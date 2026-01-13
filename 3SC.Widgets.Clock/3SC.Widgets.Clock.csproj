@@ -20,12 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Reference the shared contracts from main 3SC repo -->
-    <ProjectReference Include="..\..\3SC\3SC.Widgets.Contracts\3SC.Widgets.Contracts.csproj" />
-    <ProjectReference Include="..\..\3SC\3SC.Domain\3SC.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="manifest.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
