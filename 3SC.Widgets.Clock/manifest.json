@@ -1,22 +1,28 @@
 {
-  "packageId": "com.3sc.clock-external",
-  "widgetKey": "clock-external",
-  "displayName": "Clock (External)",
+  "packageId": "com.3sc.clock",
+  "widgetKey": "clock",
+  "displayName": "Digital Clock",
   "version": "1.0.0",
   "author": {
     "name": "3SC Team",
-    "email": "team@3sc.app"
+    "email": "team@3sc.app",
+    "url": "https://github.com/YosrBennagra/3SC-Widgets"
   },
-  "description": "Displays current time with timezone support - dynamically loaded widget",
+  "description": "A simple digital clock widget showing current time with timezone support, customizable format, and date display",
   "category": "general",
-  "icon": "icon.png",
-  "entry": "_3SC.Widgets.Clock.ClockWidgetPlugin",
+  "icon": "clock",
+  "entry": "3SC.Widgets.Clock.dll",
+  "factoryClass": "_3SC.Widgets.Clock.ClockWidgetFactory",
   "minAppVersion": "1.0.0",
   "hasSettings": true,
   "permissions": [],
-  "tags": ["clock", "time", "timezone"],
+  "tags": [
+    "clock",
+    "time",
+    "timezone"
+  ],
   "defaultSize": {
     "width": 300,
-    "height": 80
+    "height": 120
   }
 }
