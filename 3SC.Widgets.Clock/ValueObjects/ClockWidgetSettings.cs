@@ -6,7 +6,7 @@ namespace _3SC.Domain.ValueObjects;
 public class ClockWidgetSettings
 {
     public string TimeZoneId { get; set; } = TimeZoneInfo.Local.Id;
-    public bool Use24HourFormat { get; set; } = true;
+    public bool Use24HourFormat { get; set; } = false;
     public bool ShowSeconds { get; set; } = true;
     public bool ShowTimeZoneLabel { get; set; } = true;
 
@@ -36,7 +36,7 @@ public class ClockWidgetSettings
         return new ClockWidgetSettings
         {
             TimeZoneId = TimeZoneInfo.Local.Id,
-            Use24HourFormat = true,
+            Use24HourFormat = false,
             ShowSeconds = true,
             ShowTimeZoneLabel = true
         };
