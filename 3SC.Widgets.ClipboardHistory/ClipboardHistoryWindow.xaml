@@ -1,0 +1,160 @@
+<Window x:Class="_3SC.Widgets.ClipboardHistory.ClipboardHistoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:_3SC.Widgets.ClipboardHistory"
+        Title="Clipboard History"
+        Width="320"
+        Height="400"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Loaded="OnLoaded">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="WidgetSurface"
+                Color="#D0080810"/>
+        <SolidColorBrush x:Key="TextPrimary"
+                Color="#FFF1F5F9"/>
+        <SolidColorBrush x:Key="TextSecondary"
+                Color="#FFC7D2FE"/>
+        <SolidColorBrush x:Key="TextTertiary"
+                Color="#FF818CF8"/>
+        <SolidColorBrush x:Key="CardBackground"
+                Color="#FF101018"/>
+        <SolidColorBrush x:Key="CardBorder"
+                Color="#FF1E1B4B"/>
+        <SolidColorBrush x:Key="WidgetOutline"
+                Color="#FF2DD4BF"/>
+        <SolidColorBrush x:Key="Accent"
+                Color="#FF2DD4BF"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+
+    <Grid Margin="6">
+        <Border x:Name="RootBorder"
+                Background="{StaticResource WidgetSurface}"
+                CornerRadius="12"
+                SnapsToDevicePixels="True">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <Border x:Name="HeaderBorder"
+                        Grid.Row="0"
+                        Background="Transparent"
+                        Padding="12,8"
+                        Cursor="SizeAll"
+                        MouseLeftButtonDown="Header_MouseLeftButtonDown"
+                        MouseMove="Header_MouseMove"
+                        MouseLeftButtonUp="Header_MouseLeftButtonUp">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="Clipboard History"
+                                   FontSize="12"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimary}"
+                                   VerticalAlignment="Center"/>
+
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <TextBlock FontSize="10"
+                                       Foreground="{StaticResource TextTertiary}">
+                                <Run Text="{Binding ClipboardItems.Count, Mode=OneWay}"/>
+                                <Run Text=" items"/>
+                            </TextBlock>
+                            <TextBlock Text=" • "
+                                       FontSize="10"
+                                       Margin="6,0"
+                                       Foreground="{StaticResource TextTertiary}"/>
+                            <TextBlock FontSize="10"
+                                       Foreground="{StaticResource Accent}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Text"
+                                                Value="Active"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsMonitoring}"
+                                                    Value="False">
+                                                <Setter Property="Text"
+                                                        Value="Paused"/>
+                                                <Setter Property="Foreground"
+                                                        Value="{StaticResource TextTertiary}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Divider -->
+                <Border Grid.Row="0"
+                        VerticalAlignment="Bottom"
+                        Height="1"
+                        Margin="8,0"
+                        Background="{StaticResource CardBorder}"
+                        Opacity="0.25"/>
+
+                <!-- Items -->
+                <ScrollViewer Grid.Row="1"
+                        Padding="12"
+                        VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding ClipboardItems}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,0,0,8"
+                                        Padding="8"
+                                        Background="{StaticResource CardBackground}"
+                                        BorderBrush="{StaticResource CardBorder}"
+                                        BorderThickness="1"
+                                        CornerRadius="4"
+                                        Cursor="Hand"
+                                        ToolTip="Click to copy">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0"
+                                                Text="{Binding DisplayText}"
+                                                FontSize="12"
+                                                Foreground="{StaticResource TextPrimary}"
+                                                TextTrimming="CharacterEllipsis"
+                                                VerticalAlignment="Center"/>
+
+                                        <Button Grid.Column="1"
+                                                Width="24"
+                                                Height="24"
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                Cursor="Hand"
+                                                Click="DeleteItem_Click"
+                                                ToolTip="Remove">
+                                            <TextBlock Text="&#xE74D;"
+                                                    FontFamily="Segoe MDL2 Assets"
+                                                    Foreground="{StaticResource TextTertiary}"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"/>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
