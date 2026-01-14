@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Dual-mode: WinExe for testing (Debug), Library for plugin (Release) -->
+    <OutputType Condition="'$(Configuration)' == 'Debug'">WinExe</OutputType>
+    <OutputType Condition="'$(Configuration)' != 'Debug'">Library</OutputType>
+    <StartupObject Condition="'$(Configuration)' == 'Debug'">TestImageViewerWidget.Program</StartupObject>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RootNamespace>_3SC.Widgets.ImageViewer</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\3SC\3SC.Widgets.Contracts\3SC.Widgets.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="manifest.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
