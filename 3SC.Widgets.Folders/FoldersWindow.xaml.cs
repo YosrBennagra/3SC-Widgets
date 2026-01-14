@@ -61,28 +61,33 @@ namespace _3SC.Widgets.Folders
 
         private void UpdateTabVisuals()
         {
-            if (SelectionIndicator == null || AllTabButton == null || FavoritesTabButton == null)
+            if (SelectionIndicator == null || AllTabButton == null || FavoritesTabButton == null || SelectionIndicatorTransform == null)
             {
                 return;
             }
 
-            LauncherWidgetHelpers.UpdateTabVisuals(
-                _showFavoritesOnly,
-                SelectionIndicator,
-                AllTabButton,
-                FavoritesTabButton,
-                resourceKey =>
-                {
-                    try
-                    {
-                        var brush = TryFindResource(resourceKey) as Brush;
-                        if (brush != null) return brush;
-                    }
-                    catch { }
+            // Update foregrounds with local resource lookup + fallbacks
+            Brush primaryBrush = TryFindResource("Brushes.TextPrimary") as Brush ?? Brushes.White;
+            Brush tertiaryBrush = TryFindResource("Brushes.TextTertiary") as Brush ?? Brushes.Gray;
 
-                    // Fallback defaults when app resources aren't available
-                    return resourceKey.Contains("Primary") ? Brushes.Black : Brushes.Gray;
-                });
+            AllTabButton.SetValue(Control.ForegroundProperty, _showFavoritesOnly ? tertiaryBrush : primaryBrush);
+            FavoritesTabButton.SetValue(Control.ForegroundProperty, _showFavoritesOnly ? primaryBrush : tertiaryBrush);
+
+            // Animate the selection indicator between columns
+            var targetIndex = _showFavoritesOnly ? 1 : 0;
+
+            // Calculate target X based on tab button widths (assumes consistent button widths)
+            double tabWidth = AllTabButton.ActualWidth > 0 ? AllTabButton.ActualWidth : 32.0;
+            double targetX = targetIndex * tabWidth;
+
+            var anim = new System.Windows.Media.Animation.DoubleAnimation
+            {
+                To = targetX,
+                Duration = TimeSpan.FromMilliseconds(180),
+                EasingFunction = new System.Windows.Media.Animation.CubicEase { EasingMode = System.Windows.Media.Animation.EasingMode.EaseOut }
+            };
+
+            SelectionIndicatorTransform.BeginAnimation(System.Windows.Media.TranslateTransform.XProperty, anim);
         }
 
         private void AllTab_Click(object sender, RoutedEventArgs e)
