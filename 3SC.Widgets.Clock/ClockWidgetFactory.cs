@@ -1,7 +1,5 @@
 using System.Windows;
-using System.Windows.Controls;
 using _3SC.Widgets.Contracts;
-using WpfUserControl = System.Windows.Controls.UserControl;
 
 namespace _3SC.Widgets.Clock;
 
@@ -33,30 +31,27 @@ public class ClockWidget : IWidget
 
     public Window? CreateWindow()
     {
-        // Create the original ClockWidgetWindow with all its functionality
         _window = new ClockWidgetWindow();
         return _window;
     }
 
-    public WpfUserControl GetView()
+    public System.Windows.Controls.UserControl GetView()
     {
-        // Not used since HasOwnWindow is true
-        throw new NotSupportedException("This widget provides its own window. Use CreateWindow() instead.");
+        throw new NotSupportedException("This widget provides its own window.");
     }
 
     public void OnInitialize()
     {
-        // The window handles its own initialization
+        // Window handles its own initialization
     }
 
     public void OnDispose()
     {
-        // The window handles its own disposal when closed
         _window = null;
     }
 
     public void ShowSettings()
     {
-        // Settings are accessed via the window's context menu
+        // Settings accessed via window's context menu
     }
 }

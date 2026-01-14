@@ -12,7 +12,7 @@ $ErrorActionPreference = "Stop"
 $WidgetName = "Clock"
 $WidgetProjectPath = ".\3SC.Widgets.$WidgetName"
 $PackagesPath = ".\packages"
-$UnpackagedPath = Join-Path $PackagesPath "clock-external"
+$UnpackagedPath = Join-Path $PackagesPath "clock"
 $PackageFile = Join-Path $PackagesPath "clock-widget.3scwidget"
 
 Write-Host "========================================" -ForegroundColor Cyan
@@ -172,9 +172,9 @@ Write-Host "   (Ready to copy to Community folder)" -ForegroundColor Gray
 Write-Host "`n[TO INSTALL FOR TESTING]:" -ForegroundColor Yellow
 Write-Host "   1. Copy the entire folder:" -ForegroundColor White
 Write-Host "      From: $UnpackagedPath" -ForegroundColor Cyan
-Write-Host "      To:   %APPDATA%\3SC\Widgets\Community\clock-external" -ForegroundColor Cyan
+Write-Host "      To:   %APPDATA%\3SC\Widgets\Community\clock" -ForegroundColor Cyan
 Write-Host "`n   2. OR run this command:" -ForegroundColor White
-Write-Host "      xcopy /E /I /Y `"$UnpackagedPath`" `"%APPDATA%\3SC\Widgets\Community\clock-external`"" -ForegroundColor Cyan
+Write-Host "      xcopy /E /I /Y `"$UnpackagedPath`" `"%APPDATA%\3SC\Widgets\Community\clock`"" -ForegroundColor Cyan
 Write-Host "`n   3. Then restart 3SC app to see the widget" -ForegroundColor White
 
 Write-Host ""

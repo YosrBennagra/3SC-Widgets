@@ -14,23 +14,27 @@ namespace TestClockWidget
         {
             // Create WPF application
             var app = new System.Windows.Application();
-            
-            // Create the widget plugin
-            var plugin = new ClockWidgetPlugin();
-            
+
+            // Create the widget factory
+            var factory = new ClockWidgetFactory();
+            var widget = factory.CreateWidget();
+
             Console.WriteLine("=== Clock Widget Test ===");
-            Console.WriteLine($"Widget Key: {plugin.WidgetKey}");
-            Console.WriteLine($"Display Name: {plugin.DisplayName}");
-            Console.WriteLine($"Version: {plugin.Version}");
-            Console.WriteLine($"Category: {plugin.Category}");
+            Console.WriteLine($"Widget Key: {widget.WidgetKey}");
+            Console.WriteLine($"Display Name: {widget.DisplayName}");
+            Console.WriteLine($"Version: {widget.Version}");
+            Console.WriteLine($"Has Own Window: {widget.HasOwnWindow}");
             Console.WriteLine("========================\n");
-            
-            // Test with default settings (no JSON)
-            Console.WriteLine("Creating widget window with default settings...");
-            var window = (Window)plugin.CreateWidgetWindow(Guid.NewGuid(), null);
-            
-            // Show the window
-            app.Run(window);
+
+            // Create widget window
+            Console.WriteLine("Creating widget window...");
+            var window = widget.CreateWindow();
+
+            if (window != null)
+            {
+                widget.OnInitialize();
+                app.Run(window);
+            }
         }
     }
 }
