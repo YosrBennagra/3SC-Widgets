@@ -1,0 +1,9 @@
+{
+    "version": "1.0.0",
+    "name": "game-vault",
+    "displayName": "Game Vault",
+    "description": "Manage and launch your games/apps",
+    "author": "3SC Team",
+    "entryPoint": "3SC.Widgets.GameVault.dll",
+    "factoryType": "_3SC.Widgets.GameVault.GameVaultWidgetFactory"
+}
