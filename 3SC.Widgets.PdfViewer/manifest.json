@@ -1,0 +1,9 @@
+{
+  "widgetKey": "pdf-viewer",
+  "displayName": "PDF Viewer",
+  "description": "View and browse PDF files from your Downloads and Documents folders",
+  "version": "1.0.0",
+  "author": "3SC",
+  "entry": "3SC.Widgets.PdfViewer.dll",
+  "factoryType": "_3SC.Widgets.PdfViewer.PdfViewerWidgetFactory"
+}
