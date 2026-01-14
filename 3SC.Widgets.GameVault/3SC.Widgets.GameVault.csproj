@@ -4,10 +4,12 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <RootNamespace>_3SC.Widgets.GameVault</RootNamespace>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <OutputType Condition="'$(Configuration)' == 'Debug'">WinExe</OutputType>
     <OutputType Condition="'$(Configuration)' == 'Release'">Library</OutputType>
     <EnableDefaultItems>false</EnableDefaultItems>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

@@ -8,7 +8,7 @@ using _3SC.Widgets.GameVault.Helpers;
 
 namespace _3SC.Widgets.GameVault;
 
-public partial class GameVaultWindow : Window
+public partial class GameVaultWindow : WidgetWindowBase
 {
     private readonly GameVaultWidgetViewModel _viewModel;
     private bool _showFavoritesOnly = false;
@@ -39,7 +39,45 @@ public partial class GameVaultWindow : Window
             return;
         }
 
-        LauncherWidgetHelpers.UpdateTabVisuals(_showFavoritesOnly, SelectionIndicator, AllTabButton, FavoritesTabButton, resourceKey => (System.Windows.Media.Brush)FindResource(resourceKey));
+        // Safe resource lookup with sensible fallbacks
+        var primaryBrush = TryFindResource("Brushes.TextPrimary") as System.Windows.Media.Brush ?? System.Windows.Media.Brushes.White;
+        var tertiaryBrush = TryFindResource("Brushes.TextTertiary") as System.Windows.Media.Brush ?? System.Windows.Media.Brushes.Gray;
+
+        AllTabButton.SetValue(System.Windows.Controls.Control.ForegroundProperty, _showFavoritesOnly ? tertiaryBrush : primaryBrush);
+        FavoritesTabButton.SetValue(System.Windows.Controls.Control.ForegroundProperty, _showFavoritesOnly ? primaryBrush : tertiaryBrush);
+
+        // Animate selection indicator translation if a TranslateTransform is available
+        System.Windows.Media.TranslateTransform? transform = null;
+        if (SelectionIndicator.RenderTransform is System.Windows.Media.TranslateTransform tt)
+        {
+            transform = tt;
+        }
+        else if (SelectionIndicator.RenderTransform is System.Windows.Media.TransformGroup tg)
+        {
+            foreach (var child in tg.Children)
+            {
+                if (child is System.Windows.Media.TranslateTransform childTt)
+                {
+                    transform = childTt;
+                    break;
+                }
+            }
+        }
+
+        double tabWidth = AllTabButton.ActualWidth > 0 ? AllTabButton.ActualWidth : 32.0;
+        double targetX = (_showFavoritesOnly ? 1 : 0) * tabWidth;
+
+        if (transform != null)
+        {
+            var anim = new System.Windows.Media.Animation.DoubleAnimation
+            {
+                To = targetX,
+                Duration = TimeSpan.FromMilliseconds(180),
+                EasingFunction = new System.Windows.Media.Animation.CubicEase { EasingMode = System.Windows.Media.Animation.EasingMode.EaseOut }
+            };
+
+            transform.BeginAnimation(System.Windows.Media.TranslateTransform.XProperty, anim);
+        }
     }
 
     private void AllTab_Click(object sender, RoutedEventArgs e)
@@ -104,25 +142,25 @@ public partial class GameVaultWindow : Window
         LauncherWidgetWindowShared.RemoveItem(sender, _viewModel.Apps, UpdateAppDisplay, _viewModel.SaveApps);
     }
 
-    protected virtual Task OnWindowLoadedAsync()
+    protected override Task OnWidgetLoadedAsync()
     {
         UpdateAppDisplay();
         return Task.CompletedTask;
     }
 
-    protected virtual async Task OnWindowClosingAsync()
+    protected override async Task OnWidgetClosingAsync()
     {
         await Task.CompletedTask;
         _viewModel.Dispose();
     }
 
-    protected virtual bool IsDragBlocked(DependencyObject? source)
+    protected override bool IsDragBlocked(DependencyObject? source)
     {
         return LauncherWidgetWindowShared.IsDragBlocked(source, ResizeTop, ResizeBottom, ResizeLeft, ResizeRight, AllTabButton, FavoritesTabButton, SelectionIndicator, AppScrollViewer, AppItemsControl);
     }
 
-    protected double MinWindowWidth => DefaultMinWidgetWidth;
-    protected double MinWindowHeight => DefaultMinWidgetHeight;
+    protected override double MinWidgetWidth => DefaultMinWidgetWidth;
+    protected override double MinWidgetHeight => DefaultMinWidgetHeight;
 }
 
 public sealed class AppItem : _3SC.Widgets.GameVault.Abstractions.ILauncherItem

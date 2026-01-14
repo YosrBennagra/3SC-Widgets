@@ -6,6 +6,7 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using _3SC.Widgets.GameVault.Abstractions;
+using _3SC.Widgets.GameVault.Helpers;
 
 namespace _3SC.Widgets.GameVault;
 
