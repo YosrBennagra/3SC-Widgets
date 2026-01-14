@@ -13,11 +13,11 @@ public partial class NotesWindow : Window
     public NotesWindow()
     {
         InitializeComponent();
-        
+
         _viewModel = new NotesWidgetViewModel(loadFromDisk: false);
         DataContext = _viewModel;
     }
-    
+
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
         _viewModel.OnInitialize();

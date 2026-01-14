@@ -16,29 +16,29 @@
     <Window.Resources>
         <!-- Color resources matching 3SC Dark theme -->
         <SolidColorBrush x:Key="WidgetSurface"
-                Color="#D0080810"/>
+                         Color="#D0080810"/>
         <SolidColorBrush x:Key="WidgetText"
-                Color="#FFF1F5F9"/>
+                         Color="#FFF1F5F9"/>
         <SolidColorBrush x:Key="Accent"
-                Color="#FF2DD4BF"/>
+                         Color="#FF2DD4BF"/>
         <SolidColorBrush x:Key="SurfaceElevated"
-                Color="#FF16161F"/>
+                         Color="#FF16161F"/>
         <SolidColorBrush x:Key="Border"
-                Color="#FF2A2A3A"/>
+                         Color="#FF2A2A3A"/>
         <SolidColorBrush x:Key="SurfaceHover"
-                Color="#FF1C1C28"/>
+                         Color="#FF1C1C28"/>
         <SolidColorBrush x:Key="TextPrimary"
-                Color="#FFF1F5F9"/>
+                         Color="#FFF1F5F9"/>
         <SolidColorBrush x:Key="TextSecondary"
-                Color="#FF94A3B8"/>
+                         Color="#FF94A3B8"/>
         <SolidColorBrush x:Key="TextTertiary"
-                Color="#FF64748B"/>
+                         Color="#FF64748B"/>
         <SolidColorBrush x:Key="CardBackground"
-                Color="#FF101018"/>
+                         Color="#FF101018"/>
         <SolidColorBrush x:Key="CardBorder"
-                Color="#FF2A2A3A"/>
+                         Color="#FF2A2A3A"/>
         <SolidColorBrush x:Key="WidgetBackground"
-                Color="#FF0A0A0F"/>
+                         Color="#FF0A0A0F"/>
 
         <!-- Converters -->
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -107,7 +107,7 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"
-                                            MinWidth="24"/>
+                                                      MinWidth="24"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter Grid.Column="0"
@@ -123,13 +123,13 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsHighlighted"
-                                    Value="True">
+                                     Value="True">
                                 <Setter TargetName="Border"
                                         Property="Background"
                                         Value="#FF1C1C28"/>
                             </Trigger>
                             <Trigger Property="IsEnabled"
-                                    Value="False">
+                                     Value="False">
                                 <Setter Property="Opacity"
                                         Value="0.4"/>
                             </Trigger>
@@ -176,12 +176,12 @@
             <Border.ContextMenu>
                 <ContextMenu Style="{StaticResource ResourceKey={x:Type ContextMenu}}">
                     <MenuItem Header="Settings"
-                            Click="Settings_Click"
-                            Style="{StaticResource ResourceKey={x:Type MenuItem}}"/>
+                              Click="Settings_Click"
+                              Style="{StaticResource ResourceKey={x:Type MenuItem}}"/>
                     <Separator Style="{StaticResource ResourceKey={x:Type Separator}}"/>
                     <MenuItem Header="Remove"
-                            Click="Remove_Click"
-                            Style="{StaticResource ResourceKey={x:Type MenuItem}}"/>
+                              Click="Remove_Click"
+                              Style="{StaticResource ResourceKey={x:Type MenuItem}}"/>
                 </ContextMenu>
             </Border.ContextMenu>
 
@@ -212,7 +212,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-<TextBlock Text="PDF Files"
+                                <TextBlock Text="PDF Files"
                                            FontSize="13"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource TextPrimary}"
@@ -600,10 +600,13 @@
                                        Visibility="{Binding HasPdf, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Setter Property="Visibility"
+                                                Value="Collapsed"/>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding HasPdf}" Value="False">
-                                                <Setter Property="Visibility" Value="Visible"/>
+                                            <DataTrigger Binding="{Binding HasPdf}"
+                                                    Value="False">
+                                                <Setter Property="Visibility"
+                                                        Value="Visible"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>

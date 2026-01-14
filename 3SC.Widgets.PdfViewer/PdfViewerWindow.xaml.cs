@@ -17,7 +17,7 @@ public partial class PdfViewerWindow : Window
         _viewModel = new PdfWidgetViewModel();
         DataContext = _viewModel;
     }
-    
+
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
         _viewModel.OnInitialize();

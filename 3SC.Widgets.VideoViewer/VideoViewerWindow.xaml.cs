@@ -16,7 +16,7 @@ public partial class VideoViewerWindow : Window
     public VideoViewerWindow()
     {
         InitializeComponent();
-        
+
         _viewModel = new VideoWidgetViewModel();
         DataContext = _viewModel;
 
@@ -46,7 +46,7 @@ public partial class VideoViewerWindow : Window
         };
         timer.Start();
     }
-    
+
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
         _viewModel.OnInitialize();
@@ -74,10 +74,10 @@ public partial class VideoViewerWindow : Window
             var percentage = mousePosition.X / slider.ActualWidth;
             var newValue = percentage * slider.Maximum;
             slider.Value = newValue;
-            
+
             // Seek to the new position
             _viewModel.Seek(newValue);
-            
+
             e.Handled = true;
         }
     }

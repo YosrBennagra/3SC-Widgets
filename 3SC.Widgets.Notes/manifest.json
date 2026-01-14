@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0",
-  "name": "notes",
-  "displayName": "Notes",
-  "description": "Quick notes widget with auto-save and character/word count",
-  "author": "3SC Team",
-  "entryPoint": "3SC.Widgets.Notes.dll",
-  "factoryType": "_3SC.Widgets.Notes.NotesWidgetFactory"
+    "version": "1.0.0",
+    "name": "notes",
+    "displayName": "Notes",
+    "description": "Quick notes widget with auto-save and character/word count",
+    "author": "3SC Team",
+    "entryPoint": "3SC.Widgets.Notes.dll",
+    "factoryType": "_3SC.Widgets.Notes.NotesWidgetFactory"
 }

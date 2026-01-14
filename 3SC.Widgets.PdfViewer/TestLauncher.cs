@@ -13,7 +13,7 @@ public class Program
         // Setup logger
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
-            .WriteTo.File("test-pdf-viewer.log", 
+            .WriteTo.File("test-pdf-viewer.log",
                 rollingInterval: RollingInterval.Day,
                 restrictedToMinimumLevel: LogEventLevel.Debug)
             .CreateLogger();
@@ -24,7 +24,7 @@ public class Program
 
             var app = new Application();
             var window = new _3SC.Widgets.PdfViewer.PdfViewerWindow();
-            
+
             app.Run(window);
         }
         catch (Exception ex)

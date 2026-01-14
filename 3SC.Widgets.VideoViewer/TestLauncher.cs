@@ -32,7 +32,7 @@ public class TestLauncher
 
             var app = new Application();
             var window = new VideoViewerWindow();
-            
+
             var viewModel = (window.DataContext as VideoWidgetViewModel)!;
             viewModel.OnInitialize();
 

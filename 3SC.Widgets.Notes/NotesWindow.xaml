@@ -12,14 +12,22 @@
 
     <Window.Resources>
         <!-- Color Brushes -->
-        <SolidColorBrush x:Key="WidgetSurface" Color="#D0080810"/>
-        <SolidColorBrush x:Key="TextPrimary" Color="#FFF1F5F9"/>
-        <SolidColorBrush x:Key="TextSecondary" Color="#FFC7D2FE"/>
-        <SolidColorBrush x:Key="TextTertiary" Color="#FF818CF8"/>
-        <SolidColorBrush x:Key="CardBackground" Color="#FF101018"/>
-        <SolidColorBrush x:Key="CardBorder" Color="#FF1E1B4B"/>
-        <SolidColorBrush x:Key="WidgetOutline" Color="#FF2DD4BF"/>
-        <SolidColorBrush x:Key="Accent" Color="#FF2DD4BF"/>
+        <SolidColorBrush x:Key="WidgetSurface"
+                Color="#D0080810"/>
+        <SolidColorBrush x:Key="TextPrimary"
+                Color="#FFF1F5F9"/>
+        <SolidColorBrush x:Key="TextSecondary"
+                Color="#FFC7D2FE"/>
+        <SolidColorBrush x:Key="TextTertiary"
+                Color="#FF818CF8"/>
+        <SolidColorBrush x:Key="CardBackground"
+                Color="#FF101018"/>
+        <SolidColorBrush x:Key="CardBorder"
+                Color="#FF1E1B4B"/>
+        <SolidColorBrush x:Key="WidgetOutline"
+                Color="#FF2DD4BF"/>
+        <SolidColorBrush x:Key="Accent"
+                Color="#FF2DD4BF"/>
 
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>

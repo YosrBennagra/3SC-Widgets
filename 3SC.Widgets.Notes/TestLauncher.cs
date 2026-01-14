@@ -32,7 +32,7 @@ public class TestLauncher
 
             var app = new Application();
             var window = new NotesWindow();
-            
+
             var viewModel = (window.DataContext as NotesWidgetViewModel)!;
             viewModel.OnInitialize();
 
