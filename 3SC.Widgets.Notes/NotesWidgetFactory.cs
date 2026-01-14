@@ -1,5 +1,6 @@
 using System;
 using System.Windows;
+using System.Windows.Controls;
 using _3SC.Widgets.Contracts;
 
 namespace _3SC.Widgets.Notes;
@@ -30,9 +31,10 @@ public class NotesWidget : IWidget
         return _window;
     }
 
-    public System.Windows.Controls.UserControl? GetView()
+    public UserControl GetView()
     {
-        return null;
+        // This widget uses its own window, so return an empty UserControl to satisfy the contract
+        return new UserControl();
     }
 
     public void OnInitialize()
