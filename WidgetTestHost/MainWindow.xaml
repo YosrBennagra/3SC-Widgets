@@ -5,29 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WidgetTestHost"
         mc:Ignorable="d"
-        Title="Widget Test Host" Height="600" Width="1000"
+        Title="Widget Test Host"
+        Height="600"
+        Width="1000"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <!-- Widget Selector -->
-        <Border Grid.Row="0" Background="#2D2D30" Padding="15">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="Select Widget:" 
-                           Foreground="White" 
-                           FontSize="16" 
+        <Border Grid.Row="0"
+                Background="#2D2D30"
+                Padding="15">
+            <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Center">
+                <TextBlock Text="Select Widget:"
+                           Foreground="White"
+                           FontSize="16"
                            FontWeight="SemiBold"
                            VerticalAlignment="Center"
                            Margin="0,0,15,0"/>
-                <ComboBox x:Name="WidgetSelector" 
-                          Width="300" 
+                <ComboBox x:Name="WidgetSelector"
+                          Width="300"
                           FontSize="14"
                           SelectionChanged="WidgetSelector_SelectionChanged"/>
-                <Button Content="Reload Widget" 
-                        Margin="15,0,0,0" 
+                <Button Content="Reload Widget"
+                        Margin="15,0,0,0"
                         Padding="15,5"
                         FontSize="14"
                         Click="ReloadWidget_Click"/>
@@ -38,50 +43,54 @@
                            Margin="20,0,0,0"/>
             </StackPanel>
         </Border>
-        
+
         <!-- Widget Display Area -->
-        <Border Grid.Row="1" Background="#1E1E1E" Padding="20">
+        <Border Grid.Row="1"
+                Background="#1E1E1E"
+                Padding="20">
             <Grid>
                 <!-- Container for embedded widgets (UserControls) -->
-                <Border x:Name="EmbeddedWidgetContainer" 
+                <Border x:Name="EmbeddedWidgetContainer"
                         Background="White"
                         CornerRadius="4"
                         Visibility="Collapsed">
                     <ContentControl x:Name="WidgetContentControl"/>
                 </Border>
-                
+
                 <!-- Message for windowed widgets -->
                 <Border x:Name="WindowedWidgetMessage"
                         Background="#252526"
                         CornerRadius="4"
                         Padding="40"
                         Visibility="Collapsed">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <TextBlock Text="✓ Widget Opened in Separate Window" 
+                    <StackPanel HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="✓ Widget Opened in Separate Window"
                                    Foreground="#4EC9B0"
                                    FontSize="20"
                                    FontWeight="SemiBold"
                                    HorizontalAlignment="Center"/>
-                        <TextBlock Text="The selected widget provides its own window." 
+                        <TextBlock Text="The selected widget provides its own window."
                                    Foreground="#CCCCCC"
                                    FontSize="14"
                                    Margin="0,10,0,0"
                                    HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Border>
-                
+
                 <!-- Instructions when no widget is selected -->
                 <Border x:Name="InstructionsPanel"
                         Background="#252526"
                         CornerRadius="4"
                         Padding="40">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <TextBlock Text="🧪 Widget Test Host" 
+                    <StackPanel HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="🧪 Widget Test Host"
                                    Foreground="White"
                                    FontSize="24"
                                    FontWeight="Bold"
                                    HorizontalAlignment="Center"/>
-                        <TextBlock Text="Select a widget from the dropdown above to test it." 
+                        <TextBlock Text="Select a widget from the dropdown above to test it."
                                    Foreground="#CCCCCC"
                                    FontSize="16"
                                    Margin="0,15,0,0"

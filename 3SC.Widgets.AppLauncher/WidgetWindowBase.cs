@@ -49,7 +49,7 @@ namespace _3SC.Widgets.AppLauncher
             {
                 var currentPosition = e.GetPosition(this);
                 var offset = currentPosition - _dragStartPosition;
-                
+
                 Left += offset.X;
                 Top += offset.Y;
             }

@@ -75,12 +75,12 @@ public partial class MainWindow : Window
                 {
                     _currentWidgetWindow.Owner = this;
                     _currentWidgetWindow.Show();
-                    
+
                     // Show message in main window
                     InstructionsPanel.Visibility = Visibility.Collapsed;
                     EmbeddedWidgetContainer.Visibility = Visibility.Collapsed;
                     WindowedWidgetMessage.Visibility = Visibility.Visible;
-                    
+
                     StatusText.Text = $"✓ {widgetName} opened in separate window";
                 }
             }
@@ -89,17 +89,17 @@ public partial class MainWindow : Window
                 // Embed widget view in the container
                 var view = _currentWidget.GetView();
                 WidgetContentControl.Content = view;
-                
+
                 InstructionsPanel.Visibility = Visibility.Collapsed;
                 WindowedWidgetMessage.Visibility = Visibility.Collapsed;
                 EmbeddedWidgetContainer.Visibility = Visibility.Visible;
-                
+
                 StatusText.Text = $"✓ {widgetName} loaded";
             }
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error loading widget: {ex.Message}\n\n{ex.StackTrace}", 
+            MessageBox.Show($"Error loading widget: {ex.Message}\n\n{ex.StackTrace}",
                 "Widget Load Error", MessageBoxButton.OK, MessageBoxImage.Error);
             StatusText.Text = "✗ Error loading widget";
         }
@@ -120,7 +120,7 @@ public partial class MainWindow : Window
         }
 
         WidgetContentControl.Content = null;
-        
+
         InstructionsPanel.Visibility = Visibility.Visible;
         EmbeddedWidgetContainer.Visibility = Visibility.Collapsed;
         WindowedWidgetMessage.Visibility = Visibility.Collapsed;
