@@ -1,0 +1,9 @@
+{
+    "version": "1.0.0",
+    "name": "clipboard-history",
+    "displayName": "Clipboard History",
+    "description": "Access and manage recent clipboard items (text and images)",
+    "author": "3SC Team",
+    "entryPoint": "3SC.Widgets.ClipboardHistory.dll",
+    "factoryType": "_3SC.Widgets.ClipboardHistory.ClipboardHistoryWidgetFactory"
+}

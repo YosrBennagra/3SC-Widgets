@@ -1,0 +1,9 @@
+{
+    "version": "1.0.0",
+    "name": "video-viewer",
+    "displayName": "Video Viewer",
+    "description": "Video playback widget with media controls and file browser",
+    "author": "3SC Team",
+    "entryPoint": "3SC.Widgets.VideoViewer.dll",
+    "factoryType": "_3SC.Widgets.VideoViewer.VideoViewerWidgetFactory"
+}

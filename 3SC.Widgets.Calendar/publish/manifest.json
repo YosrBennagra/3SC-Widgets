@@ -1,0 +1,9 @@
+{
+  "version": "1.0.0",
+  "name": "calendar",
+  "displayName": "Calendar",
+  "description": "Calendar widget showing month view and week/day info",
+  "author": "3SC Team",
+  "entryPoint": "3SC.Widgets.Calendar.dll",
+  "factoryType": "_3SC.Widgets.Calendar.CalendarWidgetFactory"
+}

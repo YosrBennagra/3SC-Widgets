@@ -1,21 +1,25 @@
 {
   "packageId": "com.3sc.clock",
   "widgetKey": "clock",
-  "displayName": "Digital Clock",
+  "displayName": "Clock",
   "version": "1.0.0",
   "author": {
     "name": "3SC Team",
     "email": "team@3sc.app",
     "url": "https://github.com/YosrBennagra/3SC-Widgets"
   },
-  "description": "A simple digital clock widget showing current time with timezone support, customizable format, and date display",
+  "description": "Displays current time with timezone support",
   "category": "general",
-  "icon": "clock",
+  "icon": "icon.png",
   "entry": "3SC.Widgets.Clock.dll",
-  "factoryClass": "_3SC.Widgets.Clock.ClockWidgetFactory",
   "minAppVersion": "1.0.0",
   "hasSettings": true,
   "permissions": [],
+  "tags": [
+    "clock",
+    "time",
+    "timezone"
+  ],
   "tags": [
     "clock",
     "time",

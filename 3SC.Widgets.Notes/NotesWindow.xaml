@@ -1,0 +1,153 @@
+<Window x:Class="_3SC.Widgets.Notes.NotesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:_3SC.Widgets.Notes"
+        Title="Notes"
+        Width="350"
+        Height="300"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Loaded="OnLoaded">
+
+    <Window.Resources>
+        <!-- Color Brushes -->
+        <SolidColorBrush x:Key="WidgetSurface"
+                Color="#D0080810"/>
+        <SolidColorBrush x:Key="TextPrimary"
+                Color="#FFF1F5F9"/>
+        <SolidColorBrush x:Key="TextSecondary"
+                Color="#FFC7D2FE"/>
+        <SolidColorBrush x:Key="TextTertiary"
+                Color="#FF818CF8"/>
+        <SolidColorBrush x:Key="CardBackground"
+                Color="#FF101018"/>
+        <SolidColorBrush x:Key="CardBorder"
+                Color="#FF1E1B4B"/>
+        <SolidColorBrush x:Key="WidgetOutline"
+                Color="#FF2DD4BF"/>
+        <SolidColorBrush x:Key="Accent"
+                Color="#FF2DD4BF"/>
+
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+
+    <Border Background="{StaticResource WidgetSurface}"
+            CornerRadius="12"
+            BorderBrush="{StaticResource WidgetOutline}"
+            BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Thin header - drag section -->
+            <Border Grid.Row="0"
+                    Background="Transparent"
+                    Padding="20,6"
+                    Cursor="SizeAll"
+                    MouseLeftButtonDown="Border_MouseLeftButtonDown"
+                    MouseMove="Border_MouseMove"
+                    MouseLeftButtonUp="Border_MouseLeftButtonUp">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Stats (left side) -->
+                    <StackPanel Grid.Column="0"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <TextBlock FontSize="11"
+                                   Foreground="{StaticResource TextTertiary}"
+                                   VerticalAlignment="Center">
+                            <Run Text="{Binding CharacterCount, Mode=OneWay}"/>
+                            <Run Text="chars"/>
+                        </TextBlock>
+                        <TextBlock Text=" • "
+                                   FontSize="11"
+                                   Foreground="{StaticResource TextTertiary}"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock FontSize="11"
+                                   Foreground="{StaticResource TextTertiary}"
+                                   VerticalAlignment="Center">
+                            <Run Text="{Binding WordCount, Mode=OneWay}"/>
+                            <Run Text="words"/>
+                        </TextBlock>
+                    </StackPanel>
+
+                    <!-- Last saved (right side) -->
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding LastSaved}"
+                               FontSize="10"
+                               Foreground="{StaticResource TextTertiary}"
+                               FontStyle="Italic"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- Divider (separator) -->
+            <Border Grid.Row="0"
+                    VerticalAlignment="Bottom"
+                    Height="1"
+                    Margin="8,0"
+                    Background="{StaticResource CardBorder}"
+                    Opacity="0.25"/>
+
+            <!-- Text Editor Area (bottom part) -->
+            <Grid Grid.Row="1"
+                  Margin="14,8,14,14">
+                <!-- Placeholder -->
+                <TextBlock Text="Type your notes here..."
+                           FontSize="13"
+                           Foreground="{StaticResource TextTertiary}"
+                           FontStyle="Italic"
+                           VerticalAlignment="Top"
+                           IsHitTestVisible="False"
+                           Opacity="0.6">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility"
+                                    Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding NoteText}"
+                                             Value="">
+                                    <Setter Property="Visibility"
+                                            Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <!-- Text Editor -->
+                <TextBox Text="{Binding NoteText, UpdateSourceTrigger=PropertyChanged}"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Auto"
+                         FontSize="13"
+                         Foreground="{StaticResource TextPrimary}"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Padding="0"
+                         VerticalAlignment="Stretch"
+                         FontFamily="Segoe UI"
+                         Focusable="True"
+                         IsEnabled="True"
+                         Cursor="IBeam"
+                         CaretBrush="{StaticResource Accent}"
+                         SelectionBrush="{StaticResource Accent}"
+                         SelectionOpacity="0.25">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="FocusVisualStyle"
+                                    Value="{x:Null}"/>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

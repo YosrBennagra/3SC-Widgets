@@ -1,0 +1,9 @@
+{
+    "version": "1.0.0",
+    "name": "folders",
+    "displayName": "Folders",
+    "description": "Folders hub — quick access to common folders",
+    "author": "3SC Team",
+    "entryPoint": "3SC.Widgets.Folders.dll",
+    "factoryType": "_3SC.Widgets.Folders.FoldersWidgetFactory"
+}
