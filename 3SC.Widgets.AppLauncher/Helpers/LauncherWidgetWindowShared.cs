@@ -26,9 +26,9 @@ namespace _3SC.Widgets.AppLauncher.Helpers
 
         public static void HandleFileDrop(System.Windows.DragEventArgs e, Action<string> addPath)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
             {
-                var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                var files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
                 foreach (var f in files)
                 {
                     try { addPath?.Invoke(f); } catch { }
@@ -38,13 +38,13 @@ namespace _3SC.Widgets.AppLauncher.Helpers
 
         public static void HandleDragOver(System.Windows.DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
             {
-                e.Effects = DragDropEffects.Copy;
+                e.Effects = System.Windows.DragDropEffects.Copy;
             }
             else
             {
-                e.Effects = DragDropEffects.None;
+                e.Effects = System.Windows.DragDropEffects.None;
             }
             e.Handled = true;
         }

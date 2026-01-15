@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\3SC.Widgets.Clock\3SC.Widgets.Clock.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.QuickLinks\3SC.Widgets.QuickLinks.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.Calendar\3SC.Widgets.Calendar.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.Notes\3SC.Widgets.Notes.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.ImageViewer\3SC.Widgets.ImageViewer.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.VideoViewer\3SC.Widgets.VideoViewer.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.PdfViewer\3SC.Widgets.PdfViewer.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.Folders\3SC.Widgets.Folders.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.GameVault\3SC.Widgets.GameVault.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.ClipboardHistory\3SC.Widgets.ClipboardHistory.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+</Project>

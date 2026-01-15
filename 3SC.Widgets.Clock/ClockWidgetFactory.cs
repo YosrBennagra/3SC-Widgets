@@ -11,7 +11,7 @@ public class ClockWidgetFactory : IWidgetFactory
 {
     public IWidget CreateWidget()
     {
-        return new ClockWidget();
+        return new ClockWindowWidget();
     }
 }
 
@@ -19,7 +19,7 @@ public class ClockWidgetFactory : IWidgetFactory
 /// The Clock widget implementation that conforms to 3SC's IWidget interface.
 /// Uses its own window (ClockWidgetWindow) with full functionality.
 /// </summary>
-public class ClockWidget : IWidget
+public class ClockWindowWidget : IWidget
 {
     private ClockWidgetWindow? _window;
 

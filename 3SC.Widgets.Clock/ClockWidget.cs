@@ -12,11 +12,17 @@ public class ClockWidget : IWidget
     public string DisplayName => "Digital Clock";
     public string Version => "1.0.0";
     public bool HasSettings => true;
+    public bool HasOwnWindow => false;
 
     public WpfUserControl GetView()
     {
         _view ??= new ClockWidgetView();
         return _view;
+    }
+
+    public System.Windows.Window? CreateWindow()
+    {
+        return null;
     }
 
     public void OnInitialize()
