@@ -24,7 +24,7 @@ namespace _3SC.Widgets.AppLauncher.Helpers
             updateTabVisuals?.Invoke();
         }
 
-        public static void HandleFileDrop(DragEventArgs e, Action<string> addPath)
+        public static void HandleFileDrop(System.Windows.DragEventArgs e, Action<string> addPath)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -36,7 +36,7 @@ namespace _3SC.Widgets.AppLauncher.Helpers
             }
         }
 
-        public static void HandleDragOver(DragEventArgs e)
+        public static void HandleDragOver(System.Windows.DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -83,7 +83,7 @@ namespace _3SC.Widgets.AppLauncher.Helpers
             catch { }
         }
 
-        public static void HandleItemDoubleClick<T>(object sender, MouseButtonEventArgs e, Action<T> action)
+        public static void HandleItemDoubleClick<T>(object sender, System.Windows.Input.MouseButtonEventArgs e, Action<T> action)
             where T : class
         {
             if (e.ClickCount == 2 && sender is FrameworkElement fe && fe.DataContext is T item)
