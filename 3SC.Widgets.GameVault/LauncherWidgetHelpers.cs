@@ -5,11 +5,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Serilog;
 
 namespace _3SC.Widgets.GameVault.Helpers;
 
 public static class LauncherWidgetHelpers
 {
+    private static readonly ILogger Log = Serilog.Log.ForContext(typeof(LauncherWidgetHelpers));
     public static string? ResolveShortcut(string shortcutPath)
     {
         try
@@ -32,18 +34,43 @@ public static class LauncherWidgetHelpers
     {
         try
         {
-            if (path.EndsWith(".url", StringComparison.OrdinalIgnoreCase)) return null;
-            if (!File.Exists(path)) return null;
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                Log.Warning("Empty path provided for icon extraction");
+                return null;
+            }
+
+            if (path.EndsWith(".url", StringComparison.OrdinalIgnoreCase))
+            {
+                Log.Debug("Skipping icon extraction for .url file: {Path}", path);
+                return null;
+            }
+
+            if (!File.Exists(path))
+            {
+                Log.Warning("File not found for icon extraction: {Path}", path);
+                return null;
+            }
+
             using var icon = System.Drawing.Icon.ExtractAssociatedIcon(path);
-            if (icon == null) return null;
-            return System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
+            if (icon == null)
+            {
+                Log.Warning("ExtractAssociatedIcon returned null for: {Path}", path);
+                return null;
+            }
+
+            var bitmap = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
                 icon.Handle,
                 Int32Rect.Empty,
                 BitmapSizeOptions.FromEmptyOptions());
+
+            bitmap.Freeze(); // Make thread-safe
+            Log.Debug("Successfully extracted icon for: {Path}", path);
+            return bitmap;
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Failed to load icon for '{path}': {ex.Message}");
+            Log.Error(ex, "Failed to load icon for '{Path}'", path);
             return null;
         }
     }

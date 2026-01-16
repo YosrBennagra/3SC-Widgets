@@ -1,9 +1,31 @@
 {
-    "version": "1.0.0",
-    "name": "game-vault",
+    "packageId": "com.3sc.gamevault",
+    "widgetKey": "game-vault",
     "displayName": "Game Vault",
-    "description": "Manage and launch your games/apps",
-    "author": "3SC Team",
-    "entryPoint": "3SC.Widgets.GameVault.dll",
-    "factoryType": "_3SC.Widgets.GameVault.GameVaultWidgetFactory"
+    "version": "1.1.0",
+    "author": {
+        "name": "3SC Team",
+        "email": "team@3sc.app"
+    },
+    "description": "Manage and launch your games and apps with quick access and favorites.",
+    "category": "productivity",
+    "icon": "icon.png",
+    "entry": "3SC.Widgets.GameVault.dll",
+    "minAppVersion": "1.0.0",
+    "hasSettings": true,
+    "permissions": [
+        "filesystem",
+        "process"
+    ],
+    "tags": [
+        "games",
+        "apps",
+        "launcher",
+        "quick-access",
+        "productivity"
+    ],
+    "defaultSize": {
+        "width": 420,
+        "height": 340
+    }
 }

@@ -10,11 +10,14 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using _3SC.Widgets.GameVault.Abstractions;
 using _3SC.Widgets.GameVault.Helpers;
+using Serilog;
 
 namespace _3SC.Widgets.GameVault;
 
 public static class LauncherWidgetWindowShared
 {
+    private static readonly ILogger Log = Serilog.Log.ForContext(typeof(LauncherWidgetWindowShared));
+
     public static void AddFromPath<TItem>(
         string path,
         ObservableCollection<TItem> collection,
@@ -25,16 +28,18 @@ public static class LauncherWidgetWindowShared
         var item = CreateItemFromPath<TItem>(path);
         if (item == null)
         {
+            Log.Warning("Failed to create item from path: {Path}", path);
             return;
         }
 
         if (collection.Any(existingItem => string.Equals(existingItem.Path, item.Path, StringComparison.OrdinalIgnoreCase)))
         {
-            Debug.WriteLine($"App already exists: {item.Path}");
+            Log.Debug("App already exists, skipping duplicate: {Path}", item.Path);
             return;
         }
 
         collection.Add(item);
+        Log.Information("Added app: {Name} at {Path}", item.Name, item.Path);
         refresh();
         save();
     }
@@ -92,10 +97,16 @@ public static class LauncherWidgetWindowShared
             if (path.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase))
             {
                 targetPath = LauncherWidgetHelpers.ResolveShortcut(path) ?? path;
+                Log.Debug("Resolved shortcut {Shortcut} to {Target}", path, targetPath);
             }
 
             var iconPath = File.Exists(targetPath) ? targetPath : path;
             var icon = LauncherWidgetHelpers.TryLoadIcon(iconPath);
+
+            if (icon == null)
+            {
+                Log.Warning("Failed to extract icon for: {Path}", iconPath);
+            }
 
             return new TItem
             {
@@ -107,7 +118,7 @@ public static class LauncherWidgetWindowShared
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Failed to add app: {ex.Message}");
+            Log.Error(ex, "Failed to create item from path: {Path}", path);
             return null;
         }
     }
@@ -116,6 +127,7 @@ public static class LauncherWidgetWindowShared
     {
         try
         {
+            Log.Information("Launching app: {Name} at {Path}", item.Name, item.Path);
             Process.Start(new ProcessStartInfo
             {
                 FileName = item.Path,
@@ -124,7 +136,7 @@ public static class LauncherWidgetWindowShared
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Failed to launch: {ex.Message}");
+            Log.Error(ex, "Failed to launch: {Name} at {Path}", item.Name, item.Path);
         }
     }
 
@@ -134,6 +146,7 @@ public static class LauncherWidgetWindowShared
         if (sender is FrameworkElement { DataContext: TItem item })
         {
             item.IsFavorite = !item.IsFavorite;
+            Log.Debug("Toggled favorite for {Name}: {IsFavorite}", item.Name, item.IsFavorite);
             refresh();
             save();
         }
@@ -145,6 +158,7 @@ public static class LauncherWidgetWindowShared
         if (sender is FrameworkElement { DataContext: TItem item })
         {
             collection.Remove(item);
+            Log.Information("Removed item from collection");
             refresh();
             save();
         }
