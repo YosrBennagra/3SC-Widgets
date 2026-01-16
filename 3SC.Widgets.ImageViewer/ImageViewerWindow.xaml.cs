@@ -1,66 +1,83 @@
 using System;
-using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Interop;
-using MessageBox = System.Windows.MessageBox;
-using MessageBoxButton = System.Windows.MessageBoxButton;
-using MessageBoxImage = System.Windows.MessageBoxImage;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Media;
+using Serilog;
 
 namespace _3SC.Widgets.ImageViewer;
 
-public partial class ImageViewerWindow : Window
+public partial class ImageViewerWindow : WidgetWindowBase
 {
     private readonly ImageWidgetViewModel _viewModel;
+    private readonly ILogger _logger = Log.ForContext<ImageViewerWindow>();
 
     public ImageViewerWindow()
+        : this(Guid.Empty, 0, 0, 400, 300, false)
     {
+    }
+
+    public ImageViewerWindow(Guid widgetInstanceId, double left, double top, double width, double height, bool isLocked)
+    {
+        _logger.Debug("ImageViewerWindow constructor called with InstanceId={InstanceId}", widgetInstanceId);
+
         InitializeComponent();
+
+        InitializeWidgetWindow(
+            new WidgetWindowInit(widgetInstanceId, left, top, width, height, isLocked),
+            new WidgetWindowParts(
+                LockWidgetMenuItem: LockWidgetMenuItem,
+                ResizeToggleMenuItem: ResizeToggleMenuItem,
+                ResizeOutlineElement: ResizeOutline,
+                ResizeTopThumb: ResizeTop,
+                ResizeBottomThumb: ResizeBottom,
+                ResizeLeftThumb: ResizeLeft,
+                ResizeRightThumb: ResizeRight,
+                WidgetKey: "image"));
 
         _viewModel = new ImageWidgetViewModel();
         DataContext = _viewModel;
 
         Loaded += OnLoaded;
-        Closing += (s, e) => _viewModel.OnDispose();
+        Closing += (s, e) => _viewModel.Dispose();
+
+        _logger.Information("ImageViewerWindow initialized successfully");
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
+        _logger.Debug("ImageViewerWindow loaded");
         _viewModel.OnInitialize();
     }
 
-    private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    protected override bool IsDragBlocked(DependencyObject? source)
     {
-        if (e.ClickCount == 1)
+        // Don't allow dragging when clicking on interactive controls
+        return source is not null && IsInteractiveControl(source);
+    }
+
+    private static bool IsInteractiveControl(DependencyObject element)
+    {
+        DependencyObject? current = element;
+        while (current is not null)
         {
-            DragMove();
-        }
-    }
-
-    private void Settings_Click(object sender, RoutedEventArgs e)
-    {
-        // Settings functionality - could show settings dialog
-        MessageBox.Show("Settings not yet implemented", "Image Viewer", MessageBoxButton.OK, MessageBoxImage.Information);
-    }
-
-    private void Remove_Click(object sender, RoutedEventArgs e)
-    {
-        Close();
-    }
-
-    // Win32 interop for window drag
-    private new void DragMove()
-    {
-        try
-        {
-            if (Mouse.LeftButton == MouseButtonState.Pressed)
+            if (current is System.Windows.Controls.Button or
+                Slider or
+                Thumb or
+                System.Windows.Controls.ListBox or
+                ListBoxItem or
+                System.Windows.Controls.Primitives.ScrollBar or
+                System.Windows.Controls.Image)
             {
-                base.DragMove();
+                return true;
             }
+
+            // Try visual tree first, fall back to logical tree for non-visual elements
+            current = current is Visual
+                ? VisualTreeHelper.GetParent(current)
+                : LogicalTreeHelper.GetParent(current);
         }
-        catch
-        {
-            // Ignore exceptions during drag
-        }
+
+        return false;
     }
 }

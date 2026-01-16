@@ -42,8 +42,9 @@ public partial class ImageFileItem : ObservableObject
 /// <summary>
 /// ViewModel for the Image widget - displays images from Pictures/Downloads with gallery capability.
 /// </summary>
-public partial class ImageWidgetViewModel : ObservableObject
+public partial class ImageWidgetViewModel : ObservableObject, IDisposable
 {
+    private bool _disposed;
     private static readonly string DataPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "3SC", "image_widget.json");
@@ -588,13 +589,21 @@ public partial class ImageWidgetViewModel : ObservableObject
 
     public void OnInitialize()
     {
-        // Already initialized in constructor, but can be called again if needed
+        _logger.Information("ImageWidgetViewModel initializing");
         _ = DiscoverImageFilesAsync();
     }
 
-    public void OnDispose()
+    public void Dispose()
     {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _logger.Information("Disposing ImageWidgetViewModel");
         SaveRecentFiles();
+        _disposed = true;
+        GC.SuppressFinalize(this);
     }
 
     #endregion

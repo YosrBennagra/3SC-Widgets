@@ -93,7 +93,7 @@ public abstract class WidgetWindowBase : Window
 
     public virtual string WidgetKey => _widgetKey ?? string.Empty;
     protected virtual double MinWidgetWidth => 200;
-    protected virtual double MinWidgetHeight => 200;
+    protected virtual double MinWidgetHeight => 100;
     protected virtual bool SaveOnResize => false;
     protected virtual bool IsDragBlocked(DependencyObject? source) => false;
 

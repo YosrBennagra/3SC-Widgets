@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Windows;
 using DragEventArgs = System.Windows.DragEventArgs;
 using DataFormats = System.Windows.DataFormats;
@@ -5,69 +7,147 @@ using DragDropEffects = System.Windows.DragDropEffects;
 
 namespace _3SC.Widgets.ImageViewer;
 
+/// <summary>
+/// Attached behavior for handling file drop operations on UI elements.
+/// </summary>
 public static class DropFileBehavior
 {
+    #region DropHandler Attached Property
+
+    /// <summary>
+    /// Gets the drop handler delegate.
+    /// </summary>
+    public static Action<string[]>? GetDropHandler(DependencyObject obj)
+    {
+        return (Action<string[]>?)obj.GetValue(DropHandlerProperty);
+    }
+
+    /// <summary>
+    /// Sets the drop handler delegate.
+    /// </summary>
+    public static void SetDropHandler(DependencyObject obj, Action<string[]>? value)
+    {
+        obj.SetValue(DropHandlerProperty, value);
+    }
+
+    /// <summary>
+    /// Attached property for the drop handler delegate.
+    /// </summary>
     public static readonly DependencyProperty DropHandlerProperty =
         DependencyProperty.RegisterAttached(
             "DropHandler",
-            typeof(System.Action<string[]>),
+            typeof(Action<string[]>),
             typeof(DropFileBehavior),
             new PropertyMetadata(null, OnDropHandlerChanged));
 
-    public static void SetDropHandler(UIElement element, System.Action<string[]> value)
+    #endregion
+
+    #region FileExtension Attached Property
+
+    /// <summary>
+    /// Gets the file extension filter (e.g., ".jpg").
+    /// </summary>
+    public static string GetFileExtension(DependencyObject obj)
     {
-        element.SetValue(DropHandlerProperty, value);
+        return (string)obj.GetValue(FileExtensionProperty);
     }
 
-    public static System.Action<string[]>? GetDropHandler(UIElement element)
+    /// <summary>
+    /// Sets the file extension filter.
+    /// </summary>
+    public static void SetFileExtension(DependencyObject obj, string value)
     {
-        return (System.Action<string[]>?)element.GetValue(DropHandlerProperty);
+        obj.SetValue(FileExtensionProperty, value);
     }
+
+    /// <summary>
+    /// Attached property for file extension filtering.
+    /// </summary>
+    public static readonly DependencyProperty FileExtensionProperty =
+        DependencyProperty.RegisterAttached(
+            "FileExtension",
+            typeof(string),
+            typeof(DropFileBehavior),
+            new PropertyMetadata(string.Empty));
+
+    #endregion
 
     private static void OnDropHandlerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is UIElement element)
         {
-            element.Drop -= Element_Drop;
-            element.DragEnter -= Element_DragEnter;
-            element.DragOver -= Element_DragOver;
-
-            if (e.NewValue is not null)
+            if (e.NewValue != null)
             {
                 element.AllowDrop = true;
                 element.Drop += Element_Drop;
-                element.DragEnter += Element_DragEnter;
                 element.DragOver += Element_DragOver;
+            }
+            else if (e.OldValue != null)
+            {
+                element.Drop -= Element_Drop;
+                element.DragOver -= Element_DragOver;
             }
         }
     }
 
-    private static void Element_Drop(object sender, DragEventArgs e)
+    private static void Element_DragOver(object sender, DragEventArgs e)
     {
-        if (sender is UIElement element && e.Data.GetDataPresent(DataFormats.FileDrop))
-        {
-            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            var handler = GetDropHandler(element);
-            handler?.Invoke(files);
-        }
-    }
-
-    private static void Element_DragEnter(object sender, DragEventArgs e)
-    {
-        if (e.Data.GetDataPresent(DataFormats.FileDrop))
-        {
-            e.Effects = DragDropEffects.Copy;
-        }
-        else
+        if (!e.Data.GetDataPresent(DataFormats.FileDrop))
         {
             e.Effects = DragDropEffects.None;
+            e.Handled = true;
+            return;
         }
+
+        var files = (string[]?)e.Data.GetData(DataFormats.FileDrop);
+        if (files == null || files.Length == 0)
+        {
+            e.Effects = DragDropEffects.None;
+            e.Handled = true;
+            return;
+        }
+
+        // Check file extension filter if specified
+        if (sender is DependencyObject obj)
+        {
+            var extension = GetFileExtension(obj);
+            if (!string.IsNullOrEmpty(extension))
+            {
+                var hasValidFile = files.Any(file =>
+                    file.EndsWith(extension, StringComparison.OrdinalIgnoreCase));
+
+                if (!hasValidFile)
+                {
+                    e.Effects = DragDropEffects.None;
+                    e.Handled = true;
+                    return;
+                }
+            }
+        }
+
+        e.Effects = DragDropEffects.Copy;
         e.Handled = true;
     }
 
-    private static void Element_DragOver(object sender, DragEventArgs e)
+    private static void Element_Drop(object sender, DragEventArgs e)
     {
-        e.Effects = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
+        if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+        {
+            return;
+        }
+
+        var files = (string[]?)e.Data.GetData(DataFormats.FileDrop);
+        if (files == null || files.Length == 0)
+        {
+            return;
+        }
+
+        if (sender is DependencyObject obj)
+        {
+            var handler = GetDropHandler(obj);
+            handler?.Invoke(files);
+        }
+
         e.Handled = true;
     }
 }

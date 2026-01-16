@@ -1,8 +1,9 @@
 {
     "widgetKey": "image-viewer",
+    "packageId": "com.3sc.imageviewer",
     "displayName": "Image Viewer",
     "description": "View and browse images from your Pictures and Downloads folders",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "author": "3SC",
     "entry": "3SC.Widgets.ImageViewer.dll",
     "factoryType": "_3SC.Widgets.ImageViewer.ImageViewerWidgetFactory"
