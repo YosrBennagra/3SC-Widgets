@@ -2,12 +2,12 @@
   "packageId": "com.3sc.clock",
   "widgetKey": "clock",
   "displayName": "Clock",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "3SC Team",
     "email": "team@3sc.app"
   },
-  "description": "Displays current time with timezone support",
+  "description": "A beautiful digital clock with timezone support, 12/24-hour formats, and customizable display options.",
   "category": "general",
   "icon": "icon.png",
   "entry": "3SC.Widgets.Clock.dll",
@@ -17,10 +17,12 @@
   "tags": [
     "clock",
     "time",
-    "timezone"
+    "timezone",
+    "date",
+    "digital"
   ],
   "defaultSize": {
     "width": 300,
-    "height": 80
+    "height": 140
   }
 }

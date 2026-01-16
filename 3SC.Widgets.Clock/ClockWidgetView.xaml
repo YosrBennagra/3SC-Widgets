@@ -3,62 +3,102 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:_3SC.Widgets.Clock"
              mc:Ignorable="d"
-             Width="300"
-             Height="120"
+             d:DesignWidth="300"
+             d:DesignHeight="120"
              Background="Transparent">
 
     <UserControl.Resources>
-        <!-- Dark Theme Colors -->
-        <SolidColorBrush x:Key="WidgetSurface"
-                Color="#D0080810"/>
-        <SolidColorBrush x:Key="WidgetText"
+        <!-- Text Colors -->
+        <SolidColorBrush x:Key="TextPrimary"
                 Color="#FFF1F5F9"/>
+        <SolidColorBrush x:Key="TextSecondary"
+                Color="#FF94A3B8"/>
+
+        <!-- Accent Colors -->
         <SolidColorBrush x:Key="Accent"
                 Color="#FF2DD4BF"/>
+        <SolidColorBrush x:Key="AccentGlow"
+                Color="#402DD4BF"/>
     </UserControl.Resources>
 
-    <Border CornerRadius="12"
-            Padding="0"
-            SnapsToDevicePixels="True"
-            Background="{StaticResource WidgetSurface}">
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    <!-- Clock Content (no container - parent window provides the container)      -->
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    <Grid Margin="8,6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-        <Grid Margin="16">
-            <StackPanel HorizontalAlignment="Center"
-                        VerticalAlignment="Center">
+        <!-- Time Display -->
+        <TextBlock x:Name="TimeTextBlock"
+                   Grid.Row="0"
+                   FontFamily="Segoe UI Variable Display, Segoe UI"
+                   FontSize="42"
+                   FontWeight="Light"
+                   Foreground="{StaticResource TextPrimary}"
+                   HorizontalAlignment="Center"
+                   TextOptions.TextFormattingMode="Ideal"
+                   TextOptions.TextRenderingMode="ClearType"
+                   SnapsToDevicePixels="True"
+                   Text="00:00:00"/>
 
-                <!-- Time Display -->
-                <TextBlock x:Name="TimeTextBlock"
-                           FontFamily="Segoe UI"
-                           FontSize="36"
-                           FontWeight="Light"
-                           Foreground="{StaticResource WidgetText}"
-                           HorizontalAlignment="Center"
-                           TextOptions.TextFormattingMode="Ideal"
-                           TextOptions.TextRenderingMode="ClearType"
-                           SnapsToDevicePixels="True"
-                           Text="00:00:00"/>
+        <!-- Date Display -->
+        <TextBlock x:Name="DateTextBlock"
+                   Grid.Row="1"
+                   FontFamily="Segoe UI"
+                   FontSize="13"
+                   FontWeight="Normal"
+                   HorizontalAlignment="Center"
+                   Foreground="{StaticResource TextSecondary}"
+                   Margin="0,4,0,0"
+                   TextOptions.TextFormattingMode="Display"
+                   Text="Monday, January 1, 2026"/>
 
-                <!-- Date Display -->
-                <TextBlock x:Name="DateTextBlock"
-                           FontFamily="Segoe UI"
+        <!-- Timezone Label with accent pill -->
+        <Border x:Name="TimeZonePill"
+                Grid.Row="2"
+                HorizontalAlignment="Center"
+                Margin="0,8,0,0"
+                Padding="10,4"
+                CornerRadius="10"
+                Background="{StaticResource AccentGlow}">
+
+            <TextBlock x:Name="TimeZoneLabel"
+                       FontFamily="Segoe UI"
+                       FontSize="11"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource Accent}"
+                       TextOptions.TextFormattingMode="Display"
+                       Text="Local Time"/>
+        </Border>
+
+        <!-- Error Display (overlay when needed) -->
+        <Border x:Name="ErrorOverlay"
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Background="#E8EF4444"
+                CornerRadius="8"
+                Padding="12,8"
+                Visibility="Collapsed"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center">
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="⚠"
                            FontSize="14"
-                           HorizontalAlignment="Center"
-                           Foreground="{StaticResource WidgetText}"
-                           Opacity="0.7"
-                           Margin="0,8,0,0"
-                           Text="Monday, January 1, 2026"/>
-
-                <!-- Timezone Label -->
-                <TextBlock x:Name="TimeZoneLabel"
-                           FontFamily="Segoe UI"
-                           FontSize="11"
-                           HorizontalAlignment="Center"
-                           Foreground="{StaticResource Accent}"
-                           FontWeight="SemiBold"
-                           Margin="0,4,0,0"
-                           Text="Local Time"/>
+                           Foreground="White"
+                           Margin="0,0,8,0"
+                           VerticalAlignment="Center"/>
+                <TextBlock x:Name="ErrorText"
+                           FontSize="12"
+                           Foreground="White"
+                           VerticalAlignment="Center"
+                           Text="Error"/>
             </StackPanel>
-        </Grid>
-    </Border>
+        </Border>
+    </Grid>
 </UserControl>

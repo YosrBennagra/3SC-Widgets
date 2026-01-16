@@ -1,29 +1,29 @@
-using System;
+﻿using System;
 using System.ComponentModel;
-using System.Globalization;
 using System.Windows;
-using System.Windows.Input;
+using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
-using System.Windows.Threading;
+using System.Windows.Input;
 using _3SC.Domain.ValueObjects;
 using _3SC.Widgets.Clock.Helpers;
+using Serilog;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using MouseButtonEventArgs = System.Windows.Input.MouseButtonEventArgs;
 
 namespace _3SC.Widgets.Clock;
 
 /// <summary>
-/// ClockWidget displays the current time with timezone support.
-/// External widget version with full drag functionality.
+/// Widget shell for the Clock widget.
+/// Handles window behavior (drag, resize, context menu, lifecycle).
+/// Clock rendering and timing logic live in ClockWidgetView.
 /// </summary>
 public partial class ClockWidgetWindow : WidgetWindowBase
 {
-    private readonly DispatcherTimer _timer;
-    private TimeZoneInfo _timeZone = TimeZoneInfo.Local;
-    private bool _use24HourFormat;
-    private bool _showSeconds;
-    private bool _showTimeZoneLabel;
-    private ClockWidgetSettings? _currentSettings;
+    private static readonly ILogger Log = Serilog.Log.ForContext<ClockWidgetWindow>();
 
-    // Drag tracking (use Win32 coordinates for smooth movement)
+    private ClockWidgetSettings _currentSettings;
+
+    // Drag tracking (Win32 for smooth movement)
     private bool _isDragging;
     private Win32Interop.Point _dragStartCursor;
     private Win32Interop.Rect _dragStartRect;
@@ -37,183 +37,247 @@ public partial class ClockWidgetWindow : WidgetWindowBase
     {
         InitializeComponent();
 
-        // Initialize widget base (resize/lock handles and parts)
-        InitializeWidgetWindow(new WidgetWindowInit(widgetInstanceId, Left, Top, Width, Height, false),
-            new WidgetWindowParts(LockWidgetMenuItem, ResizeToggleMenuItem, ResizeOutline, ResizeTop, ResizeBottom, ResizeLeft, ResizeRight, "clock"));
+        // Initialize widget base (lock + resize system)
+        InitializeWidgetWindow(
+            new WidgetWindowInit(
+                widgetInstanceId,
+                Left,
+                Top,
+                Width,
+                Height,
+                IsLocked: false
+            ),
+            new WidgetWindowParts(
+                LockWidgetMenuItem,
+                ResizeToggleMenuItem,
+                ResizeOutline,
+                ResizeTop,
+                ResizeBottom,
+                ResizeLeft,
+                ResizeRight,
+                WidgetKey: "clock"
+            )
+        );
 
         _currentSettings = settings ?? ClockWidgetSettings.Default();
-        ApplySettings(_currentSettings);
-
-        // Start timer (match built-in widget timing)
-        _timer = new DispatcherTimer
-        {
-            Interval = TimeSpan.FromMilliseconds(500)
-        };
-        _timer.Tick += Timer_Tick;
-        _timer.Start();
 
         Loaded += ClockWidget_Loaded;
+
+        Log.Debug("ClockWidgetWindow created with InstanceId={InstanceId}", widgetInstanceId);
     }
+
+    #region Window lifecycle
 
     private void ClockWidget_Loaded(object? sender, RoutedEventArgs e)
     {
-        // Access HWND and set extended styles
-        var helper = new WindowInteropHelper(this);
-        var hwnd = helper.Handle;
-
-        // Hide from Alt+Tab and prevent activation
-        Win32Interop.MakeToolWindowNoActivate(hwnd);
-
-        // Show window without activating
-        Win32Interop.ShowWindowNoActivate(hwnd);
-
-        // Place window behind normal windows
-        Win32Interop.SendToBottom(hwnd);
-    }
-
-    private void ApplySettings(ClockWidgetSettings settings)
-    {
-        _currentSettings = settings;
-        _timeZone = TimeZoneInfo.FindSystemTimeZoneById(settings.TimeZoneId);
-        _use24HourFormat = settings.Use24HourFormat;
-        _showSeconds = settings.ShowSeconds;
-        _showTimeZoneLabel = settings.ShowTimeZoneLabel;
-
-        // Set initial values
-        UpdateTime();
-
-        // Update timezone label
-        if (_showTimeZoneLabel)
+        try
         {
-            TimeZoneLabel.Text = _timeZone.StandardName;
-            TimeZoneLabel.Visibility = Visibility.Visible;
+            var helper = new WindowInteropHelper(this);
+            var hwnd = helper.Handle;
+
+            // Hide from Alt+Tab, prevent focus stealing
+            Win32Interop.MakeToolWindowNoActivate(hwnd);
+
+            // Show without activating
+            Win32Interop.ShowWindowNoActivate(hwnd);
+
+            // Send behind normal windows (desktop-widget behavior)
+            Win32Interop.SendToBottom(hwnd);
+
+            // Apply settings to the clock view (named element in XAML)
+            ClockView?.ApplySettings(_currentSettings);
+
+            Log.Information("Clock widget loaded at position ({Left}, {Top})", Left, Top);
         }
-        else
+        catch (Exception ex)
         {
-            TimeZoneLabel.Visibility = Visibility.Collapsed;
+            Log.Error(ex, "Failed to initialize clock widget window");
         }
     }
 
-    private void RootBorder_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+    protected override void OnClosing(CancelEventArgs e)
     {
-        RootBorder.ContextMenu.IsOpen = true;
-        e.Handled = true;
+        try
+        {
+            // Dispose the clock view to stop timer
+            ClockView?.Dispose();
+            Log.Information("Clock widget closing");
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error during clock widget cleanup");
+        }
+
+        base.OnClosing(e);
     }
+
+    #endregion
+
+    #region Drag handling
 
     private void RootBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        // Start dragging
+        if (IsLocked)
+            return;
+
+        // Block dragging if clicking on resize handles or other blocked elements
+        if (IsDragBlocked(e.OriginalSource as DependencyObject))
+            return;
+
         _isDragging = true;
+
         var helper = new WindowInteropHelper(this);
         _dragHwnd = helper.Handle;
+
         Win32Interop.GetCursorPos(out _dragStartCursor);
         Win32Interop.GetWindowRect(_dragHwnd, out _dragStartRect);
 
-        // Capture mouse to continue receiving events during drag
         RootBorder.CaptureMouse();
-
         e.Handled = true;
     }
 
     private void RootBorder_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
         if (!_isDragging)
-        {
             return;
-        }
 
         _isDragging = false;
-        RootBorder.ReleaseMouseCapture();
         _dragHwnd = IntPtr.Zero;
 
+        RootBorder.ReleaseMouseCapture();
         e.Handled = true;
+
+        Log.Debug("Widget moved to ({Left}, {Top})", Left, Top);
     }
 
-    private void RootBorder_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+    private void RootBorder_PreviewMouseMove(object sender, MouseEventArgs e)
     {
-        if (!_isDragging || e.LeftButton != MouseButtonState.Pressed)
-        {
+        if (!_isDragging || _dragHwnd == IntPtr.Zero || e.LeftButton != MouseButtonState.Pressed)
             return;
-        }
 
-        if (_dragHwnd == IntPtr.Zero)
-        {
-            return;
-        }
-
-        // Compute delta in physical pixels and move the HWND directly for smooth dragging
         Win32Interop.GetCursorPos(out var current);
+
         var dx = current.X - _dragStartCursor.X;
         var dy = current.Y - _dragStartCursor.Y;
 
         var newLeft = _dragStartRect.Left + dx;
         var newTop = _dragStartRect.Top + dy;
 
-        // Constrain to screen boundaries
-        var constrainedPosition = ScreenBoundsHelper.ConstrainToScreenBounds(
+        var constrained = ScreenBoundsHelper.ConstrainToScreenBounds(
             newLeft,
             newTop,
             _dragStartRect.Right - _dragStartRect.Left,
-            _dragStartRect.Bottom - _dragStartRect.Top);
+            _dragStartRect.Bottom - _dragStartRect.Top
+        );
 
         Win32Interop.SetWindowPos(
             _dragHwnd,
             IntPtr.Zero,
-            constrainedPosition.X,
-            constrainedPosition.Y,
+            constrained.X,
+            constrained.Y,
             0,
             0,
-            Win32Interop.SWP_NOSIZE | Win32Interop.SWP_NOACTIVATE | Win32Interop.SWP_NOZORDER);
+            Win32Interop.SWP_NOSIZE |
+            Win32Interop.SWP_NOACTIVATE |
+            Win32Interop.SWP_NOZORDER
+        );
 
-        // Update WPF window position to match
-        Left = constrainedPosition.X;
-        Top = constrainedPosition.Y;
+        Left = constrained.X;
+        Top = constrained.Y;
 
+        e.Handled = true;
+    }
+
+    #endregion
+
+    #region Context menu
+
+    private void RootBorder_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (RootBorder.ContextMenu is { } ctx)
+            ctx.IsOpen = true;
         e.Handled = true;
     }
 
     private void Settings_Click(object sender, RoutedEventArgs e)
     {
-        var settingsWindow = new ClockSettingsWindow(_currentSettings)
+        try
         {
-            Owner = this,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner
-        };
+            var dialog = new ClockSettingsWindow(_currentSettings)
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
 
-        if (settingsWindow.ShowDialog() == true && settingsWindow.UpdatedSettings != null)
+            if (dialog.ShowDialog() == true && dialog.UpdatedSettings != null)
+            {
+                _currentSettings = dialog.UpdatedSettings;
+                ClockView?.ApplySettings(_currentSettings);
+
+                Log.Information("Clock settings updated: TimeZone={TimeZone}, 24Hour={Use24Hour}",
+                    _currentSettings.TimeZoneId, _currentSettings.Use24HourFormat);
+            }
+        }
+        catch (Exception ex)
         {
-            ApplySettings(settingsWindow.UpdatedSettings);
+            Log.Error(ex, "Failed to open or apply settings");
         }
     }
 
-    private void CloseWidget_Click(object sender, RoutedEventArgs e)
+    private new void RemoveWidget_Click(object sender, RoutedEventArgs e)
     {
-        this.Close();
+        Log.Information("Remove widget requested");
+        base.RemoveWidget_Click(sender, e);
     }
 
-    private void Timer_Tick(object? sender, EventArgs e)
+    #endregion
+
+    #region Drag blocking for resize handles
+
+    protected override bool IsDragBlocked(DependencyObject? source)
     {
-        UpdateTime();
-    }
-
-    private void UpdateTime()
-    {
-        var now = TimeZoneInfo.ConvertTime(DateTime.Now, _timeZone);
-
-        string format = _use24HourFormat
-            ? (_showSeconds ? "HH:mm:ss" : "HH:mm")
-            : (_showSeconds ? "hh:mm:ss tt" : "hh:mm tt");
-
-        TimeTextBlock.Text = now.ToString(format, CultureInfo.InvariantCulture);
-    }
-
-    protected override void OnClosing(CancelEventArgs e)
-    {
-        if (_timer != null)
+        // Don't start dragging if clicking on resize handles
+        while (source != null)
         {
-            _timer.Stop();
-            _timer.Tick -= Timer_Tick;
+            if (source is Thumb thumb &&
+                (thumb == ResizeTop || thumb == ResizeBottom || thumb == ResizeLeft || thumb == ResizeRight))
+            {
+                return true;
+            }
+
+            source = System.Windows.Media.VisualTreeHelper.GetParent(source);
         }
-        base.OnClosing(e);
+
+        return false;
     }
+
+    #endregion
+
+    #region Resize with font scaling
+
+    protected override void ResizeLeft_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+    {
+        base.ResizeLeft_DragDelta(sender, e);
+        ClockView?.UpdateFontSize(Width);
+    }
+
+    protected override void ResizeRight_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+    {
+        base.ResizeRight_DragDelta(sender, e);
+        ClockView?.UpdateFontSize(Width);
+    }
+
+    protected override void ResizeTop_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+    {
+        base.ResizeTop_DragDelta(sender, e);
+        ClockView?.UpdateFontSize(Width);
+    }
+
+    protected override void ResizeBottom_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+    {
+        base.ResizeBottom_DragDelta(sender, e);
+        ClockView?.UpdateFontSize(Width);
+    }
+
+    #endregion
 }

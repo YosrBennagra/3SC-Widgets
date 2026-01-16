@@ -2,131 +2,153 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
 using _3SC.Domain.ValueObjects;
 using _3SC.Data;
+using Serilog;
 
-namespace _3SC.Widgets.Clock
+namespace _3SC.Widgets.Clock;
+
+/// <summary>
+/// Settings window for the Clock widget with live preview.
+/// </summary>
+public partial class ClockSettingsWindow : Window
 {
-    /// <summary>
-    /// Standalone settings window for external Clock widget
-    /// </summary>
-    public partial class ClockSettingsWindow : Window
+    private static readonly ILogger Log = Serilog.Log.ForContext<ClockSettingsWindow>();
+
+    private readonly DispatcherTimer _previewTimer;
+    private readonly ClockWidgetSettings _originalSettings;
+
+    public ClockWidgetSettings? UpdatedSettings { get; private set; }
+
+    public ObservableCollection<TimeZoneDisplay> AvailableTimeZones { get; set; }
+    public TimeZoneDisplay? SelectedTimeZone { get; set; }
+    public bool Use24HourFormat { get; set; } = true;
+    public bool ShowSeconds { get; set; } = true;
+    public bool ShowTimeZoneLabel { get; set; } = true;
+
+    public ClockSettingsWindow(ClockWidgetSettings? currentSettings)
     {
-        private readonly DispatcherTimer _previewTimer;
-        private ClockWidgetSettings? _currentSettings;
+        InitializeComponent();
 
-        public ClockWidgetSettings? UpdatedSettings { get; private set; }
+        _originalSettings = currentSettings ?? ClockWidgetSettings.Default();
 
-        public ObservableCollection<TimeZoneDisplay> AvailableTimeZones { get; set; }
-        public TimeZoneDisplay? SelectedTimeZone { get; set; }
-        public bool Use24HourFormat { get; set; } = true;
-        public bool ShowSeconds { get; set; } = true;
-        public bool ShowTimeZoneLabel { get; set; } = true;
+        // Load available timezones
+        AvailableTimeZones = new ObservableCollection<TimeZoneDisplay>(
+            CommonTimeZones.GetAllTimeZones());
 
-        public ClockSettingsWindow(ClockWidgetSettings? currentSettings)
+        // Load current settings
+        Use24HourFormat = _originalSettings.Use24HourFormat;
+        ShowSeconds = _originalSettings.ShowSeconds;
+        ShowTimeZoneLabel = _originalSettings.ShowTimeZoneLabel;
+        SelectedTimeZone = AvailableTimeZones.FirstOrDefault(tz => tz.Id == _originalSettings.TimeZoneId)
+            ?? AvailableTimeZones.FirstOrDefault(tz => tz.Id == TimeZoneInfo.Local.Id);
+
+        DataContext = this;
+
+        // Setup preview timer
+        _previewTimer = new DispatcherTimer
         {
-            InitializeComponent();
-            
-            _currentSettings = currentSettings ?? ClockWidgetSettings.Default();
-            
-            // Load available timezones
-            AvailableTimeZones = new ObservableCollection<TimeZoneDisplay>(
-                CommonTimeZones.GetAllTimeZones());
+            Interval = TimeSpan.FromSeconds(1)
+        };
+        _previewTimer.Tick += (_, _) => UpdatePreview();
+        _previewTimer.Start();
 
-            // Load current settings
-            Use24HourFormat = _currentSettings.Use24HourFormat;
-            ShowSeconds = _currentSettings.ShowSeconds;
-            ShowTimeZoneLabel = _currentSettings.ShowTimeZoneLabel;
-            SelectedTimeZone = AvailableTimeZones.FirstOrDefault(tz => tz.Id == _currentSettings.TimeZoneId)
-                ?? AvailableTimeZones.FirstOrDefault(tz => tz.Id == TimeZoneInfo.Local.Id);
+        UpdatePreview();
 
-            DataContext = this;
+        Log.Debug("ClockSettingsWindow opened with settings: TimeZone={TimeZone}", _originalSettings.TimeZoneId);
+    }
 
-            // Setup preview timer
-            _previewTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(1)
-            };
-            _previewTimer.Tick += (_, _) => UpdatePreview();
-            _previewTimer.Start();
-            
-            UpdatePreview();
+    /// <summary>
+    /// Allow dragging the window from title bar.
+    /// </summary>
+    private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ClickCount == 1)
+        {
+            DragMove();
+        }
+    }
+
+    private void UpdatePreview()
+    {
+        if (SelectedTimeZone == null)
+        {
+            PreviewTimeTextBlock.Text = "--:--:--";
+            PreviewZoneTextBlock.Text = "";
+            return;
         }
 
-        private void UpdatePreview()
+        try
         {
-            if (SelectedTimeZone == null)
-            {
-                PreviewTimeTextBlock.Text = "--:--:--";
-                PreviewZoneTextBlock.Text = "";
-                return;
-            }
+            var timeZone = TimeZoneInfo.FindSystemTimeZoneById(SelectedTimeZone.Id);
+            var now = TimeZoneInfo.ConvertTime(DateTime.Now, timeZone);
 
-            try
-            {
-                var timeZone = TimeZoneInfo.FindSystemTimeZoneById(SelectedTimeZone.Id);
-                var now = TimeZoneInfo.ConvertTime(DateTime.Now, timeZone);
+            string format = Use24HourFormat
+                ? (ShowSeconds ? "HH:mm:ss" : "HH:mm")
+                : (ShowSeconds ? "h:mm:ss tt" : "h:mm tt");
 
-                string format = Use24HourFormat
-                    ? (ShowSeconds ? "HH:mm:ss" : "HH:mm")
-                    : (ShowSeconds ? "h:mm:ss tt" : "h:mm tt");
-
-                PreviewTimeTextBlock.Text = now.ToString(format, System.Globalization.CultureInfo.CurrentCulture);
-                PreviewZoneTextBlock.Text = ShowTimeZoneLabel ? SelectedTimeZone.ShortName : "";
-            }
-            catch
-            {
-                PreviewTimeTextBlock.Text = "--:--:--";
-                PreviewZoneTextBlock.Text = "Invalid";
-            }
+            PreviewTimeTextBlock.Text = now.ToString(format, System.Globalization.CultureInfo.CurrentCulture);
+            PreviewZoneTextBlock.Text = ShowTimeZoneLabel ? SelectedTimeZone.ShortName : "";
         }
-
-        private void TimeZoneComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        catch (Exception ex)
         {
-            UpdatePreview();
+            Log.Warning(ex, "Failed to update preview for timezone {TimeZone}", SelectedTimeZone?.Id);
+            PreviewTimeTextBlock.Text = "--:--:--";
+            PreviewZoneTextBlock.Text = "Invalid";
         }
+    }
 
-        private void Format24Hour_Checked(object sender, RoutedEventArgs e)
-        {
-            UpdatePreview();
-        }
+    private void TimeZoneComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        UpdatePreview();
+    }
 
-        private void ShowSeconds_Checked(object sender, RoutedEventArgs e)
-        {
-            UpdatePreview();
-        }
+    private void Format24Hour_Checked(object sender, RoutedEventArgs e)
+    {
+        UpdatePreview();
+    }
 
-        private void ShowTimeZone_Checked(object sender, RoutedEventArgs e)
-        {
-            UpdatePreview();
-        }
+    private void ShowSeconds_Checked(object sender, RoutedEventArgs e)
+    {
+        UpdatePreview();
+    }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedTimeZone != null)
-            {
-                UpdatedSettings = new ClockWidgetSettings(
-                    SelectedTimeZone.Id,
-                    Use24HourFormat,
-                    ShowSeconds,
-                    ShowTimeZoneLabel);
-                
-                DialogResult = true;
-                Close();
-            }
-        }
+    private void ShowTimeZone_Checked(object sender, RoutedEventArgs e)
+    {
+        UpdatePreview();
+    }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+    private void SaveButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (SelectedTimeZone != null)
         {
-            DialogResult = false;
+            UpdatedSettings = new ClockWidgetSettings(
+                SelectedTimeZone.Id,
+                Use24HourFormat,
+                ShowSeconds,
+                ShowTimeZoneLabel);
+
+            Log.Information("Settings saved: TimeZone={TimeZone}, 24Hour={Use24Hour}, Seconds={ShowSeconds}, Label={ShowLabel}",
+                UpdatedSettings.TimeZoneId, UpdatedSettings.Use24HourFormat,
+                UpdatedSettings.ShowSeconds, UpdatedSettings.ShowTimeZoneLabel);
+
+            DialogResult = true;
             Close();
         }
+    }
 
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
-        {
-            _previewTimer?.Stop();
-            base.OnClosing(e);
-        }
+    private void CancelButton_Click(object sender, RoutedEventArgs e)
+    {
+        Log.Debug("Settings cancelled");
+        DialogResult = false;
+        Close();
+    }
+
+    protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+    {
+        _previewTimer?.Stop();
+        base.OnClosing(e);
     }
 }
