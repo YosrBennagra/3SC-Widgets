@@ -1,9 +1,28 @@
 {
-    "version": "1.0.0",
-    "name": "clipboard-history",
+    "packageId": "com.3sc.clipboard-history",
+    "widgetKey": "clipboard-history",
     "displayName": "Clipboard History",
-    "description": "Access and manage recent clipboard items (text and images)",
-    "author": "3SC Team",
-    "entryPoint": "3SC.Widgets.ClipboardHistory.dll",
-    "factoryType": "_3SC.Widgets.ClipboardHistory.ClipboardHistoryWidgetFactory"
+    "version": "1.1.0",
+    "author": {
+        "name": "3SC Team",
+        "email": "team@3sc.app"
+    },
+    "description": "Access and manage recent clipboard items including text and images with quick copy functionality.",
+    "category": "productivity",
+    "icon": "icon.png",
+    "entry": "3SC.Widgets.ClipboardHistory.dll",
+    "minAppVersion": "1.0.0",
+    "hasSettings": false,
+    "permissions": [],
+    "tags": [
+        "clipboard",
+        "history",
+        "copy",
+        "paste",
+        "productivity"
+    ],
+    "defaultSize": {
+        "width": 350,
+        "height": 450
+    }
 }

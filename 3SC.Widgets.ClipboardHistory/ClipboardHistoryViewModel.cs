@@ -117,4 +117,19 @@ public partial class ClipboardHistoryViewModel : ObservableObject
             ClipboardItems.Remove(item);
         }
     }
+
+    // Clear all clipboard history
+    public void ClearAll()
+    {
+        ClipboardItems.Clear();
+        _lastClipboardText = string.Empty;
+        _lastClipboardImage = null;
+    }
+
+    // Dispose and clean up resources
+    public void Dispose()
+    {
+        _monitorTimer?.Stop();
+        ClipboardItems.Clear();
+    }
 }
