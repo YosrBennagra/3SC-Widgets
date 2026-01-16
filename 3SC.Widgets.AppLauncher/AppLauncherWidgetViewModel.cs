@@ -2,11 +2,13 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
+using Serilog;
 
 namespace _3SC.Widgets.AppLauncher
 {
     public class AppLauncherWidgetViewModel : IDisposable
     {
+        private static readonly ILogger Log = Serilog.Log.ForContext<AppLauncherWidgetViewModel>();
         private readonly string _storagePath;
         public ObservableCollection<AppItem> Apps { get; } = new ObservableCollection<AppItem>();
 
@@ -17,6 +19,7 @@ namespace _3SC.Widgets.AppLauncher
             Directory.CreateDirectory(dir);
             _storagePath = Path.Combine(dir, "app_launcher.json");
             LoadApps();
+            Log.Debug("AppLauncherWidgetViewModel initialized with {Count} apps", Apps.Count);
         }
 
         private void LoadApps()
@@ -36,8 +39,12 @@ namespace _3SC.Widgets.AppLauncher
                     seen.Add(p);
                     Apps.Add(new AppItem { Name = i.Name ?? string.Empty, Path = p, IsFavorite = i.IsFavorite });
                 }
+                Log.Information("Loaded {Count} apps from storage", Apps.Count);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to load apps");
+            }
         }
 
         public void SaveApps()
@@ -51,8 +58,12 @@ namespace _3SC.Widgets.AppLauncher
                 }
                 var json = JsonSerializer.Serialize(dto, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(_storagePath, json);
+                Log.Debug("Saved {Count} apps to storage", Apps.Count);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to save apps");
+            }
         }
 
         public void Dispose()

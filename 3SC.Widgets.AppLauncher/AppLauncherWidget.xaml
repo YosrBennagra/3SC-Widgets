@@ -17,11 +17,31 @@
 
     <local:WidgetWindowBase.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+
+        <!-- 3SC Dark Theme Colors -->
+        <SolidColorBrush x:Key="WidgetSurface"
+                Color="#D0080810"/>
+        <SolidColorBrush x:Key="WidgetOutline"
+                Color="#FF2DD4BF"/>
+        <SolidColorBrush x:Key="Accent"
+                Color="#FF2DD4BF"/>
+        <SolidColorBrush x:Key="AccentHover"
+                Color="#FF34E5CE"/>
+        <SolidColorBrush x:Key="CardBorder"
+                Color="#FF2A2A3A"/>
+        <SolidColorBrush x:Key="Card"
+                Color="#FF0F172A"/>
+        <SolidColorBrush x:Key="TextPrimary"
+                Color="#FFF1F5F9"/>
+        <SolidColorBrush x:Key="TextSecondary"
+                Color="#FF94A3B8"/>
+        <SolidColorBrush x:Key="TextTertiary"
+                Color="#FF64748B"/>
     </local:WidgetWindowBase.Resources>
 
     <Grid Margin="6">
         <Border x:Name="RootBorder"
-                Background="{DynamicResource Brushes.WidgetSurface}"
+                Background="{StaticResource WidgetSurface}"
                 CornerRadius="18"
                 SnapsToDevicePixels="True"
                 PreviewMouseLeftButtonDown="Border_PreviewMouseLeftButtonDown"
@@ -56,7 +76,7 @@
 
                 <!-- Resize outline -->
                 <Rectangle x:Name="ResizeOutline"
-                           Stroke="{DynamicResource Brushes.WidgetOutline}"
+                           Stroke="{StaticResource WidgetOutline}"
                            StrokeThickness="2"
                            RadiusX="12"
                            RadiusY="12"
@@ -75,7 +95,7 @@
                        Panel.ZIndex="10">
                     <Thumb.Template>
                         <ControlTemplate TargetType="Thumb">
-                            <Border Background="{DynamicResource Brushes.WidgetOutline}"
+                            <Border Background="{StaticResource WidgetOutline}"
                                     CornerRadius="7"/>
                         </ControlTemplate>
                     </Thumb.Template>
@@ -93,7 +113,7 @@
                        Panel.ZIndex="10">
                     <Thumb.Template>
                         <ControlTemplate TargetType="Thumb">
-                            <Border Background="{DynamicResource Brushes.WidgetOutline}"
+                            <Border Background="{StaticResource WidgetOutline}"
                                     CornerRadius="7"/>
                         </ControlTemplate>
                     </Thumb.Template>
@@ -111,7 +131,7 @@
                        Panel.ZIndex="10">
                     <Thumb.Template>
                         <ControlTemplate TargetType="Thumb">
-                            <Border Background="{DynamicResource Brushes.WidgetOutline}"
+                            <Border Background="{StaticResource WidgetOutline}"
                                     CornerRadius="7"/>
                         </ControlTemplate>
                     </Thumb.Template>
@@ -129,7 +149,7 @@
                        Panel.ZIndex="10">
                     <Thumb.Template>
                         <ControlTemplate TargetType="Thumb">
-                            <Border Background="{DynamicResource Brushes.WidgetOutline}"
+                            <Border Background="{StaticResource WidgetOutline}"
                                     CornerRadius="7"/>
                         </ControlTemplate>
                     </Thumb.Template>
@@ -155,7 +175,7 @@
                             <!-- Selection indicator -->
                             <Border x:Name="SelectionIndicator"
                                     Grid.Column="0"
-                                    Background="{DynamicResource Brushes.Accent}"
+                                    Background="{StaticResource Accent}"
                                     CornerRadius="6"
                                     Opacity="0.2"
                                     Panel.ZIndex="0"/>
@@ -207,7 +227,7 @@
                             VerticalAlignment="Bottom"
                             Height="1"
                             Margin="20,0"
-                            Background="{DynamicResource Brushes.CardBorder}"
+                            Background="{StaticResource CardBorder}"
                             Opacity="0.25"/>
 
                     <!-- CONTENT -->
@@ -219,7 +239,7 @@
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center">
 
-                            <Border Background="{DynamicResource Brushes.Card}"
+                            <Border Background="{StaticResource Card}"
                                     CornerRadius="12"
                                     Padding="16"
                                     Cursor="Hand"
@@ -228,20 +248,20 @@
                                 <TextBlock Text="&#xE710;"
                                            FontFamily="Segoe MDL2 Assets"
                                            FontSize="28"
-                                           Foreground="{DynamicResource Brushes.TextTertiary}"
+                                           Foreground="{StaticResource TextTertiary}"
                                            HorizontalAlignment="Center"/>
                             </Border>
 
                             <TextBlock Text="Drop apps here"
                                        FontSize="13"
                                        FontWeight="SemiBold"
-                                       Foreground="{DynamicResource Brushes.TextSecondary}"
+                                       Foreground="{StaticResource TextSecondary}"
                                        HorizontalAlignment="Center"
                                        Margin="0,12,0,0"/>
 
                             <TextBlock Text="or click the icon above"
                                        FontSize="11"
-                                       Foreground="{DynamicResource Brushes.TextTertiary}"
+                                       Foreground="{StaticResource TextTertiary}"
                                        Margin="0,4,0,0"
                                        HorizontalAlignment="Center"/>
                         </StackPanel>
@@ -316,7 +336,7 @@
                                                                TextAlignment="Center"
                                                                TextWrapping="Wrap"
                                                                MaxWidth="70"
-                                                               Foreground="{DynamicResource Brushes.TextPrimary}"
+                                                               Foreground="{StaticResource TextPrimary}"
                                                                HorizontalAlignment="Center"/>
                                                 </StackPanel>
                                             </Grid>

@@ -5,21 +5,43 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using _3SC.Widgets.AppLauncher.Helpers;
+using Serilog;
 
 namespace _3SC.Widgets.AppLauncher;
 
 public partial class AppLauncherWindow : WidgetWindowBase
 {
+    private static readonly ILogger Log = Serilog.Log.ForContext<AppLauncherWindow>();
     private readonly AppLauncherWidgetViewModel _viewModel;
     private bool _showFavoritesOnly = false;
     private const double DefaultMinWidgetWidth = 300;
     private const double DefaultMinWidgetHeight = 200;
 
-    public AppLauncherWindow()
+    public AppLauncherWindow() : this(Guid.Empty, 0, 0, 420, 340, false)
+    {
+    }
+
+    public AppLauncherWindow(Guid widgetInstanceId, double left, double top, double width, double height, bool isLocked)
     {
         InitializeComponent();
+
+        // Initialize widget base (lock + resize system)
+        InitializeWidgetWindow(
+            new WidgetWindowInit(widgetInstanceId, left, top, width, height, isLocked),
+            new WidgetWindowParts(
+                LockWidgetMenuItem: LockWidgetMenuItem,
+                ResizeToggleMenuItem: ResizeToggleMenuItem,
+                ResizeOutlineElement: ResizeOutline,
+                ResizeTopThumb: ResizeTop,
+                ResizeBottomThumb: ResizeBottom,
+                ResizeLeftThumb: ResizeLeft,
+                ResizeRightThumb: ResizeRight,
+                WidgetKey: "app-launcher"));
+
         _viewModel = new AppLauncherWidgetViewModel();
         DataContext = _viewModel;
+
+        Log.Debug("AppLauncherWindow created with InstanceId={InstanceId}", widgetInstanceId);
     }
 
     private void UpdateAppDisplay()
@@ -40,8 +62,8 @@ public partial class AppLauncherWindow : WidgetWindowBase
         }
 
         // Safe resource lookup with sensible fallbacks
-        var primaryBrush = TryFindResource("Brushes.TextPrimary") as System.Windows.Media.Brush ?? System.Windows.Media.Brushes.White;
-        var tertiaryBrush = TryFindResource("Brushes.TextTertiary") as System.Windows.Media.Brush ?? System.Windows.Media.Brushes.Gray;
+        var primaryBrush = TryFindResource("TextPrimary") as System.Windows.Media.Brush ?? System.Windows.Media.Brushes.White;
+        var tertiaryBrush = TryFindResource("TextTertiary") as System.Windows.Media.Brush ?? System.Windows.Media.Brushes.Gray;
 
         AllTabButton.SetValue(System.Windows.Controls.Control.ForegroundProperty, _showFavoritesOnly ? tertiaryBrush : primaryBrush);
         FavoritesTabButton.SetValue(System.Windows.Controls.Control.ForegroundProperty, _showFavoritesOnly ? primaryBrush : tertiaryBrush);
