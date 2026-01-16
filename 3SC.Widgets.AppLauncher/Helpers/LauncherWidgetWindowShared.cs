@@ -66,13 +66,32 @@ namespace _3SC.Widgets.AppLauncher.Helpers
             {
                 if (!System.IO.File.Exists(path)) return;
                 var name = System.IO.Path.GetFileNameWithoutExtension(path);
+                // Avoid adding duplicates by comparing the Path property on existing items
+                var propPath = typeof(T).GetProperty("Path");
+                if (propPath != null)
+                {
+                    foreach (var existing in apps)
+                    {
+                        try
+                        {
+                            var existingPath = propPath.GetValue(existing) as string;
+                            if (!string.IsNullOrWhiteSpace(existingPath) && string.Equals(existingPath, path, StringComparison.OrdinalIgnoreCase))
+                            {
+                                // Duplicate found — no-op
+                                return;
+                            }
+                        }
+                        catch { }
+                    }
+                }
+
                 // Try to create a T if possible via reflection; otherwise expect caller to handle adding
                 var ctor = typeof(T).GetConstructor(Type.EmptyTypes);
                 if (ctor != null)
                 {
                     var instance = ctor.Invoke(null) as T;
                     var propName = typeof(T).GetProperty("Name");
-                    var propPath = typeof(T).GetProperty("Path");
+                    propPath = typeof(T).GetProperty("Path");
                     propName?.SetValue(instance, name);
                     propPath?.SetValue(instance, path);
                     apps.Add(instance);

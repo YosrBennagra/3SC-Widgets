@@ -2,16 +2,10 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace _3SC.Widgets.Clock;
+namespace _3SC.Widgets.Clock.Helpers;
 
-/// <summary>
-/// Helper class to constrain widget positions to screen boundaries.
-/// </summary>
 public static class ScreenBoundsHelper
 {
-    /// <summary>
-    /// Constrains a window position to remain within screen bounds.
-    /// </summary>
     public static Point ConstrainToScreenBounds(int x, int y, int width, int height)
     {
         var screens = Screen.AllScreens;

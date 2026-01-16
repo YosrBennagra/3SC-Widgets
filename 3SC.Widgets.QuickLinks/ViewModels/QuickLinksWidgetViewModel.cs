@@ -8,7 +8,7 @@ using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace _3SC.ViewModels;
+namespace _3SC.Widgets.QuickLinks.ViewModels;
 
 public partial class QuickLink : ObservableObject
 {

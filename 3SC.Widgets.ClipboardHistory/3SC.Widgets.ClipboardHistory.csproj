@@ -4,6 +4,8 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <RootNamespace>_3SC.Widgets.ClipboardHistory</RootNamespace>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
     <OutputType Condition="'$(Configuration)' == 'Debug'">WinExe</OutputType>
     <OutputType Condition="'$(Configuration)' == 'Release'">Library</OutputType>

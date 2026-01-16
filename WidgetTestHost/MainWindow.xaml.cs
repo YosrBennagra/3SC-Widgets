@@ -27,6 +27,7 @@ public partial class MainWindow : Window
         _widgetFactories["Video Viewer"] = new _3SC.Widgets.VideoViewer.VideoViewerWidgetFactory();
         _widgetFactories["PDF Viewer"] = new _3SC.Widgets.PdfViewer.PdfViewerWidgetFactory();
         _widgetFactories["Folders"] = new _3SC.Widgets.Folders.FoldersWidgetFactory();
+        _widgetFactories["App Launcher"] = new _3SC.Widgets.AppLauncher.AppLauncherWidgetFactory();
         _widgetFactories["Game Vault"] = new _3SC.Widgets.GameVault.GameVaultWidgetFactory();
         _widgetFactories["Clipboard History"] = new _3SC.Widgets.ClipboardHistory.ClipboardHistoryWidgetFactory();
 

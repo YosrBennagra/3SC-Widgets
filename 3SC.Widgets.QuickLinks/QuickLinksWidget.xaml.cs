@@ -4,9 +4,9 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using _3SC.ViewModels;
+using _3SC.Widgets.QuickLinks.ViewModels;
 
-namespace _3SC.Widgets;
+namespace _3SC.Widgets.QuickLinks;
 
 public partial class QuickLinksWidget : WidgetWindowBase
 {
@@ -42,7 +42,7 @@ public partial class QuickLinksWidget : WidgetWindowBase
     }
 
     // Window interaction handlers referenced by XAML
-    private void Border_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private new void Border_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
         if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed && !IsDragBlocked(e.OriginalSource as DependencyObject))
         {
@@ -50,17 +50,17 @@ public partial class QuickLinksWidget : WidgetWindowBase
         }
     }
 
-    private void Border_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+    private new void Border_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
     {
         // No-op placeholder for XAML wiring
     }
 
-    private void Border_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private new void Border_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
         // No-op placeholder for XAML wiring
     }
 
-    private void LockWidget_Click(object sender, RoutedEventArgs e)
+    private new void LockWidget_Click(object sender, RoutedEventArgs e)
     {
         bool isLocked = false;
         if (sender is MenuItem mi)
@@ -80,7 +80,7 @@ public partial class QuickLinksWidget : WidgetWindowBase
         if (ResizeRight != null) ResizeRight.Visibility = vis;
     }
 
-    private void ResizeToggle_Click(object sender, RoutedEventArgs e)
+    private new void ResizeToggle_Click(object sender, RoutedEventArgs e)
     {
         bool show = false;
         if (sender is MenuItem mi) show = mi.IsChecked;
@@ -93,12 +93,12 @@ public partial class QuickLinksWidget : WidgetWindowBase
         if (ResizeRight != null) ResizeRight.Visibility = vis;
     }
 
-    private void RemoveWidget_Click(object sender, RoutedEventArgs e)
+    private new void RemoveWidget_Click(object sender, RoutedEventArgs e)
     {
         Close();
     }
 
-    private void ResizeTop_DragDelta(object sender, DragDeltaEventArgs e)
+    private new void ResizeTop_DragDelta(object sender, DragDeltaEventArgs e)
     {
         double newHeight = Height - e.VerticalChange;
         double newTop = Top + e.VerticalChange;
@@ -109,13 +109,13 @@ public partial class QuickLinksWidget : WidgetWindowBase
         }
     }
 
-    private void ResizeBottom_DragDelta(object sender, DragDeltaEventArgs e)
+    private new void ResizeBottom_DragDelta(object sender, DragDeltaEventArgs e)
     {
         double newHeight = Height + e.VerticalChange;
         if (newHeight >= MinHeight) Height = newHeight;
     }
 
-    private void ResizeLeft_DragDelta(object sender, DragDeltaEventArgs e)
+    private new void ResizeLeft_DragDelta(object sender, DragDeltaEventArgs e)
     {
         double newWidth = Width - e.HorizontalChange;
         double newLeft = Left + e.HorizontalChange;
@@ -126,7 +126,7 @@ public partial class QuickLinksWidget : WidgetWindowBase
         }
     }
 
-    private void ResizeRight_DragDelta(object sender, DragDeltaEventArgs e)
+    private new void ResizeRight_DragDelta(object sender, DragDeltaEventArgs e)
     {
         double newWidth = Width + e.HorizontalChange;
         if (newWidth >= MinWidth) Width = newWidth;

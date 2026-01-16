@@ -1,5 +1,8 @@
 using System;
 using System.Windows;
+using DragEventArgs = System.Windows.DragEventArgs;
+using DataFormats = System.Windows.DataFormats;
+using DragDropEffects = System.Windows.DragDropEffects;
 
 namespace _3SC.Widgets.PdfViewer;
 

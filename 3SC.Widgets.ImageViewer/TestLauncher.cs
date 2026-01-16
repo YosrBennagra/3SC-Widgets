@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using Serilog;
 using Serilog.Events;
+using Application = System.Windows.Application;
 
 namespace TestImageViewerWidget;
 

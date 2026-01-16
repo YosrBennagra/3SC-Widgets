@@ -22,7 +22,7 @@ internal class QuickLinksWidgetAdapter : IWidget
 
     public System.Windows.Window? CreateWindow()
     {
-        _window = new _3SC.Widgets.QuickLinksWidget();
+        _window = new _3SC.Widgets.QuickLinks.QuickLinksWidget();
         return _window;
     }
 

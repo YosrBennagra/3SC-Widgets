@@ -11,4 +11,9 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="3SC.Widgets.Contracts">
+      <HintPath>..\..\3SC\3SC.Widgets.Contracts\bin\Release\net8.0-windows\3SC.Widgets.Contracts.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

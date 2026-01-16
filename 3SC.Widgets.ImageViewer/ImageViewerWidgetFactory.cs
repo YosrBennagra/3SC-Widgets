@@ -1,6 +1,6 @@
 using _3SC.Widgets.Contracts;
 using System.Windows;
-using System.Windows.Controls;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace _3SC.Widgets.ImageViewer;
 

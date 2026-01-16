@@ -27,9 +27,14 @@ namespace _3SC.Widgets.AppLauncher
                 var json = File.ReadAllText(_storagePath);
                 var items = JsonSerializer.Deserialize<AppItemDto[]>(json);
                 if (items == null) return;
+                var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 foreach (var i in items)
                 {
-                    Apps.Add(new AppItem { Name = i.Name ?? string.Empty, Path = i.Path ?? string.Empty, IsFavorite = i.IsFavorite });
+                    var p = i.Path ?? string.Empty;
+                    if (string.IsNullOrWhiteSpace(p)) continue;
+                    if (seen.Contains(p)) continue;
+                    seen.Add(p);
+                    Apps.Add(new AppItem { Name = i.Name ?? string.Empty, Path = p, IsFavorite = i.IsFavorite });
                 }
             }
             catch { }

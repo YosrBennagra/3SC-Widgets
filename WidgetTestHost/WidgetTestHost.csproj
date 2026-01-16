@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\3SC.Widgets.Clock\3SC.Widgets.Clock.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.AppLauncher\3SC.Widgets.AppLauncher.csproj" />
     <ProjectReference Include="..\3SC.Widgets.QuickLinks\3SC.Widgets.QuickLinks.csproj" />
     <ProjectReference Include="..\3SC.Widgets.Calendar\3SC.Widgets.Calendar.csproj" />
     <ProjectReference Include="..\3SC.Widgets.Notes\3SC.Widgets.Notes.csproj" />
