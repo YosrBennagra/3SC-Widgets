@@ -5,8 +5,7 @@
   "version": "1.0.0",
   "author": {
     "name": "3SC Team",
-    "email": "team@3sc.app",
-    "url": "https://github.com/YosrBennagra/3SC-Widgets"
+    "email": "team@3sc.app"
   },
   "description": "Displays current time with timezone support",
   "category": "general",
@@ -20,13 +19,8 @@
     "time",
     "timezone"
   ],
-  "tags": [
-    "clock",
-    "time",
-    "timezone"
-  ],
   "defaultSize": {
     "width": 300,
-    "height": 120
+    "height": 80
   }
 }

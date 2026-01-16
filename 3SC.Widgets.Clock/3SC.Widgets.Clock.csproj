@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <!-- Dual-mode: WinExe for testing (Debug), Library for plugin (Release) -->
+    <OutputType Condition="'$(Configuration)' == 'Debug'">WinExe</OutputType>
+    <OutputType Condition="'$(Configuration)' != 'Debug'">Library</OutputType>
+    <StartupObject Condition="'$(Configuration)' == 'Debug'">TestClockWidget.Program</StartupObject>
     <TargetFramework>net8.0-windows</TargetFramework>
     <RootNamespace>_3SC.Widgets.Clock</RootNamespace>
     <Nullable>enable</Nullable>
@@ -8,7 +12,6 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
