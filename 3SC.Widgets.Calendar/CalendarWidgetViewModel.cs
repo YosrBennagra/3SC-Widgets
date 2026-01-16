@@ -3,11 +3,14 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Serilog;
 
 namespace _3SC.Widgets.Calendar;
 
-public partial class CalendarWidgetViewModel : ObservableObject
+public partial class CalendarWidgetViewModel : ObservableObject, IDisposable
 {
+    private static readonly ILogger Log = Serilog.Log.ForContext<CalendarWidgetViewModel>();
+
     [ObservableProperty]
     private DateTime _selectedDate = DateTime.Today;
 
@@ -32,15 +35,19 @@ public partial class CalendarWidgetViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<DayViewModel> _days = new();
 
+    private bool _disposed;
+
     public CalendarWidgetViewModel()
     {
         UpdateDisplay();
         GenerateCalendar();
+        Log.Debug("CalendarWidgetViewModel initialized, displaying {Month}", MonthYearDisplay);
     }
 
     partial void OnSelectedDateChanged(DateTime value)
     {
         UpdateDisplay();
+        Log.Debug("Selected date changed to {Date}", value.ToShortDateString());
 
         foreach (var day in Days)
         {
@@ -51,6 +58,7 @@ public partial class CalendarWidgetViewModel : ObservableObject
     partial void OnDisplayMonthChanged(DateTime value)
     {
         GenerateCalendar();
+        Log.Debug("Display month changed to {Month}", value.ToString("MMMM yyyy"));
     }
 
     [RelayCommand]
@@ -70,6 +78,7 @@ public partial class CalendarWidgetViewModel : ObservableObject
     {
         SelectedDate = DateTime.Today;
         DisplayMonth = DateTime.Today;
+        Log.Debug("Navigated to today");
     }
 
     private void UpdateDisplay()
@@ -109,6 +118,26 @@ public partial class CalendarWidgetViewModel : ObservableObject
         }
 
         UpdateDisplay();
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+
+        if (disposing)
+        {
+            Days.Clear();
+            Log.Debug("CalendarWidgetViewModel disposed");
+        }
+
+        _disposed = true;
     }
 }
 

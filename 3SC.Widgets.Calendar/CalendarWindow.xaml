@@ -1,304 +1,450 @@
-<Window x:Class="_3SC.Widgets.Calendar.CalendarWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Calendar"
-        Width="320"
-        Height="280"
-        WindowStyle="None"
-        AllowsTransparency="True"
-        Background="Transparent"
-        ShowInTaskbar="False"
-        Topmost="False">
-
-    <Window.Resources>
-        <SolidColorBrush x:Key="WidgetSurface"
-                Color="#D0080810"/>
-        <SolidColorBrush x:Key="TextPrimary"
-                Color="#FFF1F5F9"/>
-        <SolidColorBrush x:Key="TextSecondary"
-                Color="#FFC7D2FE"/>
-        <SolidColorBrush x:Key="TextTertiary"
-                Color="#FF94A3B8"/>
-        <SolidColorBrush x:Key="CardBackground"
-                Color="#FF0B1220"/>
-        <SolidColorBrush x:Key="CardBorder"
-                Color="#FF1E293B"/>
-        <SolidColorBrush x:Key="WidgetOutline"
-                Color="#FF2DD4BF"/>
-        <SolidColorBrush x:Key="Accent"
-                Color="#FF2DD4BF"/>
-    </Window.Resources>
-
-    <Grid Margin="6">
-        <Border x:Name="RootBorder"
-                Background="{StaticResource WidgetSurface}"
-                CornerRadius="12"
-                Padding="0">
-
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <!-- Header / Navigation -->
-                <Border Grid.Row="0"
+<local:WidgetWindowBase x:Class="_3SC.Widgets.Calendar.CalendarWindow"
+                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:local="clr-namespace:_3SC.Widgets.Calendar"
+                        Title="Calendar"
+                        Width="320"
+                        Height="280"
+                        WindowStyle="None"
+                        AllowsTransparency="True"
                         Background="Transparent"
-                        Padding="12">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                        ShowInTaskbar="False"
+                        Topmost="False">
 
-                        <Button Grid.Column="0"
-                                Command="{Binding PreviousMonthCommand}"
-                                Width="26"
-                                Height="26"
-                                ToolTip="Previous month"
-                                Cursor="Hand">
-                            <TextBlock Text="&#xE76B;"
-                                    FontFamily="Segoe MDL2 Assets"
-                                    FontSize="12"
-                                    Foreground="{StaticResource TextTertiary}"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"/>
-                        </Button>
+        <local:WidgetWindowBase.Resources>
+                <!-- 3SC Dark Theme Colors -->
+                <SolidColorBrush x:Key="WidgetSurface"
+                                Color="#D0080810"/>
+                <SolidColorBrush x:Key="TextPrimary"
+                                Color="#FFF1F5F9"/>
+                <SolidColorBrush x:Key="TextSecondary"
+                                Color="#FF94A3B8"/>
+                <SolidColorBrush x:Key="TextTertiary"
+                                Color="#FF64748B"/>
+                <SolidColorBrush x:Key="CardBackground"
+                                Color="#FF0F172A"/>
+                <SolidColorBrush x:Key="CardBorder"
+                                Color="#FF2A2A3A"/>
+                <SolidColorBrush x:Key="Accent"
+                                Color="#FF2DD4BF"/>
+                <SolidColorBrush x:Key="AccentHover"
+                                Color="#FF34E5CE"/>
 
-                        <TextBlock Grid.Column="1"
-                                Text="{Binding MonthYearDisplay}"
-                                FontSize="13"
-                                FontWeight="SemiBold"
-                                Foreground="{StaticResource TextPrimary}"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"/>
+                <!-- Button styles -->
+                <Style TargetType="Button">
+                        <Setter Property="Background"
+                                        Value="Transparent"/>
+                        <Setter Property="BorderThickness"
+                                        Value="0"/>
+                        <Setter Property="Foreground"
+                                        Value="{StaticResource TextSecondary}"/>
+                        <Setter Property="FocusVisualStyle"
+                                        Value="{x:Null}"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        CornerRadius="6">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                        VerticalAlignment="Center"/>
+                                                </Border>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                                Value="True">
+                                        <Setter Property="Background"
+                                                        Value="#1A2DD4BF"/>
+                                </Trigger>
+                        </Style.Triggers>
+                </Style>
+        </local:WidgetWindowBase.Resources>
 
-                        <Button Grid.Column="2"
-                                Command="{Binding NextMonthCommand}"
-                                Width="26"
-                                Height="26"
-                                ToolTip="Next month"
-                                Cursor="Hand">
-                            <TextBlock Text="&#xE76C;"
-                                    FontFamily="Segoe MDL2 Assets"
-                                    FontSize="12"
-                                    Foreground="{StaticResource TextTertiary}"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"/>
-                        </Button>
-                    </Grid>
-                </Border>
+        <Grid Margin="6">
+                <!-- Widget fade-in animation -->
+                <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                        <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                 From="0.0"
+                                                                 To="1.0"
+                                                                 Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                </BeginStoryboard>
+                        </EventTrigger>
+                </Grid.Triggers>
 
-                <!-- Divider -->
-                <Border Grid.Row="0"
-                        VerticalAlignment="Bottom"
-                        Height="1"
-                        Margin="8,0"
-                        Background="{StaticResource CardBorder}"
-                        Opacity="0.25"/>
+                <!-- Main content -->
+                <Border x:Name="RootBorder"
+                        Background="{StaticResource WidgetSurface}"
+                        CornerRadius="18"
+                        MouseRightButtonUp="RootBorder_MouseRightButtonUp"
+                        PreviewMouseLeftButtonDown="RootBorder_PreviewMouseLeftButtonDown"
+                        PreviewMouseLeftButtonUp="RootBorder_PreviewMouseLeftButtonUp"
+                        PreviewMouseMove="RootBorder_PreviewMouseMove"
+                        Padding="0">
 
-                <!-- Day headers -->
-                <UniformGrid Grid.Row="1"
-                        Rows="1"
-                        Columns="7"
-                        Margin="12,10,12,6">
-                    <TextBlock Text="M"
-                            FontSize="10"
-                            FontWeight="Medium"
-                            Foreground="{StaticResource TextTertiary}"
-                            HorizontalAlignment="Center"/>
-                    <TextBlock Text="T"
-                            FontSize="10"
-                            FontWeight="Medium"
-                            Foreground="{StaticResource TextTertiary}"
-                            HorizontalAlignment="Center"/>
-                    <TextBlock Text="W"
-                            FontSize="10"
-                            FontWeight="Medium"
-                            Foreground="{StaticResource TextTertiary}"
-                            HorizontalAlignment="Center"/>
-                    <TextBlock Text="T"
-                            FontSize="10"
-                            FontWeight="Medium"
-                            Foreground="{StaticResource TextTertiary}"
-                            HorizontalAlignment="Center"/>
-                    <TextBlock Text="F"
-                            FontSize="10"
-                            FontWeight="Medium"
-                            Foreground="{StaticResource TextTertiary}"
-                            HorizontalAlignment="Center"/>
-                    <TextBlock Text="S"
-                            FontSize="10"
-                            FontWeight="Medium"
-                            Foreground="{StaticResource TextTertiary}"
-                            HorizontalAlignment="Center"
-                            Opacity="0.7"/>
-                    <TextBlock Text="S"
-                            FontSize="10"
-                            FontWeight="Medium"
-                            Foreground="{StaticResource TextTertiary}"
-                            HorizontalAlignment="Center"
-                            Opacity="0.7"/>
-                </UniformGrid>
+                        <!-- Context Menu -->
+                        <Border.ContextMenu>
+                                <ContextMenu>
+                                        <MenuItem x:Name="LockWidgetMenuItem"
+                                                        Header="Lock Widget"
+                                                        Click="LockWidget_Click"/>
+                                        <MenuItem x:Name="ResizeToggleMenuItem"
+                                                        Header="Toggle Resize Handles"
+                                                        Click="ResizeToggle_Click"/>
+                                        <Separator/>
+                                        <MenuItem Header="Remove Widget"
+                                                        Click="RemoveWidget_Click"/>
+                                </ContextMenu>
+                        </Border.ContextMenu>
 
-                <!-- Calendar grid -->
-                <ItemsControl Grid.Row="2"
-                        ItemsSource="{Binding Days}"
-                        Margin="10,0,10,6">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Rows="6"
-                                    Columns="7"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Command="{Binding SelectCommand}"
-                                    Margin="1"
-                                    Cursor="Hand">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Grid Width="28"
-                                                Height="28">
-                                            <Border x:Name="bgBorder"
-                                                    CornerRadius="6"
-                                                    Background="Transparent"
-                                                    BorderThickness="0"/>
-                                            <TextBlock x:Name="dayText"
-                                                    Text="{Binding Day}"
-                                                    FontSize="12"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"/>
+                        <Grid>
+                                <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Header / Navigation -->
+                                <Border Grid.Row="0"
+                                        Background="Transparent"
+                                        Padding="12">
+                                        <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <Button Grid.Column="0"
+                                                        Command="{Binding PreviousMonthCommand}"
+                                                        Width="26"
+                                                        Height="26"
+                                                        ToolTip="Previous month"
+                                                        Cursor="Hand">
+                                                        <TextBlock Text="&#xE76B;"
+                                                                   FontFamily="Segoe MDL2 Assets"
+                                                                   FontSize="12"
+                                                                   Foreground="{StaticResource TextTertiary}"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"/>
+                                                </Button>
+
+                                                <TextBlock Grid.Column="1"
+                                                           Text="{Binding MonthYearDisplay}"
+                                                           FontSize="13"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{StaticResource TextPrimary}"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+
+                                                <Button Grid.Column="2"
+                                                        Command="{Binding NextMonthCommand}"
+                                                        Width="26"
+                                                        Height="26"
+                                                        ToolTip="Next month"
+                                                        Cursor="Hand">
+                                                        <TextBlock Text="&#xE76C;"
+                                                                   FontFamily="Segoe MDL2 Assets"
+                                                                   FontSize="12"
+                                                                   Foreground="{StaticResource TextTertiary}"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"/>
+                                                </Button>
                                         </Grid>
-                                        <ControlTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding IsCurrentMonth}"
-                                                    Value="False">
-                                                <Setter TargetName="dayText"
-                                                        Property="Foreground"
-                                                        Value="{StaticResource TextTertiary}"/>
-                                                <Setter TargetName="dayText"
-                                                        Property="Opacity"
-                                                        Value="0.3"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsCurrentMonth}"
-                                                    Value="True">
-                                                <Setter TargetName="dayText"
-                                                        Property="Foreground"
-                                                        Value="{StaticResource TextSecondary}"/>
-                                            </DataTrigger>
-                                            <MultiDataTrigger>
-                                                <MultiDataTrigger.Conditions>
-                                                    <Condition Binding="{Binding IsToday}"
-                                                            Value="True"/>
-                                                    <Condition Binding="{Binding IsSelected}"
-                                                            Value="False"/>
-                                                </MultiDataTrigger.Conditions>
-                                                <Setter TargetName="dayText"
-                                                        Property="Foreground"
-                                                        Value="{StaticResource Accent}"/>
-                                                <Setter TargetName="dayText"
-                                                        Property="FontWeight"
-                                                        Value="SemiBold"/>
-                                                <Setter TargetName="bgBorder"
-                                                        Property="BorderBrush"
-                                                        Value="{StaticResource Accent}"/>
-                                                <Setter TargetName="bgBorder"
-                                                        Property="BorderThickness"
-                                                        Value="1.5"/>
-                                            </MultiDataTrigger>
-                                            <DataTrigger Binding="{Binding IsSelected}"
-                                                    Value="True">
-                                                <Setter TargetName="bgBorder"
-                                                        Property="Background"
-                                                        Value="{StaticResource Accent}"/>
-                                                <Setter TargetName="dayText"
-                                                        Property="Foreground"
-                                                        Value="#FF0F172A"/>
-                                                <Setter TargetName="dayText"
-                                                        Property="FontWeight"
-                                                        Value="SemiBold"/>
-                                            </DataTrigger>
-                                            <MultiTrigger>
-                                                <MultiTrigger.Conditions>
-                                                    <Condition Property="IsMouseOver"
-                                                            Value="True"/>
-                                                </MultiTrigger.Conditions>
-                                                <Setter TargetName="bgBorder"
-                                                        Property="Background"
-                                                        Value="{StaticResource CardBackground}"/>
-                                            </MultiTrigger>
-                                            <MultiDataTrigger>
-                                                <MultiDataTrigger.Conditions>
-                                                    <Condition Binding="{Binding IsSelected}"
-                                                            Value="True"/>
-                                                    <Condition Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsMouseOver}"
-                                                            Value="True"/>
-                                                </MultiDataTrigger.Conditions>
-                                                <Setter TargetName="bgBorder"
-                                                        Property="Background"
-                                                        Value="{StaticResource Accent}"/>
-                                            </MultiDataTrigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                                </Border>
 
-                <!-- Footer -->
-                <Border Grid.Row="3"
-                        Background="Transparent"
-                        Padding="14,8,14,12">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                                <!-- Divider -->
+                                <Border Grid.Row="0"
+                                        VerticalAlignment="Bottom"
+                                        Height="1"
+                                        Margin="8,0"
+                                        Background="{StaticResource CardBorder}"
+                                        Opacity="0.25"/>
 
-                        <StackPanel Grid.Column="0"
-                                VerticalAlignment="Center">
-                            <TextBlock Text="{Binding SelectedDateLong}"
-                                    FontSize="11"
-                                    FontWeight="Medium"
-                                    Foreground="{StaticResource TextPrimary}"/>
-                            <StackPanel Orientation="Horizontal"
-                                    Margin="0,2,0,0">
-                                <TextBlock FontSize="10"
-                                        Foreground="{StaticResource TextTertiary}">
+                                <!-- Day headers -->
+                                <UniformGrid Grid.Row="1"
+                                             Rows="1"
+                                             Columns="7"
+                                             Margin="12,10,12,6">
+                                        <TextBlock Text="M"
+                                                   FontSize="10"
+                                                   FontWeight="Medium"
+                                                   Foreground="{StaticResource TextTertiary}"
+                                                   HorizontalAlignment="Center"/>
+                                        <TextBlock Text="T"
+                                                   FontSize="10"
+                                                   FontWeight="Medium"
+                                                   Foreground="{StaticResource TextTertiary}"
+                                                   HorizontalAlignment="Center"/>
+                                        <TextBlock Text="W"
+                                                   FontSize="10"
+                                                   FontWeight="Medium"
+                                                   Foreground="{StaticResource TextTertiary}"
+                                                   HorizontalAlignment="Center"/>
+                                        <TextBlock Text="T"
+                                                   FontSize="10"
+                                                   FontWeight="Medium"
+                                                   Foreground="{StaticResource TextTertiary}"
+                                                   HorizontalAlignment="Center"/>
+                                        <TextBlock Text="F"
+                                                   FontSize="10"
+                                                   FontWeight="Medium"
+                                                   Foreground="{StaticResource TextTertiary}"
+                                                   HorizontalAlignment="Center"/>
+                                        <TextBlock Text="S"
+                                                   FontSize="10"
+                                                   FontWeight="Medium"
+                                                   Foreground="{StaticResource TextTertiary}"
+                                                   HorizontalAlignment="Center"
+                                                   Opacity="0.7"/>
+                                        <TextBlock Text="S"
+                                                   FontSize="10"
+                                                   FontWeight="Medium"
+                                                   Foreground="{StaticResource TextTertiary}"
+                                                   HorizontalAlignment="Center"
+                                                   Opacity="0.7"/>
+                                </UniformGrid>
+
+                                <!-- Calendar grid -->
+                                <ItemsControl Grid.Row="2"
+                                              ItemsSource="{Binding Days}"
+                                              Margin="10,0,10,6">
+                                        <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                        <UniformGrid Rows="6"
+                                                                     Columns="7"/>
+                                                </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                        <Button Command="{Binding SelectCommand}"
+                                                                Margin="1"
+                                                                Cursor="Hand">
+                                                                <Button.Template>
+                                                                        <ControlTemplate TargetType="Button">
+                                                                                <Grid Width="28"
+                                                                                      Height="28">
+                                                                                        <Border x:Name="bgBorder"
+                                                                                                CornerRadius="6"
+                                                                                                Background="Transparent"
+                                                                                                BorderThickness="0"/>
+                                                                                        <TextBlock x:Name="dayText"
+                                                                                                   Text="{Binding Day}"
+                                                                                                   FontSize="12"
+                                                                                                   HorizontalAlignment="Center"
+                                                                                                   VerticalAlignment="Center"/>
+                                                                                </Grid>
+                                                                                <ControlTemplate.Triggers>
+                                                                                        <DataTrigger Binding="{Binding IsCurrentMonth}"
+                                                                                                     Value="False">
+                                                                                                <Setter TargetName="dayText"
+                                                                                                        Property="Foreground"
+                                                                                                        Value="{StaticResource TextTertiary}"/>
+                                                                                                <Setter TargetName="dayText"
+                                                                                                        Property="Opacity"
+                                                                                                        Value="0.3"/>
+                                                                                        </DataTrigger>
+                                                                                        <DataTrigger Binding="{Binding IsCurrentMonth}"
+                                                                                                     Value="True">
+                                                                                                <Setter TargetName="dayText"
+                                                                                                        Property="Foreground"
+                                                                                                        Value="{StaticResource TextSecondary}"/>
+                                                                                        </DataTrigger>
+                                                                                        <MultiDataTrigger>
+                                                                                                <MultiDataTrigger.Conditions>
+                                                                                                        <Condition Binding="{Binding IsToday}"
+                                                                                                                   Value="True"/>
+                                                                                                        <Condition Binding="{Binding IsSelected}"
+                                                                                                                   Value="False"/>
+                                                                                                </MultiDataTrigger.Conditions>
+                                                                                                <Setter TargetName="dayText"
+                                                                                                        Property="Foreground"
+                                                                                                        Value="{StaticResource Accent}"/>
+                                                                                                <Setter TargetName="dayText"
+                                                                                                        Property="FontWeight"
+                                                                                                        Value="SemiBold"/>
+                                                                                                <Setter TargetName="bgBorder"
+                                                                                                        Property="BorderBrush"
+                                                                                                        Value="{StaticResource Accent}"/>
+                                                                                                <Setter TargetName="bgBorder"
+                                                                                                        Property="BorderThickness"
+                                                                                                        Value="1.5"/>
+                                                                                        </MultiDataTrigger>
+                                                                                        <DataTrigger Binding="{Binding IsSelected}"
+                                                                                                     Value="True">
+                                                                                                <Setter TargetName="bgBorder"
+                                                                                                        Property="Background"
+                                                                                                        Value="{StaticResource Accent}"/>
+                                                                                                <Setter TargetName="dayText"
+                                                                                                        Property="Foreground"
+                                                                                                        Value="#FF0F172A"/>
+                                                                                                <Setter TargetName="dayText"
+                                                                                                        Property="FontWeight"
+                                                                                                        Value="SemiBold"/>
+                                                                                        </DataTrigger>
+                                                                                        <MultiTrigger>
+                                                                                                <MultiTrigger.Conditions>
+                                                                                                        <Condition Property="IsMouseOver"
+                                                                                                                   Value="True"/>
+                                                                                                </MultiTrigger.Conditions>
+                                                                                                <Setter TargetName="bgBorder"
+                                                                                                        Property="Background"
+                                                                                                        Value="{StaticResource CardBackground}"/>
+                                                                                        </MultiTrigger>
+                                                                                        <MultiDataTrigger>
+                                                                                                <MultiDataTrigger.Conditions>
+                                                                                                        <Condition Binding="{Binding IsSelected}"
+                                                                                                                   Value="True"/>
+                                                                                                        <Condition Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsMouseOver}"
+                                                                                                                   Value="True"/>
+                                                                                                </MultiDataTrigger.Conditions>
+                                                                                                <Setter TargetName="bgBorder"
+                                                                                                        Property="Background"
+                                                                                                        Value="{StaticResource Accent}"/>
+                                                                                        </MultiDataTrigger>
+                                                                                </ControlTemplate.Triggers>
+                                                                        </ControlTemplate>
+                                                                </Button.Template>
+                                                        </Button>
+                                                </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <!-- Footer -->
+                                <Border Grid.Row="3"
+                                        Background="Transparent"
+                                        Padding="14,8,14,12">
+                                        <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <StackPanel Grid.Column="0"
+                                                            VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding SelectedDateLong}"
+                                                                   FontSize="11"
+                                                                   FontWeight="Medium"
+                                                                   Foreground="{StaticResource TextPrimary}"/>
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Margin="0,2,0,0">
+                                                                <TextBlock FontSize="10"
+                                                                           Foreground="{StaticResource TextTertiary}">
                                     <Run Text="Week "/>
                                     <Run Text="{Binding WeekOfYear}"
-                                            FontWeight="Medium"/>
+                                                                        FontWeight="Medium"/>
                                     <Run Text="  •  Day "/>
                                     <Run Text="{Binding DayOfYear}"
-                                            FontWeight="Medium"/>
-                                </TextBlock>
-                            </StackPanel>
-                        </StackPanel>
+                                                                        FontWeight="Medium"/>
+                                                                </TextBlock>
+                                                        </StackPanel>
+                                                </StackPanel>
 
-                        <Button Grid.Column="1"
-                                Command="{Binding TodayCommand}"
-                                ToolTip="Go to today"
-                                Cursor="Hand"
-                                VerticalAlignment="Center">
-                            <Border x:Name="bg"
-                                    Padding="10,5"
-                                    CornerRadius="4"
-                                    Background="{StaticResource CardBackground}"
-                                    BorderBrush="{StaticResource CardBorder}"
-                                    BorderThickness="1">
-                                <TextBlock Text="Today"
-                                        FontSize="10"
-                                        FontWeight="Medium"
-                                        Foreground="{StaticResource TextSecondary}"/>
-                            </Border>
-                        </Button>
-                    </Grid>
+                                                <Button Grid.Column="1"
+                                                        Command="{Binding TodayCommand}"
+                                                        ToolTip="Go to today"
+                                                        Cursor="Hand"
+                                                        VerticalAlignment="Center">
+                                                        <Border x:Name="bg"
+                                                                Padding="10,5"
+                                                                CornerRadius="4"
+                                                                Background="{StaticResource CardBackground}"
+                                                                BorderBrush="{StaticResource CardBorder}"
+                                                                BorderThickness="1">
+                                                                <TextBlock Text="Today"
+                                                                           FontSize="10"
+                                                                           FontWeight="Medium"
+                                                                           Foreground="{StaticResource TextSecondary}"/>
+                                                        </Border>
+                                                </Button>
+                                        </Grid>
+                                </Border>
+                        </Grid>
                 </Border>
-            </Grid>
-        </Border>
-    </Grid>
-</Window>
+
+                <!-- Resize outline (shown when resizing) -->
+                <Rectangle x:Name="ResizeOutline"
+                           Stroke="{StaticResource Accent}"
+                           StrokeThickness="2"
+                           RadiusX="18"
+                           RadiusY="18"
+                           IsHitTestVisible="False"
+                           Visibility="Collapsed"/>
+
+                <!-- Resize handles (14x14 circles, -7px margin for centered positioning) -->
+                <Thumb x:Name="ResizeTop"
+                       Width="14"
+                                Height="14"
+                       Margin="0,-7,0,0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Top"
+                       Cursor="SizeNS"
+                       DragDelta="ResizeTop_DragDelta"
+                       Visibility="Collapsed"
+                       Panel.ZIndex="10">
+                        <Thumb.Template>
+                                <ControlTemplate TargetType="Thumb">
+                                        <Ellipse Fill="{StaticResource Accent}"/>
+                                </ControlTemplate>
+                        </Thumb.Template>
+                </Thumb>
+
+                <Thumb x:Name="ResizeBottom"
+                       Width="14"
+                                Height="14"
+                       Margin="0,0,0,-7"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
+                       Cursor="SizeNS"
+                       DragDelta="ResizeBottom_DragDelta"
+                       Visibility="Collapsed"
+                       Panel.ZIndex="10">
+                        <Thumb.Template>
+                                <ControlTemplate TargetType="Thumb">
+                                        <Ellipse Fill="{StaticResource Accent}"/>
+                                </ControlTemplate>
+                        </Thumb.Template>
+                </Thumb>
+
+                <Thumb x:Name="ResizeLeft"
+                       Width="14"
+                                Height="14"
+                       Margin="-7,0,0,0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Cursor="SizeWE"
+                       DragDelta="ResizeLeft_DragDelta"
+                       Visibility="Collapsed"
+                       Panel.ZIndex="10">
+                        <Thumb.Template>
+                                <ControlTemplate TargetType="Thumb">
+                                        <Ellipse Fill="{StaticResource Accent}"/>
+                                </ControlTemplate>
+                        </Thumb.Template>
+                </Thumb>
+
+                <Thumb x:Name="ResizeRight"
+                       Width="14"
+                                Height="14"
+                       Margin="0,0,-7,0"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       Cursor="SizeWE"
+                       DragDelta="ResizeRight_DragDelta"
+                       Visibility="Collapsed"
+                       Panel.ZIndex="10">
+                        <Thumb.Template>
+                                <ControlTemplate TargetType="Thumb">
+                                        <Ellipse Fill="{StaticResource Accent}"/>
+                                </ControlTemplate>
+                        </Thumb.Template>
+                </Thumb>
+        </Grid>
+</local:WidgetWindowBase>

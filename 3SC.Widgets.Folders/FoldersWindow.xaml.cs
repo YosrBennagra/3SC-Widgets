@@ -10,11 +10,13 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using _3SC.Widgets.Folders.Helpers;
+using Serilog;
 
 namespace _3SC.Widgets.Folders
 {
     public partial class FoldersWindow : WidgetWindowBase
     {
+        private static readonly ILogger Log = Serilog.Log.ForContext<FoldersWindow>();
         private readonly FolderHubWidgetViewModel _viewModel;
         private bool _showFavoritesOnly = false;
 
@@ -35,10 +37,12 @@ namespace _3SC.Widgets.Folders
                     ResizeBottomThumb: ResizeBottom,
                     ResizeLeftThumb: ResizeLeft,
                     ResizeRightThumb: ResizeRight,
-                    WidgetKey: "folder-hub"));
+                    WidgetKey: "folders"));
 
             _viewModel = new FolderHubWidgetViewModel();
             DataContext = _viewModel;
+
+            Log.Debug("FoldersWindow created with InstanceId={InstanceId}", widgetInstanceId);
         }
 
         private void UpdateFolderDisplay()

@@ -6,11 +6,13 @@ using System.Linq;
 using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Serilog;
 
 namespace _3SC.Widgets.Folders
 {
     public partial class FolderHubWidgetViewModel : ObservableObject, IDisposable
     {
+        private static readonly ILogger Log = Serilog.Log.ForContext<FolderHubWidgetViewModel>();
         private bool _disposed;
         private static readonly string FoldersFilePath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -25,6 +27,7 @@ namespace _3SC.Widgets.Folders
         public FolderHubWidgetViewModel()
         {
             LoadFolders();
+            Log.Debug("FolderHubWidgetViewModel initialized with {Count} folders", Folders.Count);
         }
 
         public void LoadFolders()
@@ -46,10 +49,12 @@ namespace _3SC.Widgets.Folders
                         IsFavorite = item.IsFavorite
                     });
                 }
+
+                Log.Information("Loaded {Count} folders from storage", Folders.Count);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Failed to load folders: {ex.Message}");
+                Log.Error(ex, "Failed to load folders");
             }
         }
 
@@ -72,10 +77,12 @@ namespace _3SC.Widgets.Folders
 
                 var json = JsonSerializer.Serialize(data, JsonOptions);
                 File.WriteAllText(FoldersFilePath, json);
+
+                Log.Debug("Saved {Count} folders to storage", Folders.Count);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Failed to save folders: {ex.Message}");
+                Log.Error(ex, "Failed to save folders");
             }
         }
 
