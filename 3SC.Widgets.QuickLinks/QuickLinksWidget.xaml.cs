@@ -1,135 +1,63 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
 using _3SC.Widgets.QuickLinks.ViewModels;
+using Serilog;
 
 namespace _3SC.Widgets.QuickLinks;
 
-public partial class QuickLinksWidget : WidgetWindowBase
+public partial class QuickLinksWidget : Window
 {
+    private readonly ILogger _logger = Log.ForContext<QuickLinksWidget>();
+    private bool _isDragging;
+    private System.Windows.Point _clickPosition;
+
     public QuickLinksWidget()
+        : this(Guid.Empty, 0, 0, 300, 250, false)
     {
+    }
+
+    public QuickLinksWidget(Guid widgetInstanceId, double left, double top, double width, double height, bool isLocked)
+    {
+        _logger.Debug("QuickLinksWidget constructor called with InstanceId={InstanceId}", widgetInstanceId);
+
         InitializeComponent();
 
         var viewModel = new QuickLinksWidgetViewModel();
         DataContext = viewModel;
+
+        _logger.Information("QuickLinksWidget initialized successfully");
     }
 
-    protected override bool IsDragBlocked(DependencyObject? source)
+    private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        return source is not null && IsInteractiveControl(source);
-    }
-
-    private static bool IsInteractiveControl(DependencyObject element)
-    {
-        DependencyObject? current = element;
-        while (current is not null)
+        if (e.ClickCount == 1)
         {
-            if (current is System.Windows.Controls.Button or Slider or Thumb or System.Windows.Controls.ListBox or ListBoxItem or System.Windows.Controls.Primitives.ScrollBar or ScrollViewer or System.Windows.Controls.TextBox)
-            {
-                return true;
-            }
-
-            current = current is Visual
-                ? VisualTreeHelper.GetParent(current)
-                : LogicalTreeHelper.GetParent(current);
-        }
-
-        return false;
-    }
-
-    // Window interaction handlers referenced by XAML
-    private new void Border_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-    {
-        if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed && !IsDragBlocked(e.OriginalSource as DependencyObject))
-        {
-            try { DragMove(); } catch { }
+            _isDragging = true;
+            _clickPosition = e.GetPosition(this);
+            (sender as Border)?.CaptureMouse();
         }
     }
 
-    private new void Border_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+    private void Border_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
     {
-        // No-op placeholder for XAML wiring
-    }
-
-    private new void Border_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-    {
-        // No-op placeholder for XAML wiring
-    }
-
-    private new void LockWidget_Click(object sender, RoutedEventArgs e)
-    {
-        bool isLocked = false;
-        if (sender is MenuItem mi)
+        if (_isDragging && e.LeftButton == MouseButtonState.Pressed)
         {
-            mi.IsChecked = !mi.IsChecked;
-            isLocked = mi.IsChecked;
-        }
-        else if (LockWidgetMenuItem != null)
-        {
-            isLocked = LockWidgetMenuItem.IsChecked;
-        }
-
-        var vis = isLocked ? Visibility.Collapsed : Visibility.Visible;
-        if (ResizeTop != null) ResizeTop.Visibility = vis;
-        if (ResizeBottom != null) ResizeBottom.Visibility = vis;
-        if (ResizeLeft != null) ResizeLeft.Visibility = vis;
-        if (ResizeRight != null) ResizeRight.Visibility = vis;
-    }
-
-    private new void ResizeToggle_Click(object sender, RoutedEventArgs e)
-    {
-        bool show = false;
-        if (sender is MenuItem mi) show = mi.IsChecked;
-        else if (ResizeToggleMenuItem != null) show = ResizeToggleMenuItem.IsChecked;
-
-        var vis = show ? Visibility.Visible : Visibility.Collapsed;
-        if (ResizeTop != null) ResizeTop.Visibility = vis;
-        if (ResizeBottom != null) ResizeBottom.Visibility = vis;
-        if (ResizeLeft != null) ResizeLeft.Visibility = vis;
-        if (ResizeRight != null) ResizeRight.Visibility = vis;
-    }
-
-    private new void RemoveWidget_Click(object sender, RoutedEventArgs e)
-    {
-        Close();
-    }
-
-    private new void ResizeTop_DragDelta(object sender, DragDeltaEventArgs e)
-    {
-        double newHeight = Height - e.VerticalChange;
-        double newTop = Top + e.VerticalChange;
-        if (newHeight >= MinHeight)
-        {
-            Height = newHeight;
-            Top = newTop;
+            var currentPosition = e.GetPosition(this);
+            var offset = currentPosition - _clickPosition;
+            Left += offset.X;
+            Top += offset.Y;
         }
     }
 
-    private new void ResizeBottom_DragDelta(object sender, DragDeltaEventArgs e)
+    private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
-        double newHeight = Height + e.VerticalChange;
-        if (newHeight >= MinHeight) Height = newHeight;
-    }
-
-    private new void ResizeLeft_DragDelta(object sender, DragDeltaEventArgs e)
-    {
-        double newWidth = Width - e.HorizontalChange;
-        double newLeft = Left + e.HorizontalChange;
-        if (newWidth >= MinWidth)
+        if (_isDragging)
         {
-            Width = newWidth;
-            Left = newLeft;
+            _isDragging = false;
+            (sender as Border)?.ReleaseMouseCapture();
         }
-    }
-
-    private new void ResizeRight_DragDelta(object sender, DragDeltaEventArgs e)
-    {
-        double newWidth = Width + e.HorizontalChange;
-        if (newWidth >= MinWidth) Width = newWidth;
     }
 
     private void ItemBorder_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -146,7 +74,6 @@ public partial class QuickLinksWidget : WidgetWindowBase
 
     private void RootBorder_PreviewDragOver(object sender, System.Windows.DragEventArgs e)
     {
-        // Accept file drops or plain text (URLs)
         if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop) || e.Data.GetDataPresent(System.Windows.DataFormats.Text))
         {
             e.Effects = System.Windows.DragDropEffects.Copy;

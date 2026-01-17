@@ -1,0 +1,9 @@
+{
+    "version": "1.1.0",
+    "name": "quicklinks",
+    "displayName": "Quick Links",
+    "description": "Manage and access your frequently used links and URLs",
+    "author": "3SC Team",
+    "entryPoint": "3SC.Widgets.QuickLinks.dll",
+    "factoryType": "_3SC.Widgets.QuickLinks.QuickLinksWidgetFactory"
+}

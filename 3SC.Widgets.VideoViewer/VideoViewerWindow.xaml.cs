@@ -2,145 +2,191 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
+using Serilog;
 
 namespace _3SC.Widgets.VideoViewer;
 
-public partial class VideoViewerWindow : Window
+public partial class VideoViewerWindow : WidgetWindowBase
 {
     private readonly VideoWidgetViewModel _viewModel;
-    private bool _isDragging;
-    private Point _clickPosition;
+    private readonly ILogger _logger = Log.ForContext<VideoViewerWindow>();
+    private readonly DispatcherTimer _timer;
+    private bool _isSeeking;
 
     public VideoViewerWindow()
+        : this(Guid.Empty, 0, 0, 500, 350, false)
     {
+    }
+
+    public VideoViewerWindow(Guid widgetInstanceId, double left, double top, double width, double height, bool isLocked)
+    {
+        _logger.Debug("VideoViewerWindow constructor called with InstanceId={InstanceId}", widgetInstanceId);
+
         InitializeComponent();
+
+        InitializeWidgetWindow(
+            new WidgetWindowInit(widgetInstanceId, left, top, width, height, isLocked),
+            new WidgetWindowParts(
+                LockWidgetMenuItem: LockWidgetMenuItem,
+                ResizeToggleMenuItem: ResizeToggleMenuItem,
+                ResizeOutlineElement: ResizeOutline,
+                ResizeTopThumb: ResizeTop,
+                ResizeBottomThumb: ResizeBottom,
+                ResizeLeftThumb: ResizeLeft,
+                ResizeRightThumb: ResizeRight,
+                WidgetKey: "video"));
 
         _viewModel = new VideoWidgetViewModel();
         DataContext = _viewModel;
 
-        // Connect ViewModel events to MediaElement
-        _viewModel.PlayRequested += () => VideoPlayer?.Play();
-        _viewModel.PauseRequested += () => VideoPlayer?.Pause();
-        _viewModel.StopRequested += () => VideoPlayer?.Stop();
-        _viewModel.SeekRequested += (position) =>
-        {
-            if (VideoPlayer != null)
-            {
-                VideoPlayer.Position = position;
-            }
-        };
-
-        // Update position periodically during playback
-        var timer = new System.Windows.Threading.DispatcherTimer
+        // Timer for updating progress
+        _timer = new DispatcherTimer
         {
             Interval = TimeSpan.FromMilliseconds(100)
         };
-        timer.Tick += (s, e) =>
+        _timer.Tick += Timer_Tick;
+        _timer.Start();
+
+        Loaded += OnLoaded;
+        Closing += (s, e) =>
         {
-            if (_viewModel.IsPlaying && VideoPlayer != null)
-            {
-                _viewModel.UpdatePosition(VideoPlayer.Position);
-            }
+            _timer.Stop();
+            VideoPlayer.Stop();
+            VideoPlayer.Close();
         };
-        timer.Start();
+
+        _logger.Information("VideoViewerWindow initialized successfully");
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
+        _logger.Debug("VideoViewerWindow loaded");
         _viewModel.OnInitialize();
+    }
+
+    private void Timer_Tick(object? sender, EventArgs e)
+    {
+        if (VideoPlayer.Source != null && VideoPlayer.NaturalDuration.HasTimeSpan && !_isSeeking)
+        {
+            var duration = VideoPlayer.NaturalDuration.TimeSpan;
+            var position = VideoPlayer.Position;
+
+            ProgressSlider.Maximum = duration.TotalSeconds;
+            ProgressSlider.Value = position.TotalSeconds;
+
+            TimeDisplay.Text = $"{FormatTime(position)} / {FormatTime(duration)}";
+        }
+    }
+
+    private static string FormatTime(TimeSpan time)
+    {
+        return time.Hours > 0
+            ? $"{time.Hours}:{time.Minutes:D2}:{time.Seconds:D2}"
+            : $"{time.Minutes}:{time.Seconds:D2}";
+    }
+
+    protected override bool IsDragBlocked(DependencyObject? source)
+    {
+        // Don't allow dragging when clicking on interactive controls
+        return source is not null && IsInteractiveControl(source);
+    }
+
+    private static bool IsInteractiveControl(DependencyObject element)
+    {
+        DependencyObject? current = element;
+        while (current is not null)
+        {
+            if (current is System.Windows.Controls.Button or
+                Slider or
+                Thumb or
+                System.Windows.Controls.ListBox or
+                ListBoxItem or
+                System.Windows.Controls.Primitives.ScrollBar or
+                MediaElement)
+            {
+                return true;
+            }
+
+            current = current is Visual
+                ? VisualTreeHelper.GetParent(current)
+                : LogicalTreeHelper.GetParent(current);
+        }
+
+        return false;
     }
 
     private void VideoPlayer_MediaOpened(object sender, RoutedEventArgs e)
     {
-        if (VideoPlayer?.NaturalDuration.HasTimeSpan == true)
+        _logger.Debug("Video media opened");
+        if (VideoPlayer.NaturalDuration.HasTimeSpan)
         {
-            _viewModel.SetDuration(VideoPlayer.NaturalDuration.TimeSpan);
+            ProgressSlider.Maximum = VideoPlayer.NaturalDuration.TimeSpan.TotalSeconds;
         }
+        VideoPlayer.Volume = VolumeSlider.Value / 100.0;
     }
 
     private void VideoPlayer_MediaEnded(object sender, RoutedEventArgs e)
     {
-        _viewModel.NotifyPlaybackEnded();
+        _logger.Debug("Video playback ended");
+        VideoPlayer.Stop();
+        PlayPauseIcon.Text = "\uE768"; // Play icon
     }
 
-    private void ProgressSlider_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void PlayPause_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is Slider slider)
+        if (VideoPlayer.Source == null)
         {
-            // Calculate the position based on mouse click
-            var mousePosition = e.GetPosition(slider);
-            var percentage = mousePosition.X / slider.ActualWidth;
-            var newValue = percentage * slider.Maximum;
-            slider.Value = newValue;
+            _logger.Warning("No video loaded");
+            return;
+        }
 
-            // Seek to the new position
-            _viewModel.Seek(newValue);
+        if (PlayPauseIcon.Text == "\uE768") // Play icon
+        {
+            VideoPlayer.Play();
+            PlayPauseIcon.Text = "\uE769"; // Pause icon
+            _logger.Debug("Video playback started");
+        }
+        else
+        {
+            VideoPlayer.Pause();
+            PlayPauseIcon.Text = "\uE768"; // Play icon
+            _logger.Debug("Video playback paused");
+        }
+    }
 
-            e.Handled = true;
+    private void ProgressSlider_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        _isSeeking = true;
+    }
+
+    private void ProgressSlider_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        _isSeeking = false;
+        if (VideoPlayer.Source != null && VideoPlayer.NaturalDuration.HasTimeSpan)
+        {
+            VideoPlayer.Position = TimeSpan.FromSeconds(ProgressSlider.Value);
+            _logger.Debug("Seeked to position: {Position}", ProgressSlider.Value);
         }
     }
 
     private void ProgressSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
-        // Only seek if user is dragging (not during normal playback updates)
-        if (sender is Slider slider && slider.IsMouseCaptureWithin)
+        // Handled by MouseUp event
+    }
+
+    private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        if (VideoPlayer != null)
         {
-            _viewModel.Seek(e.NewValue);
+            VideoPlayer.Volume = e.NewValue / 100.0;
         }
     }
 
-    private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void Fullscreen_Click(object sender, RoutedEventArgs e)
     {
-        if (e.ClickCount == 1)
-        {
-            DragMove();
-        }
-    }
-
-    private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        if (e.ClickCount == 1)
-        {
-            _isDragging = true;
-            _clickPosition = e.GetPosition(this);
-            (sender as Border)?.CaptureMouse();
-        }
-    }
-
-    private void Border_MouseMove(object sender, MouseEventArgs e)
-    {
-        if (_isDragging && e.LeftButton == MouseButtonState.Pressed)
-        {
-            var currentPosition = e.GetPosition(this);
-            var offset = currentPosition - _clickPosition;
-            Left += offset.X;
-            Top += offset.Y;
-        }
-    }
-
-    private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-    {
-        if (_isDragging)
-        {
-            _isDragging = false;
-            (sender as Border)?.ReleaseMouseCapture();
-        }
-    }
-
-    private void Border_Drop(object sender, DragEventArgs e)
-    {
-        // Handled by DropFileBehavior
-    }
-
-    private void Border_DragOver(object sender, DragEventArgs e)
-    {
-        // Handled by DropFileBehavior
-    }
-
-    private void ProgressSlider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-    {
-        // Handled in PreviewMouseLeftButtonDown
+        _logger.Information("Fullscreen requested (not implemented)");
+        // TODO: Implement fullscreen mode
     }
 }

@@ -25,7 +25,7 @@ public class VideoViewerWidget : IWidget
 
     public Window? CreateWindow()
     {
-        _window = new VideoViewerWindow();
+        _window = new VideoViewerWindow(Guid.NewGuid(), 100, 100, 500, 350, false);
         _viewModel = (_window.DataContext as VideoWidgetViewModel)!;
         return _window;
     }

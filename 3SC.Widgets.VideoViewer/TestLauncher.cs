@@ -31,7 +31,7 @@ public class TestLauncher
             Log.Information("Starting Video Viewer test launcher");
 
             var app = new Application();
-            var window = new VideoViewerWindow();
+            var window = new VideoViewerWindow(Guid.NewGuid(), 100, 100, 500, 350, false);
 
             var viewModel = (window.DataContext as VideoWidgetViewModel)!;
             viewModel.OnInitialize();
