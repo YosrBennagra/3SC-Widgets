@@ -92,8 +92,8 @@ public abstract class WidgetWindowBase : Window
     protected virtual Thumb? ResizeRightThumb => _resizeRightThumb;
 
     public virtual string WidgetKey => _widgetKey ?? string.Empty;
-    protected virtual double MinWidgetWidth => 300;
-    protected virtual double MinWidgetHeight => 400;
+    protected virtual double MinWidgetWidth => 200;
+    protected virtual double MinWidgetHeight => 100;
     protected virtual bool SaveOnResize => false;
     protected virtual bool IsDragBlocked(DependencyObject? source) => false;
 
