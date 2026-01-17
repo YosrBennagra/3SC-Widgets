@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
 using System.Windows.Input;
 using _3SC.Domain.ValueObjects;
@@ -20,7 +19,7 @@ namespace _3SC.Widgets.Clock;
 public partial class ClockWidgetWindow : WidgetWindowBase
 {
     private static readonly ILogger Log = Serilog.Log.ForContext<ClockWidgetWindow>();
-
+    
     private ClockWidgetSettings _currentSettings;
 
     // Drag tracking (Win32 for smooth movement)
@@ -62,7 +61,7 @@ public partial class ClockWidgetWindow : WidgetWindowBase
         _currentSettings = settings ?? ClockWidgetSettings.Default();
 
         Loaded += ClockWidget_Loaded;
-
+        
         Log.Debug("ClockWidgetWindow created with InstanceId={InstanceId}", widgetInstanceId);
     }
 
@@ -86,7 +85,7 @@ public partial class ClockWidgetWindow : WidgetWindowBase
 
             // Apply settings to the clock view (named element in XAML)
             ClockView?.ApplySettings(_currentSettings);
-
+            
             Log.Information("Clock widget loaded at position ({Left}, {Top})", Left, Top);
         }
         catch (Exception ex)
@@ -107,7 +106,7 @@ public partial class ClockWidgetWindow : WidgetWindowBase
         {
             Log.Error(ex, "Error during clock widget cleanup");
         }
-
+        
         base.OnClosing(e);
     }
 
@@ -118,10 +117,6 @@ public partial class ClockWidgetWindow : WidgetWindowBase
     private void RootBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         if (IsLocked)
-            return;
-
-        // Block dragging if clicking on resize handles or other blocked elements
-        if (IsDragBlocked(e.OriginalSource as DependencyObject))
             return;
 
         _isDragging = true;
@@ -146,7 +141,7 @@ public partial class ClockWidgetWindow : WidgetWindowBase
 
         RootBorder.ReleaseMouseCapture();
         e.Handled = true;
-
+        
         Log.Debug("Widget moved to ({Left}, {Top})", Left, Top);
     }
 
@@ -194,7 +189,7 @@ public partial class ClockWidgetWindow : WidgetWindowBase
 
     private void RootBorder_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
     {
-        if (RootBorder.ContextMenu is { } ctx)
+        if (RootBorder.ContextMenu is { } ctx) 
             ctx.IsOpen = true;
         e.Handled = true;
     }
@@ -213,7 +208,7 @@ public partial class ClockWidgetWindow : WidgetWindowBase
             {
                 _currentSettings = dialog.UpdatedSettings;
                 ClockView?.ApplySettings(_currentSettings);
-
+                
                 Log.Information("Clock settings updated: TimeZone={TimeZone}, 24Hour={Use24Hour}",
                     _currentSettings.TimeZoneId, _currentSettings.Use24HourFormat);
             }
@@ -228,55 +223,6 @@ public partial class ClockWidgetWindow : WidgetWindowBase
     {
         Log.Information("Remove widget requested");
         base.RemoveWidget_Click(sender, e);
-    }
-
-    #endregion
-
-    #region Drag blocking for resize handles
-
-    protected override bool IsDragBlocked(DependencyObject? source)
-    {
-        // Don't start dragging if clicking on resize handles
-        while (source != null)
-        {
-            if (source is Thumb thumb &&
-                (thumb == ResizeTop || thumb == ResizeBottom || thumb == ResizeLeft || thumb == ResizeRight))
-            {
-                return true;
-            }
-
-            source = System.Windows.Media.VisualTreeHelper.GetParent(source);
-        }
-
-        return false;
-    }
-
-    #endregion
-
-    #region Resize with font scaling
-
-    protected override void ResizeLeft_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
-    {
-        base.ResizeLeft_DragDelta(sender, e);
-        ClockView?.UpdateFontSize(Width);
-    }
-
-    protected override void ResizeRight_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
-    {
-        base.ResizeRight_DragDelta(sender, e);
-        ClockView?.UpdateFontSize(Width);
-    }
-
-    protected override void ResizeTop_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
-    {
-        base.ResizeTop_DragDelta(sender, e);
-        ClockView?.UpdateFontSize(Width);
-    }
-
-    protected override void ResizeBottom_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
-    {
-        base.ResizeBottom_DragDelta(sender, e);
-        ClockView?.UpdateFontSize(Width);
     }
 
     #endregion

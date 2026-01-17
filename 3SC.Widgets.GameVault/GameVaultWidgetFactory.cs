@@ -67,4 +67,9 @@ public class GameVaultWidget : IWidget
             Log.Error(ex, "Error during GameVault widget disposal");
         }
     }
+
+    public void ShowSettings()
+    {
+        Log.Information("ShowSettings called - not yet implemented");
+    }
 }

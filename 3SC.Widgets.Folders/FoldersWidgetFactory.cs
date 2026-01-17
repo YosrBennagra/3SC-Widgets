@@ -70,5 +70,10 @@ namespace _3SC.Widgets.Folders
                 Log.Error(ex, "Error during folders widget disposal");
             }
         }
+
+        public void ShowSettings()
+        {
+            Log.Information("ShowSettings called - no settings available");
+        }
     }
 }

@@ -70,5 +70,10 @@ namespace _3SC.Widgets.Calendar
                 Log.Error(ex, "Error during calendar widget disposal");
             }
         }
+
+        public void ShowSettings()
+        {
+            Log.Information("ShowSettings called - no settings available");
+        }
     }
 }
