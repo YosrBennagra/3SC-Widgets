@@ -18,4 +18,16 @@
       <HintPath>..\..\3SC\3SC.Widgets.Contracts\bin\Release\net8.0-windows\3SC.Widgets.Contracts.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

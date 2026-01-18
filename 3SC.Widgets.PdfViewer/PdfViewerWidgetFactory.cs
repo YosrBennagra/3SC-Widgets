@@ -4,6 +4,7 @@ using UserControl = System.Windows.Controls.UserControl;
 
 namespace _3SC.Widgets.PdfViewer;
 
+[Widget("pdf-viewer", "PDF Viewer")]
 public class PdfViewerWidgetFactory : IWidgetFactory
 {
     public IWidget CreateWidget()
@@ -12,6 +13,7 @@ public class PdfViewerWidgetFactory : IWidgetFactory
     }
 }
 
+[Widget("pdf-viewer", "PDF Viewer")]
 public class PdfViewerWidget : IWidget
 {
     private PdfViewerWindow? _window;

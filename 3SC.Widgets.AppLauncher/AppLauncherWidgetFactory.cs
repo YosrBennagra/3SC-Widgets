@@ -6,6 +6,7 @@ using Serilog;
 
 namespace _3SC.Widgets.AppLauncher;
 
+[Widget("app-launcher", "App Launcher")]
 public class AppLauncherWidgetFactory : IWidgetFactory
 {
     private static readonly ILogger Log = Serilog.Log.ForContext<AppLauncherWidgetFactory>();
@@ -17,6 +18,7 @@ public class AppLauncherWidgetFactory : IWidgetFactory
     }
 }
 
+[Widget("app-launcher", "App Launcher")]
 public class AppLauncherWidget : IWidget
 {
     private static readonly ILogger Log = Serilog.Log.ForContext<AppLauncherWidget>();
@@ -67,5 +69,10 @@ public class AppLauncherWidget : IWidget
         {
             Log.Error(ex, "Error during AppLauncher widget disposal");
         }
+    }
+
+    public void ShowSettings()
+    {
+        // No settings for this widget
     }
 }

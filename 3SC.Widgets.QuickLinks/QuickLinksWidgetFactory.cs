@@ -3,6 +3,7 @@ using Serilog;
 
 namespace _3SC.Widgets.QuickLinks;
 
+[Widget("quicklinks", "Quick Links")]
 public class QuickLinksWidgetFactory : IWidgetFactory
 {
     private readonly ILogger _logger = Log.ForContext<QuickLinksWidgetFactory>();
@@ -14,6 +15,7 @@ public class QuickLinksWidgetFactory : IWidgetFactory
     }
 }
 
+[Widget("quicklinks", "Quick Links")]
 internal class QuickLinksWidgetAdapter : IWidget
 {
     private readonly ILogger _logger = Log.ForContext<QuickLinksWidgetAdapter>();

@@ -5,6 +5,7 @@ using Serilog;
 
 namespace _3SC.Widgets.Folders
 {
+    [Widget("folders", "Folders")]
     public class FoldersWidgetFactory : IWidgetFactory
     {
         private static readonly ILogger Log = Serilog.Log.ForContext<FoldersWidgetFactory>();
@@ -16,6 +17,7 @@ namespace _3SC.Widgets.Folders
         }
     }
 
+    [Widget("folders", "Folders")]
     public class FoldersWidget : IWidget
     {
         private static readonly ILogger Log = Serilog.Log.ForContext<FoldersWidget>();

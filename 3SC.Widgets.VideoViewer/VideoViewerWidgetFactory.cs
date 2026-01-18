@@ -4,6 +4,7 @@ using _3SC.Widgets.Contracts;
 
 namespace _3SC.Widgets.VideoViewer;
 
+[Widget("video-viewer", "Video Viewer")]
 public class VideoViewerWidgetFactory : IWidgetFactory
 {
     public IWidget CreateWidget()
@@ -12,6 +13,7 @@ public class VideoViewerWidgetFactory : IWidgetFactory
     }
 }
 
+[Widget("video-viewer", "Video Viewer")]
 public class VideoViewerWidget : IWidget
 {
     private VideoViewerWindow? _window;

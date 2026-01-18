@@ -2,17 +2,19 @@
     "packageId": "com.3sc.folders",
     "widgetKey": "folders",
     "displayName": "Folders",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "author": {
         "name": "3SC Team",
-        "email": "team@3sc.app"
+        "email": "team@3sc.app",
+        "url": "https://3sc.app"
     },
     "description": "Quick access hub for your favorite folders with drag-and-drop support.",
     "category": "productivity",
-    "icon": "icon.png",
+    "icon": "Assets/icon.png",
     "entry": "3SC.Widgets.Folders.dll",
     "minAppVersion": "1.0.0",
     "hasSettings": false,
+    "hasOwnWindow": true,
     "permissions": [
         "filesystem"
     ],
@@ -26,5 +28,26 @@
     "defaultSize": {
         "width": 420,
         "height": 340
+    },
+    "preview": {
+        "static": "Assets/preview.png",
+        "animated": "Assets/preview.gif",
+        "screenshots": [
+            "Assets/screenshots/main.png",
+            "Assets/screenshots/drag-drop.png"
+        ]
+    },
+    "distribution": {
+        "category": "Productivity",
+        "tags": [
+            "folders",
+            "files",
+            "organization",
+            "productivity"
+        ],
+        "listing": {
+            "shortDescription": "Quick access hub for your favorite folders",
+            "changelog": "CHANGELOG.md"
+        }
     }
 }

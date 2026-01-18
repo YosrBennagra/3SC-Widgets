@@ -5,6 +5,7 @@ using Serilog;
 
 namespace _3SC.Widgets.Calendar
 {
+    [Widget("calendar", "Calendar")]
     public class CalendarWidgetFactory : IWidgetFactory
     {
         private static readonly ILogger Log = Serilog.Log.ForContext<CalendarWidgetFactory>();
@@ -16,6 +17,7 @@ namespace _3SC.Widgets.Calendar
         }
     }
 
+    [Widget("calendar", "Calendar")]
     public class CalendarWidget : IWidget
     {
         private static readonly ILogger Log = Serilog.Log.ForContext<CalendarWidget>();

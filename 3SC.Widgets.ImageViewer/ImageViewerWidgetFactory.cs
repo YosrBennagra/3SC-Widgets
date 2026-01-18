@@ -6,6 +6,7 @@ using UserControl = System.Windows.Controls.UserControl;
 
 namespace _3SC.Widgets.ImageViewer;
 
+[Widget("image-viewer", "Image Viewer")]
 public class ImageViewerWidgetFactory : IWidgetFactory
 {
     private readonly ILogger _logger = Log.ForContext<ImageViewerWidgetFactory>();
@@ -17,6 +18,7 @@ public class ImageViewerWidgetFactory : IWidgetFactory
     }
 }
 
+[Widget("image-viewer", "Image Viewer")]
 public class ImageViewerWidget : IWidget
 {
     private readonly ILogger _logger = Log.ForContext<ImageViewerWidget>();

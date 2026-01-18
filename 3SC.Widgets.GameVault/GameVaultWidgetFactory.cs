@@ -5,6 +5,7 @@ using Serilog;
 
 namespace _3SC.Widgets.GameVault;
 
+[Widget("game-vault", "Game Vault")]
 public class GameVaultWidgetFactory : IWidgetFactory
 {
     private static readonly ILogger Log = Serilog.Log.ForContext<GameVaultWidgetFactory>();
@@ -16,6 +17,7 @@ public class GameVaultWidgetFactory : IWidgetFactory
     }
 }
 
+[Widget("game-vault", "Game Vault")]
 public class GameVaultWidget : IWidget
 {
     private static readonly ILogger Log = Serilog.Log.ForContext<GameVaultWidget>();

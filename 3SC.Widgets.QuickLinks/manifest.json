@@ -1,9 +1,51 @@
 {
-    "version": "1.1.0",
-    "name": "quicklinks",
+    "packageId": "com.3sc.quicklinks",
+    "widgetKey": "quicklinks",
     "displayName": "Quick Links",
-    "description": "Manage and access your frequently used links and URLs",
-    "author": "3SC Team",
-    "entryPoint": "3SC.Widgets.QuickLinks.dll",
-    "factoryType": "_3SC.Widgets.QuickLinks.QuickLinksWidgetFactory"
+    "version": "1.2.0",
+    "author": {
+        "name": "3SC Team",
+        "email": "team@3sc.app",
+        "url": "https://3sc.app"
+    },
+    "description": "Manage and access your frequently used links and URLs.",
+    "category": "productivity",
+    "icon": "Assets/icon.png",
+    "entry": "3SC.Widgets.QuickLinks.dll",
+    "minAppVersion": "1.0.0",
+    "hasSettings": false,
+    "hasOwnWindow": true,
+    "permissions": [],
+    "tags": [
+        "links",
+        "urls",
+        "bookmarks",
+        "quick-access",
+        "productivity"
+    ],
+    "defaultSize": {
+        "width": 350,
+        "height": 300
+    },
+    "preview": {
+        "static": "Assets/preview.png",
+        "animated": "Assets/preview.gif",
+        "screenshots": [
+            "Assets/screenshots/main.png",
+            "Assets/screenshots/adding-links.png"
+        ]
+    },
+    "distribution": {
+        "category": "Productivity",
+        "tags": [
+            "links",
+            "urls",
+            "bookmarks",
+            "productivity"
+        ],
+        "listing": {
+            "shortDescription": "Manage and access your frequently used links",
+            "changelog": "CHANGELOG.md"
+        }
+    }
 }

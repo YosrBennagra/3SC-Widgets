@@ -5,6 +5,7 @@ using _3SC.Widgets.Contracts;
 
 namespace _3SC.Widgets.Notes;
 
+[Widget("notes", "Notes")]
 public class NotesWidgetFactory : IWidgetFactory
 {
     public IWidget CreateWidget()
@@ -13,6 +14,7 @@ public class NotesWidgetFactory : IWidgetFactory
     }
 }
 
+[Widget("notes", "Notes")]
 public class NotesWidget : IWidget
 {
     private NotesWindow? _window;

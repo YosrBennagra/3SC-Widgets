@@ -3,11 +3,13 @@ using _3SC.Widgets.Contracts;
 
 namespace _3SC.Widgets.ClipboardHistory
 {
+    [Widget("clipboard-history", "Clipboard History")]
     public class ClipboardHistoryWidgetFactory : IWidgetFactory
     {
         public IWidget CreateWidget() => new ClipboardHistoryWidget();
     }
 
+    [Widget("clipboard-history", "Clipboard History")]
     public class ClipboardHistoryWidget : IWidget
     {
         private ClipboardHistoryWindow? _window;

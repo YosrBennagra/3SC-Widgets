@@ -2,17 +2,19 @@
     "packageId": "com.3sc.calendar",
     "widgetKey": "calendar",
     "displayName": "Calendar",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "author": {
         "name": "3SC Team",
-        "email": "team@3sc.app"
+        "email": "team@3sc.app",
+        "url": "https://3sc.app"
     },
     "description": "A beautiful calendar widget with month view, week numbers, and day selection.",
     "category": "productivity",
-    "icon": "icon.png",
+    "icon": "Assets/icon.png",
     "entry": "3SC.Widgets.Calendar.dll",
     "minAppVersion": "1.0.0",
     "hasSettings": false,
+    "hasOwnWindow": true,
     "permissions": [],
     "tags": [
         "calendar",
@@ -24,5 +26,26 @@
     "defaultSize": {
         "width": 320,
         "height": 280
+    },
+    "preview": {
+        "static": "Assets/preview.png",
+        "animated": "Assets/preview.gif",
+        "screenshots": [
+            "Assets/screenshots/main.png",
+            "Assets/screenshots/navigation.png"
+        ]
+    },
+    "distribution": {
+        "category": "Productivity",
+        "tags": [
+            "calendar",
+            "date",
+            "schedule",
+            "productivity"
+        ],
+        "listing": {
+            "shortDescription": "Beautiful calendar widget with month view",
+            "changelog": "CHANGELOG.md"
+        }
     }
 }
