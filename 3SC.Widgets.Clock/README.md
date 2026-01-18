@@ -1,6 +1,17 @@
-# 📦 Clock Widget - External Widget Template
+# � Clock Widget
 
-This is a **standalone external widget** that demonstrates the complete structure for creating 3SC widgets.
+A beautiful digital clock widget for 3SC with timezone support, 12/24-hour formats, and customizable display options.
+
+## ✨ Features
+
+- **Multiple Timezones** - Display time from any timezone worldwide
+- **12/24 Hour Format** - Switch between AM/PM and 24-hour display
+- **Seconds Toggle** - Show or hide seconds for cleaner display
+- **Timezone Label** - Optional timezone indicator pill
+- **Smooth Animations** - Fluid time updates every 500ms
+- **Dark Theme** - Beautiful 3SC-themed dark UI
+- **Resizable** - Scales proportionally with font size adjustment
+- **Desktop Widget Mode** - Stays on desktop, behind normal windows
 
 ## 🎯 Quick Start
 
@@ -11,93 +22,159 @@ dotnet run --configuration Debug
 ```
 This will show the Clock widget window directly for testing.
 
-### Build as Plugin (For Deployment)
+### Build as Plugin (For 3SC Deployment)
 ```powershell
 dotnet build --configuration Release
 ```
 This creates a DLL that can be dynamically loaded by the 3SC main app.
 
-## 📁 Project Files
+## 📁 Project Structure
 
 ```
 3SC.Widgets.Clock/
-├── 3SC.Widgets.Clock.csproj    # Project configuration
-├── ClockWidgetPlugin.cs         # Entry point - implements IExternalWidget
-├── ClockWidgetWindow.xaml       # Widget UI
-├── ClockWidgetWindow.xaml.cs    # Widget logic
-├── manifest.json                # Widget metadata (required!)
-└── TestLauncher.cs             # Standalone test launcher
+├── manifest.json                # Widget metadata (REQUIRED)
+├── ClockWidgetFactory.cs        # IWidgetFactory implementation
+├── ClockWidget.cs               # IWidget implementation (UserControl mode)
+├── ClockWidgetWindow.xaml       # Widget window UI (HasOwnWindow mode)
+├── ClockWidgetWindow.xaml.cs    # Widget window logic
+├── ClockWidgetView.xaml         # Clock display UserControl
+├── ClockWidgetView.xaml.cs      # Clock display logic
+├── ClockSettingsWindow.xaml     # Settings dialog
+├── ClockSettingsWindow.xaml.cs  # Settings logic with live preview
+├── WidgetWindowBase.cs          # Base class for widget windows
+├── CommonTimeZones.cs           # Curated timezone list
+├── ValueObjects/
+│   └── ClockWidgetSettings.cs   # Settings data model
+├── Helpers/
+│   ├── ScreenBoundsHelper.cs    # Multi-monitor screen handling
+│   ├── WidgetBehaviorHelper.cs  # Common widget behaviors
+│   └── Win32Interop.cs          # Windows API interop
+└── Assets/
+    ├── icon.png                 # Widget icon (128x128)
+    ├── preview.png              # Static preview (800x600)
+    ├── preview.gif              # Animated preview
+    └── screenshots/
+        ├── main.png             # Main widget view
+        ├── settings.png         # Settings dialog
+        └── timezones.png        # Timezone selection
 ```
 
-## 🔑 Key Concepts
+## 🔑 Widget Interface Implementation
 
-### 1. Plugin Entry Point (`ClockWidgetPlugin.cs`)
-Every widget must have a class that implements `IExternalWidget`:
+### IWidgetFactory
+The factory is discovered by 3SC via reflection and marked with `[Widget]` attribute:
+
 ```csharp
-public class ClockWidgetPlugin : IExternalWidget
+[Widget("clock", "Clock")]
+public class ClockWidgetFactory : IWidgetFactory
 {
-    public string WidgetKey => "clock-external";
-    public string DisplayName => "Clock (External)";
-    // ... other metadata
-    
-    public object CreateWidgetWindow(Guid widgetInstanceId, string? settingsJson)
-    {
-        return new ClockWidgetWindow(widgetInstanceId, settings);
-    }
+    public IWidget CreateWidget() => new ClockWindowWidget();
 }
 ```
 
-### 2. Widget Window
-A standard WPF Window with your widget UI and logic.
+### IWidget Implementation
+The widget implements all required interface members:
 
-### 3. Manifest File
-JSON file with widget metadata - **must be copied to output directory**.
-
-### 4. Dual-Mode Configuration
-- **Debug**: Builds as executable (`WinExe`) for standalone testing
-- **Release**: Builds as library (`Library`) for plugin loading
-
-## 📋 Required References
-
-Your widget needs:
-1. `3SC.Widgets.Contracts` - IExternalWidget interface
-2. `3SC.Domain` - Shared domain types (like ClockWidgetSettings)
-3. WPF packages
-
-## 🚀 Create Your Own Widget
-
-1. **Copy this folder** to create a new widget
-2. **Rename** the project and files
-3. **Update** manifest.json with your widget info
-4. **Implement** IExternalWidget in your plugin class
-5. **Create** your widget window UI
-6. **Test** in Debug mode (F5)
-7. **Build** in Release mode
-8. **Package** using Build-ExternalWidget.ps1
-
-## 📦 Packaging
-
-From the main 3SC repo:
-```powershell
-.\Build-ExternalWidget.ps1 -WidgetName Clock -Install
+```csharp
+[Widget("clock", "Clock")]
+public class ClockWindowWidget : IWidget
+{
+    public string WidgetKey => "clock";
+    public string DisplayName => "Clock";
+    public string Version => "1.0.0";
+    public bool HasSettings => true;
+    public bool HasOwnWindow => true;   // Uses custom window
+    
+    public Window? CreateWindow() => new ClockWidgetWindow();
+    public UserControl GetView() => throw new NotSupportedException();
+    public void OnInitialize() { }
+    public void OnDispose() { }
+    public void ShowSettings() { }
+}
 ```
 
-This will:
-- Build the widget in Release mode
-- Create a .3scwidget package
-- Install to Community folder (with -Install flag)
+## 📋 Configuration
 
-## 🎨 Widget Design Guidelines
+### manifest.json
+The manifest file contains widget metadata and must be in the output directory:
 
-- Use rounded corners (`CornerRadius="12"`)
-- Transparent window background
-- Drop shadow for depth
-- Light/dark theme support
-- Clean up resources in `OnClosing()`
+```json
+{
+  "packageId": "com.3sc.clock",
+  "widgetKey": "clock",
+  "displayName": "Clock",
+  "version": "1.2.0",
+  "hasSettings": true,
+  "hasOwnWindow": true,
+  "preview": {
+    "static": "Assets/preview.png",
+    "animated": "Assets/preview.gif"
+  }
+}
+```
 
-## 💡 Tips
+### ClockWidgetSettings
+User-configurable settings:
 
-- Always test in Debug mode first (standalone)
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `TimeZoneId` | string | Local | Windows timezone ID |
+| `Use24HourFormat` | bool | false | 24-hour vs 12-hour |
+| `ShowSeconds` | bool | true | Display seconds |
+| `ShowTimeZoneLabel` | bool | true | Show timezone pill |
+
+## 🚀 Building & Packaging
+
+### Build
+```powershell
+# Debug (standalone executable for testing)
+dotnet build -c Debug
+
+# Release (library DLL for 3SC)
+dotnet build -c Release
+```
+
+### Package
+```powershell
+# From widgets root folder:
+.\Build-And-Package-Clock.ps1 -Configuration Release
+```
+
+This creates:
+- `packages/clock/` - Unpackaged files for local testing
+- `packages/clock-widget.3scwidget` - Packaged ZIP for distribution
+
+### Install for Testing
+```powershell
+# Copy to 3SC Community folder
+$dest = "$env:APPDATA\3SC\Widgets\Community\clock"
+Copy-Item packages/clock/* $dest -Recurse -Force
+```
+
+## 🎨 Design Guidelines
+
+- **Dark Theme**: Uses 3SC color palette (#0A0A0F, #2DD4BF accent)
+- **Rounded Corners**: CornerRadius="12" for container
+- **Transparent Window**: AllowsTransparency="True"
+- **Drop Shadow**: Depth effect for floating appearance
+- **Scaling**: Font sizes scale proportionally on resize
+
+## 📦 Required Assets for Distribution
+
+See [WIDGET-DELIVERY.md](./WIDGET-DELIVERY.md) for complete guide on creating preview images.
+
+| Asset | Dimensions | Format | Purpose |
+|-------|-----------|--------|---------|
+| icon.png | 128×128 | PNG | Widget picker icon |
+| preview.png | 800×600 | PNG | Static store preview |
+| preview.gif | 800×600 | GIF | Animated preview |
+| screenshots/*.png | 1280×720 | PNG | Feature showcase |
+
+## 📚 Dependencies
+
+- `3SC.Widgets.Contracts` - IWidget interface (provided by host)
+- `CommunityToolkit.Mvvm 8.2.2` - MVVM support
+- `Serilog 3.1.1` - Logging (NOT 4.x for host compatibility)
 - Handle null settings gracefully
 - Use DispatcherTimer for UI updates
 - Stop timers in OnClosing()

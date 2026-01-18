@@ -7,6 +7,7 @@ namespace _3SC.Widgets.Clock;
 /// Factory for creating Clock widget instances.
 /// This class is discovered by the 3SC app via reflection.
 /// </summary>
+[Widget("clock", "Clock")]
 public class ClockWidgetFactory : IWidgetFactory
 {
     public IWidget CreateWidget()
@@ -19,6 +20,7 @@ public class ClockWidgetFactory : IWidgetFactory
 /// The Clock widget implementation that conforms to 3SC's IWidget interface.
 /// Uses its own window (ClockWidgetWindow) with full functionality.
 /// </summary>
+[Widget("clock", "Clock")]
 public class ClockWindowWidget : IWidget
 {
     private ClockWidgetWindow? _window;
