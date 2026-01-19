@@ -1,0 +1,53 @@
+{
+  "packageId": "com.3sc.pdfviewer",
+  "widgetKey": "pdf-viewer",
+  "displayName": "PDF Viewer",
+  "version": "1.1.0",
+  "author": {
+    "name": "3SC Team",
+    "email": "team@3sc.app",
+    "url": "https://3sc.app"
+  },
+  "description": "View and browse PDF files from your Downloads and Documents folders.",
+  "category": "media",
+  "icon": "Assets/icon.png",
+  "entry": "3SC.Widgets.PdfViewer.dll",
+  "minAppVersion": "1.0.0",
+  "hasSettings": false,
+  "hasOwnWindow": true,
+  "permissions": [
+    "filesystem"
+  ],
+  "tags": [
+    "pdf",
+    "viewer",
+    "documents",
+    "reader",
+    "media"
+  ],
+  "defaultSize": {
+    "width": 500,
+    "height": 400
+  },
+  "preview": {
+    "static": "Assets/preview.png",
+    "animated": "Assets/preview.gif",
+    "screenshots": [
+      "Assets/screenshots/main.png",
+      "Assets/screenshots/reading.png"
+    ]
+  },
+  "distribution": {
+    "category": "Media",
+    "tags": [
+      "pdf",
+      "viewer",
+      "documents",
+      "reader"
+    ],
+    "listing": {
+      "shortDescription": "View and browse PDF files",
+      "changelog": "CHANGELOG.md"
+    }
+  }
+}

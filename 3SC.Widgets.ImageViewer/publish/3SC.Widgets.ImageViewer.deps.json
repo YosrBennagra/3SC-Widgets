@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v8.0": {
-      "3SC.Widgets.AppLauncher/1.0.0": {
+      "3SC.Widgets.ImageViewer/1.0.0": {
         "dependencies": {
           "3SC.Widgets.Contracts": "1.0.0",
           "CommunityToolkit.Mvvm": "8.2.2",
@@ -14,7 +14,7 @@
           "Serilog.Sinks.File": "5.0.0"
         },
         "runtime": {
-          "3SC.Widgets.AppLauncher.dll": {}
+          "3SC.Widgets.ImageViewer.dll": {}
         }
       },
       "CommunityToolkit.Mvvm/8.2.2": {
@@ -55,7 +55,7 @@
     }
   },
   "libraries": {
-    "3SC.Widgets.AppLauncher/1.0.0": {
+    "3SC.Widgets.ImageViewer/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

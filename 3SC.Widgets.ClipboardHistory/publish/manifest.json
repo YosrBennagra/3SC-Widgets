@@ -1,52 +1,50 @@
 {
-    "packageId": "com.3sc.folders",
-    "widgetKey": "folders",
-    "displayName": "Folders",
+    "packageId": "com.3sc.clipboard-history",
+    "widgetKey": "clipboard-history",
+    "displayName": "Clipboard History",
     "version": "1.2.0",
     "author": {
         "name": "3SC Team",
         "email": "team@3sc.app",
         "url": "https://3sc.app"
     },
-    "description": "Quick access hub for your favorite folders with drag-and-drop support.",
+    "description": "Access and manage recent clipboard items including text and images with quick copy functionality.",
     "category": "productivity",
     "icon": "Assets/icon.png",
-    "entry": "3SC.Widgets.Folders.dll",
+    "entry": "3SC.Widgets.ClipboardHistory.dll",
     "minAppVersion": "1.0.0",
     "hasSettings": false,
     "hasOwnWindow": true,
-    "permissions": [
-        "filesystem"
-    ],
+    "permissions": [],
     "tags": [
-        "folders",
-        "files",
-        "quick-access",
-        "productivity",
-        "organization"
+        "clipboard",
+        "history",
+        "copy",
+        "paste",
+        "productivity"
     ],
     "defaultSize": {
-        "width": 420,
-        "height": 340
+        "width": 350,
+        "height": 450
     },
     "preview": {
         "static": "Assets/preview.png",
         "animated": "Assets/preview.gif",
         "screenshots": [
             "Assets/screenshots/main.png",
-            "Assets/screenshots/drag-drop.png"
+            "Assets/screenshots/text-items.png"
         ]
     },
     "distribution": {
         "category": "Productivity",
         "tags": [
-            "folders",
-            "files",
-            "organization",
-            "productivity"
+            "clipboard",
+            "history",
+            "copy",
+            "paste"
         ],
         "listing": {
-            "shortDescription": "Quick access hub for your favorite folders",
+            "shortDescription": "Access and manage recent clipboard items",
             "changelog": "CHANGELOG.md"
         }
     }

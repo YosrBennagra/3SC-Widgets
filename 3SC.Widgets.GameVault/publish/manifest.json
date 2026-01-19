@@ -1,28 +1,54 @@
 {
-  "packageId": "com.3sc.gamevault",
-  "widgetKey": "game-vault",
-  "displayName": "Game Vault",
-  "version": "1.1.0",
-  "author": {
-    "name": "3SC Team",
-    "email": "team@3sc.app"
-  },
-  "description": "Manage and launch your games and apps with quick access and favorites.",
-  "category": "productivity",
-  "icon": "icon.png",
-  "entry": "3SC.Widgets.GameVault.dll",
-  "minAppVersion": "1.0.0",
-  "hasSettings": true,
-  "permissions": ["filesystem", "process"],
-  "tags": [
-    "games",
-    "apps",
-    "launcher",
-    "quick-access",
-    "productivity"
-  ],
-  "defaultSize": {
-    "width": 420,
-    "height": 340
-  }
+    "packageId": "com.3sc.gamevault",
+    "widgetKey": "game-vault",
+    "displayName": "Game Vault",
+    "version": "1.2.0",
+    "author": {
+        "name": "3SC Team",
+        "email": "team@3sc.app",
+        "url": "https://3sc.app"
+    },
+    "description": "Manage and launch your games and apps with quick access and favorites.",
+    "category": "productivity",
+    "icon": "Assets/icon.png",
+    "entry": "3SC.Widgets.GameVault.dll",
+    "minAppVersion": "1.0.0",
+    "hasSettings": true,
+    "hasOwnWindow": true,
+    "permissions": [
+        "filesystem",
+        "process"
+    ],
+    "tags": [
+        "games",
+        "apps",
+        "launcher",
+        "quick-access",
+        "productivity"
+    ],
+    "defaultSize": {
+        "width": 420,
+        "height": 340
+    },
+    "preview": {
+        "static": "Assets/preview.png",
+        "animated": "Assets/preview.gif",
+        "screenshots": [
+            "Assets/screenshots/main.png",
+            "Assets/screenshots/games-list.png"
+        ]
+    },
+    "distribution": {
+        "category": "Gaming",
+        "tags": [
+            "games",
+            "launcher",
+            "gaming",
+            "productivity"
+        ],
+        "listing": {
+            "shortDescription": "Manage and launch your games with quick access",
+            "changelog": "CHANGELOG.md"
+        }
+    }
 }

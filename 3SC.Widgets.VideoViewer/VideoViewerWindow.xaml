@@ -15,38 +15,39 @@
     <local:WidgetWindowBase.Resources>
         <!-- 3SC Dark Theme Colors -->
         <SolidColorBrush x:Key="WidgetSurface"
-                Color="#D0080810"/>
+                         Color="#D0080810"/>
         <SolidColorBrush x:Key="WidgetText"
-                Color="#FFF1F5F9"/>
+                         Color="#FFF1F5F9"/>
         <SolidColorBrush x:Key="Accent"
-                Color="#FF2DD4BF"/>
+                         Color="#FF2DD4BF"/>
         <SolidColorBrush x:Key="SurfaceElevated"
-                Color="#FF16161F"/>
+                         Color="#FF16161F"/>
         <SolidColorBrush x:Key="Border"
-                Color="#FF2A2A3A"/>
+                         Color="#FF2A2A3A"/>
         <SolidColorBrush x:Key="SurfaceHover"
-                Color="#FF1C1C28"/>
+                         Color="#FF1C1C28"/>
         <SolidColorBrush x:Key="TextPrimary"
-                Color="#FFF1F5F9"/>
+                         Color="#FFF1F5F9"/>
         <SolidColorBrush x:Key="TextSecondary"
-                Color="#FF94A3B8"/>
+                         Color="#FF94A3B8"/>
         <SolidColorBrush x:Key="TextTertiary"
-                Color="#FF64748B"/>
+                         Color="#FF64748B"/>
         <SolidColorBrush x:Key="CardBackground"
-                Color="#FF101018"/>
+                         Color="#FF101018"/>
         <SolidColorBrush x:Key="CardBorder"
-                Color="#FF2A2A3A"/>
+                         Color="#FF2A2A3A"/>
         <SolidColorBrush x:Key="WidgetBackground"
-                Color="#FF0A0A0F"/>
+                         Color="#FF0A0A0F"/>
         <SolidColorBrush x:Key="WidgetOutline"
-                Color="#FF2DD4BF"/>
+                         Color="#FF2DD4BF"/>
 
         <!-- Converters -->
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <local:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter"/>
 
         <!-- Context Menu Style -->
-        <Style TargetType="ContextMenu">
+        <Style x:Key="WidgetContextMenuStyle"
+                TargetType="ContextMenu">
             <Setter Property="Background"
                     Value="#FF16161F"/>
             <Setter Property="BorderBrush"
@@ -61,6 +62,8 @@
                     Value="True"/>
             <Setter Property="FontSize"
                     Value="13"/>
+            <Setter Property="ItemContainerStyle"
+                    Value="{DynamicResource WidgetMenuItemStyle}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ContextMenu">
@@ -71,9 +74,9 @@
                                 Padding="{TemplateBinding Padding}">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="32"
-                                        ShadowDepth="8"
-                                        Opacity="0.4"
-                                        Color="#000000"/>
+                                                  ShadowDepth="8"
+                                                  Opacity="0.4"
+                                                  Color="#000000"/>
                             </Border.Effect>
                             <StackPanel IsItemsHost="True"/>
                         </Border>
@@ -83,7 +86,8 @@
         </Style>
 
         <!-- MenuItem Style -->
-        <Style TargetType="MenuItem">
+        <Style x:Key="WidgetMenuItemStyle"
+                TargetType="MenuItem">
             <Setter Property="Background"
                     Value="Transparent"/>
             <Setter Property="Foreground"
@@ -108,29 +112,29 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"
-                                            MinWidth="24"/>
+                                                      MinWidth="24"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter Grid.Column="0"
-                                        ContentSource="Icon"
-                                        Margin="8,0,8,0"
-                                        VerticalAlignment="Center"/>
+                                                  ContentSource="Icon"
+                                                  Margin="8,0,8,0"
+                                                  VerticalAlignment="Center"/>
                                 <ContentPresenter Grid.Column="1"
-                                        ContentSource="Header"
-                                        Margin="{TemplateBinding Padding}"
-                                        VerticalAlignment="Center"
-                                        RecognizesAccessKey="True"/>
+                                                  ContentSource="Header"
+                                                  Margin="{TemplateBinding Padding}"
+                                                  VerticalAlignment="Center"
+                                                  RecognizesAccessKey="True"/>
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsHighlighted"
-                                    Value="True">
+                                     Value="True">
                                 <Setter TargetName="Border"
                                         Property="Background"
                                         Value="#FF1C1C28"/>
                             </Trigger>
                             <Trigger Property="IsEnabled"
-                                    Value="False">
+                                     Value="False">
                                 <Setter Property="Opacity"
                                         Value="0.4"/>
                             </Trigger>
@@ -141,7 +145,8 @@
         </Style>
 
         <!-- Separator Style -->
-        <Style TargetType="Separator">
+        <Style x:Key="WidgetSeparatorStyle"
+                TargetType="Separator">
             <Setter Property="Background"
                     Value="#FF2A2A3A"/>
             <Setter Property="Height"
@@ -181,7 +186,7 @@
                                     CornerRadius="4"
                                     Opacity="0.3"/>
                             <Track x:Name="PART_Track"
-                                    IsDirectionReversed="True">
+                                   IsDirectionReversed="True">
                                 <Track.Thumb>
                                     <Thumb>
                                         <Thumb.Template>
@@ -193,12 +198,12 @@
                                                         Margin="2">
                                                     <Border.RenderTransform>
                                                         <ScaleTransform ScaleX="1"
-                                                                ScaleY="1"/>
+                                                                        ScaleY="1"/>
                                                     </Border.RenderTransform>
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver"
-                                                            Value="True">
+                                                             Value="True">
                                                         <Setter TargetName="ThumbBorder"
                                                                 Property="Background"
                                                                 Value="{StaticResource Accent}"/>
@@ -207,7 +212,7 @@
                                                                 Value="0.8"/>
                                                     </Trigger>
                                                     <Trigger Property="IsDragging"
-                                                            Value="True">
+                                                             Value="True">
                                                         <Setter TargetName="ThumbBorder"
                                                                 Property="Background"
                                                                 Value="{StaticResource Accent}"/>
@@ -224,7 +229,7 @@
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="Orientation"
-                                    Value="Horizontal">
+                                     Value="Horizontal">
                                 <Setter TargetName="PART_Track"
                                         Property="IsDirectionReversed"
                                         Value="False"/>
@@ -235,7 +240,7 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="Orientation"
-                        Value="Horizontal">
+                         Value="Horizontal">
                     <Setter Property="MinHeight"
                             Value="8"/>
                     <Setter Property="Height"
@@ -244,7 +249,7 @@
                             Value="0"/>
                 </Trigger>
                 <Trigger Property="Orientation"
-                        Value="Vertical">
+                         Value="Vertical">
                     <Setter Property="MinWidth"
                             Value="8"/>
                     <Setter Property="Width"
@@ -267,18 +272,21 @@
                 PreviewMouseLeftButtonUp="Border_PreviewMouseLeftButtonUp">
 
             <Border.ContextMenu>
-                <ContextMenu>
+                <ContextMenu Style="{StaticResource WidgetContextMenuStyle}">
                     <MenuItem x:Name="LockWidgetMenuItem"
                               Header="Lock Widget"
                               Click="LockWidget_Click"
-                              IsCheckable="True"/>
+                              IsCheckable="True"
+                              Style="{StaticResource WidgetMenuItemStyle}"/>
                     <MenuItem x:Name="ResizeToggleMenuItem"
                               Header="Resize Handles"
                               Click="ResizeToggle_Click"
-                              IsCheckable="True"/>
-                    <Separator/>
+                              IsCheckable="True"
+                              Style="{StaticResource WidgetMenuItemStyle}"/>
+                    <Separator Style="{StaticResource WidgetSeparatorStyle}"/>
                     <MenuItem Header="Remove Widget"
-                              Click="RemoveWidget_Click"/>
+                              Click="RemoveWidget_Click"
+                              Style="{StaticResource WidgetMenuItemStyle}"/>
                 </ContextMenu>
             </Border.ContextMenu>
 
@@ -294,14 +302,14 @@
                 <!-- Resize handles -->
                 <Thumb x:Name="ResizeTop"
                        Width="14"
-                        Height="14"
+                       Height="14"
                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
+                       VerticalAlignment="Top"
                        Cursor="SizeNS"
-                        DragDelta="ResizeTop_DragDelta"
+                       DragDelta="ResizeTop_DragDelta"
                        Visibility="Collapsed"
-                        Margin="0,-7,0,0"
-                        Panel.ZIndex="10">
+                       Margin="0,-7,0,0"
+                       Panel.ZIndex="10">
                     <Thumb.Template>
                         <ControlTemplate TargetType="Thumb">
                             <Border Background="{StaticResource WidgetOutline}"
@@ -312,14 +320,14 @@
 
                 <Thumb x:Name="ResizeBottom"
                        Width="14"
-                        Height="14"
+                       Height="14"
                        HorizontalAlignment="Center"
-                        VerticalAlignment="Bottom"
+                       VerticalAlignment="Bottom"
                        Cursor="SizeNS"
-                        DragDelta="ResizeBottom_DragDelta"
+                       DragDelta="ResizeBottom_DragDelta"
                        Visibility="Collapsed"
-                        Margin="0,0,0,-7"
-                        Panel.ZIndex="10">
+                       Margin="0,0,0,-7"
+                       Panel.ZIndex="10">
                     <Thumb.Template>
                         <ControlTemplate TargetType="Thumb">
                             <Border Background="{StaticResource WidgetOutline}"
@@ -330,14 +338,14 @@
 
                 <Thumb x:Name="ResizeLeft"
                        Width="14"
-                        Height="14"
+                       Height="14"
                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
+                       VerticalAlignment="Center"
                        Cursor="SizeWE"
-                        DragDelta="ResizeLeft_DragDelta"
+                       DragDelta="ResizeLeft_DragDelta"
                        Visibility="Collapsed"
-                        Margin="-7,0,0,0"
-                        Panel.ZIndex="10">
+                       Margin="-7,0,0,0"
+                       Panel.ZIndex="10">
                     <Thumb.Template>
                         <ControlTemplate TargetType="Thumb">
                             <Border Background="{StaticResource WidgetOutline}"
@@ -348,14 +356,14 @@
 
                 <Thumb x:Name="ResizeRight"
                        Width="14"
-                        Height="14"
+                       Height="14"
                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
+                       VerticalAlignment="Center"
                        Cursor="SizeWE"
-                        DragDelta="ResizeRight_DragDelta"
+                       DragDelta="ResizeRight_DragDelta"
                        Visibility="Collapsed"
-                        Margin="0,0,-7,0"
-                        Panel.ZIndex="10">
+                       Margin="0,0,-7,0"
+                       Panel.ZIndex="10">
                     <Thumb.Template>
                         <ControlTemplate TargetType="Thumb">
                             <Border Background="{StaticResource WidgetOutline}"
@@ -393,7 +401,7 @@
 
                                     <TextBlock Text="Videos"
                                                FontSize="13"
-                                            FontWeight="SemiBold"
+                                               FontWeight="SemiBold"
                                                Foreground="{StaticResource TextPrimary}"
                                                VerticalAlignment="Center"/>
 
@@ -409,13 +417,13 @@
                                                         CornerRadius="4"
                                                         Background="Transparent">
                                                     <TextBlock Text="&#xE72C;"
-                                                            FontFamily="Segoe MDL2 Assets"
-                                                            FontSize="12"
-                                                            Foreground="{StaticResource TextSecondary}"/>
+                                                               FontFamily="Segoe MDL2 Assets"
+                                                               FontSize="12"
+                                                               Foreground="{StaticResource TextSecondary}"/>
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver"
-                                                            Value="True">
+                                                             Value="True">
                                                         <Setter TargetName="bg"
                                                                 Property="Background"
                                                                 Value="{StaticResource CardBackground}"/>
@@ -442,34 +450,34 @@
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock Text="&#xE721;"
-                                            FontFamily="Segoe MDL2 Assets"
-                                            FontSize="12"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               FontSize="12"
                                                Foreground="{StaticResource TextTertiary}"
                                                VerticalAlignment="Center"
-                                            Margin="0,0,6,0"/>
+                                               Margin="0,0,6,0"/>
 
                                     <TextBox Grid.Column="1"
                                              Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                                              FontSize="12"
-                                            Foreground="{StaticResource TextPrimary}"
+                                             Foreground="{StaticResource TextPrimary}"
                                              Background="Transparent"
-                                            BorderThickness="0"
+                                             BorderThickness="0"
                                              VerticalAlignment="Center"
-                                            CaretBrush="{StaticResource Accent}"/>
+                                             CaretBrush="{StaticResource Accent}"/>
 
                                     <TextBlock Grid.Column="1"
-                                            Text="Search..."
-                                            FontSize="12"
+                                               Text="Search..."
+                                               FontSize="12"
                                                Foreground="{StaticResource TextTertiary}"
                                                VerticalAlignment="Center"
-                                            IsHitTestVisible="False">
+                                               IsHitTestVisible="False">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Visibility"
                                                         Value="Collapsed"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding SearchText}"
-                                                            Value="">
+                                                                 Value="">
                                                         <Setter Property="Visibility"
                                                                 Value="Visible"/>
                                                     </DataTrigger>
@@ -482,21 +490,21 @@
 
                             <!-- File list -->
                             <ScrollViewer Grid.Row="2"
-                                    VerticalScrollBarVisibility="Auto"
-                                    HorizontalScrollBarVisibility="Disabled">
+                                          VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Disabled">
                                 <StackPanel>
                                     <!-- Loading indicator -->
                                     <StackPanel Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                 HorizontalAlignment="Center"
-                                            Margin="0,20">
+                                                Margin="0,20">
                                         <TextBlock Text="&#xE117;"
-                                                FontFamily="Segoe MDL2 Assets"
-                                                FontSize="16"
+                                                   FontFamily="Segoe MDL2 Assets"
+                                                   FontSize="16"
                                                    Foreground="{StaticResource TextTertiary}"
-                                                HorizontalAlignment="Center">
+                                                   HorizontalAlignment="Center">
                                             <TextBlock.RenderTransform>
                                                 <RotateTransform CenterX="8"
-                                                        CenterY="8"/>
+                                                                 CenterY="8"/>
                                             </TextBlock.RenderTransform>
                                             <TextBlock.Triggers>
                                                 <EventTrigger RoutedEvent="Loaded">
@@ -504,28 +512,28 @@
                                                         <Storyboard RepeatBehavior="Forever">
                                                             <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
                                                                              From="0"
-                                                                    To="360"
-                                                                    Duration="0:0:1"/>
+                                                                             To="360"
+                                                                             Duration="0:0:1"/>
                                                         </Storyboard>
                                                     </BeginStoryboard>
                                                 </EventTrigger>
                                             </TextBlock.Triggers>
                                         </TextBlock>
                                         <TextBlock Text="Scanning..."
-                                                FontSize="11"
+                                                   FontSize="11"
                                                    Foreground="{StaticResource TextTertiary}"
                                                    HorizontalAlignment="Center"
-                                                Margin="0,4,0,0"/>
+                                                   Margin="0,4,0,0"/>
                                     </StackPanel>
 
                                     <!-- Recent files section -->
                                     <StackPanel Visibility="{Binding HasRecentFiles, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                 Margin="8,4,8,0">
                                         <TextBlock Text="RECENT"
-                                                FontSize="10"
-                                                FontWeight="SemiBold"
+                                                   FontSize="10"
+                                                   FontWeight="SemiBold"
                                                    Foreground="{StaticResource TextTertiary}"
-                                                Margin="4,0,0,4"/>
+                                                   Margin="4,0,0,4"/>
 
                                         <ItemsControl ItemsSource="{Binding RecentFiles}">
                                             <ItemsControl.ItemTemplate>
@@ -552,35 +560,35 @@
                                                                                 Background="#20E74C3C"
                                                                                 Margin="0,0,8,0">
                                                                             <TextBlock Text="&#xE714;"
-                                                                                    FontFamily="Segoe MDL2 Assets"
-                                                                                    FontSize="12"
+                                                                                       FontFamily="Segoe MDL2 Assets"
+                                                                                       FontSize="12"
                                                                                        Foreground="#E74C3C"
                                                                                        HorizontalAlignment="Center"
-                                                                                    VerticalAlignment="Center"/>
+                                                                                       VerticalAlignment="Center"/>
                                                                         </Border>
 
                                                                         <StackPanel Grid.Column="1"
-                                                                                VerticalAlignment="Center">
+                                                                                    VerticalAlignment="Center">
                                                                             <TextBlock Text="{Binding FileName}"
-                                                                                    FontSize="11"
+                                                                                       FontSize="11"
                                                                                        Foreground="{StaticResource TextPrimary}"
                                                                                        TextTrimming="CharacterEllipsis"
-                                                                                    MaxWidth="110"/>
+                                                                                       MaxWidth="110"/>
                                                                             <TextBlock Text="{Binding FileSize}"
-                                                                                    FontSize="9"
+                                                                                       FontSize="9"
                                                                                        Foreground="{StaticResource TextTertiary}"/>
                                                                         </StackPanel>
                                                                     </Grid>
                                                                 </Border>
                                                                 <ControlTemplate.Triggers>
                                                                     <DataTrigger Binding="{Binding IsSelected}"
-                                                                            Value="True">
+                                                                                 Value="True">
                                                                         <Setter TargetName="bg"
                                                                                 Property="Background"
                                                                                 Value="{StaticResource Accent}"/>
                                                                     </DataTrigger>
                                                                     <Trigger Property="IsMouseOver"
-                                                                            Value="True">
+                                                                             Value="True">
                                                                         <Setter TargetName="bg"
                                                                                 Property="Background"
                                                                                 Value="{StaticResource CardBackground}"/>
@@ -602,10 +610,10 @@
                                     <!-- All files section -->
                                     <StackPanel Margin="8,0,8,8">
                                         <TextBlock Text="ALL VIDEOS"
-                                                FontSize="10"
-                                                FontWeight="SemiBold"
+                                                   FontSize="10"
+                                                   FontWeight="SemiBold"
                                                    Foreground="{StaticResource TextTertiary}"
-                                                Margin="4,0,0,4"/>
+                                                   Margin="4,0,0,4"/>
 
                                         <ItemsControl ItemsSource="{Binding FilteredFiles}">
                                             <ItemsControl.ItemTemplate>
@@ -632,35 +640,35 @@
                                                                                 Background="#20E74C3C"
                                                                                 Margin="0,0,8,0">
                                                                             <TextBlock Text="&#xE714;"
-                                                                                    FontFamily="Segoe MDL2 Assets"
-                                                                                    FontSize="12"
+                                                                                       FontFamily="Segoe MDL2 Assets"
+                                                                                       FontSize="12"
                                                                                        Foreground="#E74C3C"
                                                                                        HorizontalAlignment="Center"
-                                                                                    VerticalAlignment="Center"/>
+                                                                                       VerticalAlignment="Center"/>
                                                                         </Border>
 
                                                                         <StackPanel Grid.Column="1"
-                                                                                VerticalAlignment="Center">
+                                                                                    VerticalAlignment="Center">
                                                                             <TextBlock Text="{Binding FileName}"
-                                                                                    FontSize="11"
+                                                                                       FontSize="11"
                                                                                        Foreground="{StaticResource TextPrimary}"
                                                                                        TextTrimming="CharacterEllipsis"
-                                                                                    MaxWidth="110"/>
+                                                                                       MaxWidth="110"/>
                                                                             <TextBlock Text="{Binding FileSize}"
-                                                                                    FontSize="9"
+                                                                                       FontSize="9"
                                                                                        Foreground="{StaticResource TextTertiary}"/>
                                                                         </StackPanel>
                                                                     </Grid>
                                                                 </Border>
                                                                 <ControlTemplate.Triggers>
                                                                     <DataTrigger Binding="{Binding IsSelected}"
-                                                                            Value="True">
+                                                                                 Value="True">
                                                                         <Setter TargetName="bg"
                                                                                 Property="Background"
                                                                                 Value="{StaticResource Accent}"/>
                                                                     </DataTrigger>
                                                                     <Trigger Property="IsMouseOver"
-                                                                            Value="True">
+                                                                             Value="True">
                                                                         <Setter TargetName="bg"
                                                                                 Property="Background"
                                                                                 Value="{StaticResource CardBackground}"/>
@@ -677,25 +685,25 @@
                                     <!-- Empty state -->
                                     <StackPanel Visibility="{Binding HasNoFiles, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                 HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Margin="0,40,0,0">
+                                                VerticalAlignment="Center"
+                                                Margin="0,40,0,0">
                                         <TextBlock Text="&#xE714;"
-                                                FontFamily="Segoe MDL2 Assets"
-                                                FontSize="32"
+                                                   FontFamily="Segoe MDL2 Assets"
+                                                   FontSize="32"
                                                    Foreground="{StaticResource TextTertiary}"
-                                                Opacity="0.3"
+                                                   Opacity="0.3"
                                                    HorizontalAlignment="Center"/>
                                         <TextBlock Text="No videos found"
-                                                FontSize="12"
-                                                Foreground="{StaticResource TextTertiary}"
-                                                   HorizontalAlignment="Center"
-                                                Margin="0,8,0,0"/>
-                                        <TextBlock Text="Drop a video file here"
-                                                FontSize="10"
+                                                   FontSize="12"
                                                    Foreground="{StaticResource TextTertiary}"
-                                                Opacity="0.6"
                                                    HorizontalAlignment="Center"
-                                                Margin="0,4,0,0"/>
+                                                   Margin="0,8,0,0"/>
+                                        <TextBlock Text="Drop a video file here"
+                                                   FontSize="10"
+                                                   Foreground="{StaticResource TextTertiary}"
+                                                   Opacity="0.6"
+                                                   HorizontalAlignment="Center"
+                                                   Margin="0,4,0,0"/>
                                     </StackPanel>
                                 </StackPanel>
                             </ScrollViewer>
@@ -704,7 +712,7 @@
 
                     <!-- Right Panel: Video Player -->
                     <Grid Grid.Column="1"
-                            Background="{StaticResource WidgetBackground}">
+                          Background="{StaticResource WidgetBackground}">
                         <MediaElement x:Name="VideoPlayer"
                                       LoadedBehavior="Manual"
                                       UnloadedBehavior="Manual"
@@ -715,7 +723,7 @@
 
                         <!-- Video controls overlay -->
                         <Grid VerticalAlignment="Bottom"
-                                Background="#90000000">
+                              Background="#90000000">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -734,7 +742,7 @@
 
                             <!-- Control buttons -->
                             <Grid Grid.Row="1"
-                                    Margin="12,8">
+                                  Margin="12,8">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
@@ -753,20 +761,20 @@
                                         Background="Transparent"
                                         BorderThickness="0">
                                     <TextBlock x:Name="PlayPauseIcon"
-                                            Text="&#xE768;"
-                                            FontFamily="Segoe MDL2 Assets"
+                                               Text="&#xE768;"
+                                               FontFamily="Segoe MDL2 Assets"
                                                FontSize="14"
-                                            Foreground="White"/>
+                                               Foreground="White"/>
                                 </Button>
 
                                 <!-- Time display -->
                                 <TextBlock x:Name="TimeDisplay"
-                                        Grid.Column="1"
-                                        Text="0:00 / 0:00"
+                                           Grid.Column="1"
+                                           Text="0:00 / 0:00"
                                            FontSize="11"
-                                        Foreground="White"
-                                        VerticalAlignment="Center"
-                                        Margin="8,0,0,0"/>
+                                           Foreground="White"
+                                           VerticalAlignment="Center"
+                                           Margin="8,0,0,0"/>
 
                                 <!-- Volume slider -->
                                 <Slider x:Name="VolumeSlider"
@@ -789,9 +797,9 @@
                                         Background="Transparent"
                                         BorderThickness="0">
                                     <TextBlock Text="&#xE740;"
-                                            FontFamily="Segoe MDL2 Assets"
-                                            FontSize="14"
-                                            Foreground="White"/>
+                                               FontFamily="Segoe MDL2 Assets"
+                                               FontSize="14"
+                                               Foreground="White"/>
                                 </Button>
                             </Grid>
                         </Grid>
@@ -802,17 +810,17 @@
                                 CornerRadius="8"
                                 Margin="8">
                             <StackPanel HorizontalAlignment="Center"
-                                    VerticalAlignment="Center">
+                                        VerticalAlignment="Center">
                                 <TextBlock Text="&#xE752;"
-                                        FontFamily="Segoe MDL2 Assets"
-                                        FontSize="48"
+                                           FontFamily="Segoe MDL2 Assets"
+                                           FontSize="48"
                                            Foreground="{StaticResource Accent}"
-                                        HorizontalAlignment="Center"/>
+                                           HorizontalAlignment="Center"/>
                                 <TextBlock Text="Drop video here"
-                                        FontSize="16"
-                                        Foreground="White"
+                                           FontSize="16"
+                                           Foreground="White"
                                            HorizontalAlignment="Center"
-                                        Margin="0,16,0,0"/>
+                                           Margin="0,16,0,0"/>
                             </StackPanel>
                         </Border>
                     </Grid>

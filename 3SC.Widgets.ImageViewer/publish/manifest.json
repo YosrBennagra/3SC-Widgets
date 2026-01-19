@@ -1,0 +1,53 @@
+{
+    "packageId": "com.3sc.imageviewer",
+    "widgetKey": "image-viewer",
+    "displayName": "Image Viewer",
+    "version": "1.2.0",
+    "author": {
+        "name": "3SC Team",
+        "email": "team@3sc.app",
+        "url": "https://3sc.app"
+    },
+    "description": "View and browse images from your Pictures and Downloads folders with drag-and-drop support.",
+    "category": "media",
+    "icon": "Assets/icon.png",
+    "entry": "3SC.Widgets.ImageViewer.dll",
+    "minAppVersion": "1.0.0",
+    "hasSettings": false,
+    "hasOwnWindow": true,
+    "permissions": [
+        "filesystem"
+    ],
+    "tags": [
+        "images",
+        "viewer",
+        "photos",
+        "pictures",
+        "media"
+    ],
+    "defaultSize": {
+        "width": 400,
+        "height": 300
+    },
+    "preview": {
+        "static": "Assets/preview.png",
+        "animated": "Assets/preview.gif",
+        "screenshots": [
+            "Assets/screenshots/main.png",
+            "Assets/screenshots/browsing.png"
+        ]
+    },
+    "distribution": {
+        "category": "Media",
+        "tags": [
+            "images",
+            "viewer",
+            "photos",
+            "media"
+        ],
+        "listing": {
+            "shortDescription": "View and browse images with drag-and-drop support",
+            "changelog": "CHANGELOG.md"
+        }
+    }
+}

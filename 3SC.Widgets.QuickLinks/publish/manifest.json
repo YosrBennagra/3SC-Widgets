@@ -1,53 +1,50 @@
 {
-    "packageId": "com.3sc.applauncher",
-    "widgetKey": "app-launcher",
-    "displayName": "App Launcher",
+    "packageId": "com.3sc.quicklinks",
+    "widgetKey": "quicklinks",
+    "displayName": "Quick Links",
     "version": "1.2.0",
     "author": {
         "name": "3SC Team",
         "email": "team@3sc.app",
         "url": "https://3sc.app"
     },
-    "description": "Quick access launcher for your favorite applications with drag-and-drop support.",
+    "description": "Manage and access your frequently used links and URLs.",
     "category": "productivity",
     "icon": "Assets/icon.png",
-    "entry": "3SC.Widgets.AppLauncher.dll",
+    "entry": "3SC.Widgets.QuickLinks.dll",
     "minAppVersion": "1.0.0",
     "hasSettings": false,
     "hasOwnWindow": true,
-    "permissions": [
-        "filesystem",
-        "process"
-    ],
+    "permissions": [],
     "tags": [
-        "apps",
-        "launcher",
+        "links",
+        "urls",
+        "bookmarks",
         "quick-access",
-        "productivity",
-        "shortcuts"
+        "productivity"
     ],
     "defaultSize": {
-        "width": 420,
-        "height": 340
+        "width": 350,
+        "height": 300
     },
     "preview": {
         "static": "Assets/preview.png",
         "animated": "Assets/preview.gif",
         "screenshots": [
             "Assets/screenshots/main.png",
-            "Assets/screenshots/drag-drop.png"
+            "Assets/screenshots/adding-links.png"
         ]
     },
     "distribution": {
         "category": "Productivity",
         "tags": [
-            "apps",
-            "launcher",
-            "shortcuts",
+            "links",
+            "urls",
+            "bookmarks",
             "productivity"
         ],
         "listing": {
-            "shortDescription": "Quick access launcher for your favorite applications",
+            "shortDescription": "Manage and access your frequently used links",
             "changelog": "CHANGELOG.md"
         }
     }

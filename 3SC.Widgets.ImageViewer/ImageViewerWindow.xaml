@@ -46,7 +46,8 @@
         <local:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter"/>
 
         <!-- Context Menu Style -->
-        <Style TargetType="ContextMenu">
+        <Style x:Key="WidgetContextMenuStyle"
+                TargetType="ContextMenu">
             <Setter Property="Background"
                     Value="#FF16161F"/>
             <Setter Property="BorderBrush"
@@ -61,6 +62,8 @@
                     Value="True"/>
             <Setter Property="FontSize"
                     Value="13"/>
+            <Setter Property="ItemContainerStyle"
+                    Value="{DynamicResource WidgetMenuItemStyle}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ContextMenu">
@@ -83,7 +86,8 @@
         </Style>
 
         <!-- MenuItem Style -->
-        <Style TargetType="MenuItem">
+        <Style x:Key="WidgetMenuItemStyle"
+                TargetType="MenuItem">
             <Setter Property="Background"
                     Value="Transparent"/>
             <Setter Property="Foreground"
@@ -141,7 +145,8 @@
         </Style>
 
         <!-- Separator Style -->
-        <Style TargetType="Separator">
+        <Style x:Key="WidgetSeparatorStyle"
+                TargetType="Separator">
             <Setter Property="Background"
                     Value="#FF2A2A3A"/>
             <Setter Property="Height"
@@ -264,18 +269,21 @@
                 PreviewMouseLeftButtonUp="Border_PreviewMouseLeftButtonUp">
 
             <Border.ContextMenu>
-                <ContextMenu>
+                <ContextMenu Style="{StaticResource WidgetContextMenuStyle}">
                     <MenuItem x:Name="LockWidgetMenuItem"
                               Header="Lock Widget"
                               Click="LockWidget_Click"
-                              IsCheckable="True"/>
+                              IsCheckable="True"
+                              Style="{StaticResource WidgetMenuItemStyle}"/>
                     <MenuItem x:Name="ResizeToggleMenuItem"
                               Header="Resize Handles"
                               Click="ResizeToggle_Click"
-                              IsCheckable="True"/>
-                    <Separator/>
+                              IsCheckable="True"
+                              Style="{StaticResource WidgetMenuItemStyle}"/>
+                    <Separator Style="{StaticResource WidgetSeparatorStyle}"/>
                     <MenuItem Header="Remove Widget"
-                              Click="RemoveWidget_Click"/>
+                              Click="RemoveWidget_Click"
+                              Style="{StaticResource WidgetMenuItemStyle}"/>
                 </ContextMenu>
             </Border.ContextMenu>
 

@@ -20,23 +20,144 @@
 
         <!-- 3SC Dark Theme Colors -->
         <SolidColorBrush x:Key="WidgetSurface"
-                Color="#D0080810"/>
+                         Color="#D0080810"/>
         <SolidColorBrush x:Key="WidgetOutline"
-                Color="#FF2DD4BF"/>
+                         Color="#FF2DD4BF"/>
         <SolidColorBrush x:Key="Accent"
-                Color="#FF2DD4BF"/>
+                         Color="#FF2DD4BF"/>
         <SolidColorBrush x:Key="AccentHover"
-                Color="#FF34E5CE"/>
+                         Color="#FF34E5CE"/>
         <SolidColorBrush x:Key="CardBorder"
-                Color="#FF2A2A3A"/>
+                         Color="#FF2A2A3A"/>
         <SolidColorBrush x:Key="Card"
-                Color="#FF0F172A"/>
+                         Color="#FF0F172A"/>
         <SolidColorBrush x:Key="TextPrimary"
-                Color="#FFF1F5F9"/>
+                         Color="#FFF1F5F9"/>
         <SolidColorBrush x:Key="TextSecondary"
-                Color="#FF94A3B8"/>
+                         Color="#FF94A3B8"/>
         <SolidColorBrush x:Key="TextTertiary"
-                Color="#FF64748B"/>
+                         Color="#FF64748B"/>
+        <SolidColorBrush x:Key="SurfaceElevated"
+                         Color="#FF16161F"/>
+        <SolidColorBrush x:Key="SurfaceHover"
+                         Color="#FF1C1C28"/>
+        <SolidColorBrush x:Key="Border"
+                         Color="#FF2A2A3A"/>
+
+        <!-- Context Menu Style -->
+        <Style x:Key="WidgetContextMenuStyle"
+               TargetType="ContextMenu">
+            <Setter Property="Background"
+                    Value="{StaticResource SurfaceElevated}"/>
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource Border}"/>
+            <Setter Property="BorderThickness"
+                    Value="1"/>
+            <Setter Property="Foreground"
+                    Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Padding"
+                    Value="4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContextMenu">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <Border.Effect>
+                                <DropShadowEffect Color="Black"
+                                                  BlurRadius="16"
+                                                  ShadowDepth="4"
+                                                  Opacity="0.4"/>
+                            </Border.Effect>
+                            <StackPanel IsItemsHost="True"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemContainerStyle"
+                    Value="{DynamicResource WidgetMenuItemStyle}"/>
+        </Style>
+
+        <!-- MenuItem Style -->
+        <Style x:Key="WidgetMenuItemStyle"
+               TargetType="MenuItem">
+            <Setter Property="Background"
+                    Value="Transparent"/>
+            <Setter Property="Foreground"
+                    Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Padding"
+                    Value="12,8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="MenuItem">
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="0"
+                                                  ContentSource="Icon"
+                                                  Width="16"
+                                                  Height="16"
+                                                  Margin="0,0,8,0"
+                                                  VerticalAlignment="Center"/>
+                                <ContentPresenter Grid.Column="1"
+                                                  ContentSource="Header"
+                                                  VerticalAlignment="Center"
+                                                  TextBlock.Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Grid.Column="2"
+                                           x:Name="Checkmark"
+                                           Text="✓"
+                                           Foreground="{StaticResource Accent}"
+                                           Visibility="Collapsed"
+                                           VerticalAlignment="Center"
+                                           Margin="8,0,0,0"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="{StaticResource SurfaceHover}"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked"
+                                     Value="True">
+                                <Setter TargetName="Checkmark"
+                                        Property="Visibility"
+                                        Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Separator Style -->
+        <Style x:Key="WidgetSeparatorStyle"
+               TargetType="Separator">
+            <Setter Property="Height"
+                    Value="1"/>
+            <Setter Property="Margin"
+                    Value="8,4"/>
+            <Setter Property="Background"
+                    Value="{StaticResource Border}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Separator">
+                        <Border Background="{TemplateBinding Background}"
+                                Height="{TemplateBinding Height}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </local:WidgetWindowBase.Resources>
 
     <Grid Margin="6">
@@ -48,27 +169,45 @@
                 PreviewMouseMove="Border_PreviewMouseMove"
                 PreviewMouseLeftButtonUp="Border_PreviewMouseLeftButtonUp">
             <Border.ContextMenu>
-                <ContextMenu>
+                <ContextMenu Style="{StaticResource WidgetContextMenuStyle}">
                     <MenuItem Header="Add App"
+                              Style="{StaticResource WidgetMenuItemStyle}"
                               Click="AddApp_Click">
                         <MenuItem.Icon>
-                            <TextBlock Text="&#xE710;"
-                                       FontFamily="Segoe MDL2 Assets"
-                                       FontSize="12"/>
+                            <TextBlock Text="➕"
+                                    FontSize="12"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator/>
+                    <Separator Style="{StaticResource WidgetSeparatorStyle}"/>
                     <MenuItem x:Name="LockWidgetMenuItem"
                               Header="Lock Widget"
+                              Style="{StaticResource WidgetMenuItemStyle}"
                               IsCheckable="True"
-                              Click="LockWidget_Click"/>
+                              Click="LockWidget_Click">
+                        <MenuItem.Icon>
+                            <TextBlock Text="🔒"
+                                    FontSize="12"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem x:Name="ResizeToggleMenuItem"
                               Header="Resize Handles"
+                              Style="{StaticResource WidgetMenuItemStyle}"
                               IsCheckable="True"
-                              Click="ResizeToggle_Click"/>
-                    <Separator/>
+                              Click="ResizeToggle_Click">
+                        <MenuItem.Icon>
+                            <TextBlock Text="⤡"
+                                    FontSize="12"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator Style="{StaticResource WidgetSeparatorStyle}"/>
                     <MenuItem Header="Remove Widget"
-                              Click="RemoveWidget_Click"/>
+                              Style="{StaticResource WidgetMenuItemStyle}"
+                              Click="RemoveWidget_Click">
+                        <MenuItem.Icon>
+                            <TextBlock Text="✕"
+                                    FontSize="12"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
             </Border.ContextMenu>
 
@@ -292,14 +431,32 @@
                                                 ToolTip="{Binding Name}">
 
                                             <Border.ContextMenu>
-                                                <ContextMenu>
+                                                <ContextMenu Style="{StaticResource WidgetContextMenuStyle}">
                                                     <MenuItem Header="Launch"
-                                                              Click="LaunchApp_Click"/>
-                                                    <Separator/>
+                                                              Style="{StaticResource WidgetMenuItemStyle}"
+                                                              Click="LaunchApp_Click">
+                                                        <MenuItem.Icon>
+                                                            <TextBlock Text="🚀"
+                                                                    FontSize="12"/>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
+                                                    <Separator Style="{StaticResource WidgetSeparatorStyle}"/>
                                                     <MenuItem Header="Toggle Favorite"
-                                                              Click="ToggleFavorite_Click"/>
+                                                              Style="{StaticResource WidgetMenuItemStyle}"
+                                                              Click="ToggleFavorite_Click">
+                                                        <MenuItem.Icon>
+                                                            <TextBlock Text="⭐"
+                                                                    FontSize="12"/>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
                                                     <MenuItem Header="Remove"
-                                                              Click="RemoveApp_Click"/>
+                                                              Style="{StaticResource WidgetMenuItemStyle}"
+                                                              Click="RemoveApp_Click">
+                                                        <MenuItem.Icon>
+                                                            <TextBlock Text="✕"
+                                                                    FontSize="12"/>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
                                                 </ContextMenu>
                                             </Border.ContextMenu>
 

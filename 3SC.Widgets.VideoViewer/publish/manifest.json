@@ -1,0 +1,53 @@
+{
+    "packageId": "com.3sc.videoviewer",
+    "widgetKey": "video-viewer",
+    "displayName": "Video Viewer",
+    "version": "1.1.0",
+    "author": {
+        "name": "3SC Team",
+        "email": "team@3sc.app",
+        "url": "https://3sc.app"
+    },
+    "description": "Video playback widget with media controls and file browser.",
+    "category": "media",
+    "icon": "Assets/icon.png",
+    "entry": "3SC.Widgets.VideoViewer.dll",
+    "minAppVersion": "1.0.0",
+    "hasSettings": false,
+    "hasOwnWindow": true,
+    "permissions": [
+        "filesystem"
+    ],
+    "tags": [
+        "video",
+        "player",
+        "media",
+        "movies",
+        "playback"
+    ],
+    "defaultSize": {
+        "width": 500,
+        "height": 350
+    },
+    "preview": {
+        "static": "Assets/preview.png",
+        "animated": "Assets/preview.gif",
+        "screenshots": [
+            "Assets/screenshots/main.png",
+            "Assets/screenshots/playback.png"
+        ]
+    },
+    "distribution": {
+        "category": "Media",
+        "tags": [
+            "video",
+            "player",
+            "media",
+            "movies"
+        ],
+        "listing": {
+            "shortDescription": "Video playback widget with media controls",
+            "changelog": "CHANGELOG.md"
+        }
+    }
+}
