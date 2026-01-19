@@ -30,6 +30,7 @@ public partial class MainWindow : Window
         _widgetFactories["App Launcher"] = new _3SC.Widgets.AppLauncher.AppLauncherWidgetFactory();
         _widgetFactories["Game Vault"] = new _3SC.Widgets.GameVault.GameVaultWidgetFactory();
         _widgetFactories["Clipboard History"] = new _3SC.Widgets.ClipboardHistory.ClipboardHistoryWidgetFactory();
+        _widgetFactories["Desktop Pet"] = new _3SC.Widgets.DesktopPet.DesktopPetWidgetFactory();
 
         WidgetSelector.ItemsSource = _widgetFactories.Keys.OrderBy(k => k).ToList();
         WidgetSelector.SelectedIndex = -1;
