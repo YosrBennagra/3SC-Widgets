@@ -1,0 +1,52 @@
+{
+  "packageId": "com.3sc.clock",
+  "widgetKey": "clock",
+  "displayName": "Clock",
+  "version": "1.2.0",
+  "author": {
+    "name": "3SC Team",
+    "email": "team@3sc.app",
+    "url": "https://3sc.app"
+  },
+  "description": "A beautiful digital clock with timezone support, 12/24-hour formats, and customizable display options.",
+  "category": "general",
+  "icon": "Assets/icon.png",
+  "entry": "3SC.Widgets.Clock.dll",
+  "minAppVersion": "1.0.0",
+  "hasSettings": true,
+  "hasOwnWindow": true,
+  "permissions": [],
+  "tags": [
+    "clock",
+    "time",
+    "timezone",
+    "date",
+    "digital"
+  ],
+  "defaultSize": {
+    "width": 300,
+    "height": 140
+  },
+  "preview": {
+    "static": "Assets/preview.png",
+    "animated": "Assets/preview.gif",
+    "screenshots": [
+      "Assets/screenshots/main.png",
+      "Assets/screenshots/settings.png",
+      "Assets/screenshots/timezones.png"
+    ]
+  },
+  "distribution": {
+    "category": "Utilities",
+    "tags": [
+      "clock",
+      "time",
+      "timezone",
+      "productivity"
+    ],
+    "listing": {
+      "shortDescription": "Beautiful digital clock with timezone support",
+      "changelog": "CHANGELOG.md"
+    }
+  }
+}

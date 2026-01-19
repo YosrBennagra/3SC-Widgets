@@ -23,43 +23,43 @@
     <local:WidgetWindowBase.Resources>
         <!-- Background Colors -->
         <SolidColorBrush x:Key="WidgetBackground"
-                Color="#FF0A0A0F"/>
+                         Color="#FF0A0A0F"/>
         <SolidColorBrush x:Key="WidgetSurface"
-                Color="#D0080810"/>
+                         Color="#D0080810"/>
         <SolidColorBrush x:Key="SurfaceElevated"
-                Color="#FF16161F"/>
+                         Color="#FF16161F"/>
         <SolidColorBrush x:Key="SurfaceHover"
-                Color="#FF1C1C28"/>
+                         Color="#FF1C1C28"/>
 
         <!-- Text Colors -->
         <SolidColorBrush x:Key="TextPrimary"
-                Color="#FFF1F5F9"/>
+                         Color="#FFF1F5F9"/>
         <SolidColorBrush x:Key="TextSecondary"
-                Color="#FF94A3B8"/>
+                         Color="#FF94A3B8"/>
         <SolidColorBrush x:Key="TextTertiary"
-                Color="#FF64748B"/>
+                         Color="#FF64748B"/>
 
         <!-- Accent Colors -->
         <SolidColorBrush x:Key="Accent"
-                Color="#FF2DD4BF"/>
+                         Color="#FF2DD4BF"/>
         <SolidColorBrush x:Key="AccentHover"
-                Color="#FF5EEAD4"/>
+                         Color="#FF5EEAD4"/>
         <SolidColorBrush x:Key="AccentPressed"
-                Color="#FF14B8A6"/>
+                         Color="#FF14B8A6"/>
 
         <!-- Border Colors -->
         <SolidColorBrush x:Key="Border"
-                Color="#FF2A2A3A"/>
+                         Color="#FF2A2A3A"/>
         <SolidColorBrush x:Key="BorderHover"
-                Color="#FF3A3A4A"/>
+                         Color="#FF3A3A4A"/>
         <SolidColorBrush x:Key="BorderSubtle"
-                Color="#20FFFFFF"/>
+                         Color="#20FFFFFF"/>
 
         <!-- Animations -->
         <Storyboard x:Key="FadeIn">
             <DoubleAnimation Storyboard.TargetProperty="Opacity"
                              From="0"
-                    To="1"
+                             To="1"
                              Duration="0:0:0.3">
                 <DoubleAnimation.EasingFunction>
                     <CubicEase EasingMode="EaseOut"/>
@@ -68,7 +68,8 @@
         </Storyboard>
 
         <!-- Context Menu Style -->
-        <Style TargetType="ContextMenu">
+        <Style x:Key="WidgetContextMenuStyle"
+                TargetType="ContextMenu">
             <Setter Property="Background"
                     Value="{StaticResource SurfaceElevated}"/>
             <Setter Property="BorderBrush"
@@ -89,19 +90,22 @@
                                 Padding="{TemplateBinding Padding}">
                             <Border.Effect>
                                 <DropShadowEffect Color="Black"
-                                        BlurRadius="16"
-                                        ShadowDepth="4"
-                                        Opacity="0.4"/>
+                                                  BlurRadius="16"
+                                                  ShadowDepth="4"
+                                                  Opacity="0.4"/>
                             </Border.Effect>
                             <StackPanel IsItemsHost="True"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Setter Property="ItemContainerStyle"
+                    Value="{DynamicResource WidgetMenuItemStyle}"/>
         </Style>
 
         <!-- MenuItem Style -->
-        <Style TargetType="MenuItem">
+        <Style x:Key="WidgetMenuItemStyle"
+                TargetType="MenuItem">
             <Setter Property="Background"
                     Value="Transparent"/>
             <Setter Property="Foreground"
@@ -124,12 +128,13 @@
                                 <ContentPresenter Grid.Column="0"
                                                   ContentSource="Icon"
                                                   Width="16"
-                                        Height="16"
+                                                  Height="16"
                                                   Margin="0,0,8,0"
                                                   VerticalAlignment="Center"/>
                                 <ContentPresenter Grid.Column="1"
                                                   ContentSource="Header"
-                                                  VerticalAlignment="Center"/>
+                                                  VerticalAlignment="Center"
+                                                  TextBlock.Foreground="{StaticResource TextPrimary}"/>
                                 <TextBlock Grid.Column="2"
                                            x:Name="Checkmark"
                                            Text="✓"
@@ -141,13 +146,13 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver"
-                                    Value="True">
+                                     Value="True">
                                 <Setter TargetName="Border"
                                         Property="Background"
                                         Value="{StaticResource SurfaceHover}"/>
                             </Trigger>
                             <Trigger Property="IsChecked"
-                                    Value="True">
+                                     Value="True">
                                 <Setter TargetName="Checkmark"
                                         Property="Visibility"
                                         Value="Visible"/>
@@ -159,7 +164,8 @@
         </Style>
 
         <!-- Separator Style -->
-        <Style TargetType="Separator">
+        <Style x:Key="WidgetSeparatorStyle"
+                TargetType="Separator">
             <Setter Property="Height"
                     Value="1"/>
             <Setter Property="Margin"
@@ -207,8 +213,9 @@
             <!-- Context Menu                                                     -->
             <!-- ═══════════════════════════════════════════════════════════════ -->
             <Border.ContextMenu>
-                <ContextMenu>
+                <ContextMenu Style="{StaticResource WidgetContextMenuStyle}">
                     <MenuItem Header="Settings..."
+                              Style="{StaticResource WidgetMenuItemStyle}"
                               Click="Settings_Click">
                         <MenuItem.Icon>
                             <TextBlock Text="⚙"
@@ -217,10 +224,11 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <Separator/>
+                    <Separator Style="{StaticResource WidgetSeparatorStyle}"/>
 
                     <MenuItem x:Name="LockWidgetMenuItem"
                               Header="Lock Widget"
+                              Style="{StaticResource WidgetMenuItemStyle}"
                               IsCheckable="True"
                               Click="LockWidget_Click">
                         <MenuItem.Icon>
@@ -232,6 +240,7 @@
 
                     <MenuItem x:Name="ResizeToggleMenuItem"
                               Header="Resize Handles"
+                              Style="{StaticResource WidgetMenuItemStyle}"
                               IsCheckable="True"
                               Click="ResizeToggle_Click">
                         <MenuItem.Icon>
@@ -241,9 +250,10 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <Separator/>
+                    <Separator Style="{StaticResource WidgetSeparatorStyle}"/>
 
                     <MenuItem Header="Remove Widget"
+                              Style="{StaticResource WidgetMenuItemStyle}"
                               Click="RemoveWidget_Click">
                         <MenuItem.Icon>
                             <TextBlock Text="✕"
@@ -343,7 +353,7 @@
                 <!-- Widget Content (Clock UI)                                    -->
                 <!-- ═══════════════════════════════════════════════════════════ -->
                 <view:ClockWidgetView x:Name="ClockView"
-                        Margin="12"/>
+                                      Margin="12"/>
 
             </Grid>
         </Border>
