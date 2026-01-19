@@ -10,7 +10,6 @@
     },
     "description": "Manage and launch your games and apps with quick access and favorites.",
     "category": "productivity",
-    "icon": "Assets/icon.png",
     "entry": "3SC.Widgets.GameVault.dll",
     "minAppVersion": "1.0.0",
     "hasSettings": true,

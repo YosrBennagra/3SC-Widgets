@@ -10,7 +10,6 @@
     },
     "description": "Quick access hub for your favorite folders with drag-and-drop support.",
     "category": "productivity",
-    "icon": "Assets/icon.png",
     "entry": "3SC.Widgets.Folders.dll",
     "minAppVersion": "1.0.0",
     "hasSettings": false,

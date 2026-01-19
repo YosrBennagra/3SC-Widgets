@@ -10,7 +10,6 @@
     },
     "description": "Quick access launcher for your favorite applications with drag-and-drop support.",
     "category": "productivity",
-    "icon": "Assets/icon.png",
     "entry": "3SC.Widgets.AppLauncher.dll",
     "minAppVersion": "1.0.0",
     "hasSettings": false,

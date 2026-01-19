@@ -10,7 +10,6 @@
   },
   "description": "View and browse PDF files from your Downloads and Documents folders.",
   "category": "media",
-  "icon": "Assets/icon.png",
   "entry": "3SC.Widgets.PdfViewer.dll",
   "minAppVersion": "1.0.0",
   "hasSettings": false,

@@ -10,7 +10,6 @@
     },
     "description": "Video playback widget with media controls and file browser.",
     "category": "media",
-    "icon": "Assets/icon.png",
     "entry": "3SC.Widgets.VideoViewer.dll",
     "minAppVersion": "1.0.0",
     "hasSettings": false,

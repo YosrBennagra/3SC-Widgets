@@ -10,7 +10,6 @@
     },
     "description": "Access and manage recent clipboard items including text and images with quick copy functionality.",
     "category": "productivity",
-    "icon": "Assets/icon.png",
     "entry": "3SC.Widgets.ClipboardHistory.dll",
     "minAppVersion": "1.0.0",
     "hasSettings": false,
