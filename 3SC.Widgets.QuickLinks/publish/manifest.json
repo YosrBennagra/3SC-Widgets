@@ -10,7 +10,6 @@
     },
     "description": "Manage and access your frequently used links and URLs.",
     "category": "productivity",
-    "icon": "Assets/icon.png",
     "entry": "3SC.Widgets.QuickLinks.dll",
     "minAppVersion": "1.0.0",
     "hasSettings": false,

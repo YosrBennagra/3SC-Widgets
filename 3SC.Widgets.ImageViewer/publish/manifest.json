@@ -10,7 +10,6 @@
     },
     "description": "View and browse images from your Pictures and Downloads folders with drag-and-drop support.",
     "category": "media",
-    "icon": "Assets/icon.png",
     "entry": "3SC.Widgets.ImageViewer.dll",
     "minAppVersion": "1.0.0",
     "hasSettings": false,

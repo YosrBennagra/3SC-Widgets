@@ -10,7 +10,6 @@
     },
     "description": "Quick notes widget with auto-save and character/word count.",
     "category": "productivity",
-    "icon": "Assets/icon.png",
     "entry": "3SC.Widgets.Notes.dll",
     "minAppVersion": "1.0.0",
     "hasSettings": false,

@@ -10,7 +10,6 @@
     },
     "description": "A beautiful calendar widget with month view, week numbers, and day selection.",
     "category": "productivity",
-    "icon": "Assets/icon.png",
     "entry": "3SC.Widgets.Calendar.dll",
     "minAppVersion": "1.0.0",
     "hasSettings": false,

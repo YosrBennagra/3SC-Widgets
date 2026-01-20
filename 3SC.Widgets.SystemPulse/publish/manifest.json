@@ -1,0 +1,30 @@
+{
+    "widgetKey": "system-pulse",
+    "name": "System Pulse",
+    "description": "Beautiful real-time system monitor with animated pulse effects showing CPU, RAM, and disk usage",
+    "version": "1.0.0",
+    "author": "3SC Community",
+    "minHostVersion": "1.0.0",
+    "assemblyName": "3SC.Widgets.SystemPulse.dll",
+    "factoryTypeName": "_3SC.Widgets.SystemPulse.SystemPulseWidgetFactory",
+    "defaultWidth": 280,
+    "defaultHeight": 180,
+    "minWidth": 220,
+    "minHeight": 140,
+    "maxWidth": 500,
+    "maxHeight": 350,
+    "supportedFeatures": [
+        "resize",
+        "settings"
+    ],
+    "tags": [
+        "system",
+        "monitor",
+        "cpu",
+        "ram",
+        "performance",
+        "pulse"
+    ],
+    "previewImage": "Assets/preview.png",
+    "icon": "Assets/icon.png"
+}
