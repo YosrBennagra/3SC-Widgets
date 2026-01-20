@@ -423,78 +423,8 @@ Beautify messy data.
 - Tree view
 ```
 
-
-## 🌈 Visual Effects & Ambiance
-
-
-
----
-
-## 🤖 AI & Smart Widgets
-
-### **Smart Clipboard** 📋
-AI-powered clipboard manager.
-```
-- Last 20 clipboard items
-- AI categorization
-- Text translation
-- Extract emails/URLs
-- Clipboard history search
-```
-
-### **Auto Summarizer** 📄
-Paste text, get summary.
-```
-- AI-powered summarization
-- Adjustable length
-- Bullet points or paragraph
-- Copy summary
-- Multiple languages
-```
-
-### **Text to Emoji** 😀
-Convert text to emoji.
-```
-- "I'm happy" → 😊
-- AI interpretation
-- Multiple emoji suggestions
-- Copy emoji string
-- Emoji search
-```
-
-### **Meeting Notes AI** 📝
-AI meeting assistant.
-```
-- Paste meeting transcript
-- Extract action items
-- Identify decisions
-- Attendee summary
-- Export to formats
-```
-
-### **Code Explainer** 💻
-Paste code, get explanation.
-```
-- Supports 20+ languages
-- Line-by-line breakdown
-- Complexity analysis
-- Suggest improvements
-- Beginner-friendly mode
-```
-
----
-
 ## 📊 Monitoring & Stats
 
-### **GitHub Streak** 🔥
-Your contribution streak.
-```
-- Days contributed
-- Longest streak
-- Current streak
-- Heat map visualization
-- PR/commit count
-```
 
 ### **Battery Health** 🔋
 Detailed battery info.
