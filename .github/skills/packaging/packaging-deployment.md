@@ -1,16 +1,26 @@
 # Packaging & Deployment
 
 > **Category:** Packaging | **Priority:** 🔴 Critical
-> **Version:** 2.0.0 | **Last Updated:** 2026-01-15
+> **Version:** 3.0.0 | **Last Updated:** 2026-01-20
 
 ## Overview
 
-This skill covers creating distributable widget packages (.3scwidget) and deploying them to the 3SC host application.
+This skill covers creating distributable widget packages (.3scwidget) and deploying them to the 3SC host application using the **centralized Build-Widget.ps1 and Install-Widget.ps1 scripts** located in the repository root.
 
 ## Prerequisites
 
 - [build-configuration.md](build-configuration.md)
 - [manifest-specification.md](../core/manifest-specification.md)
+
+---
+
+## ⚠️ IMPORTANT: Use Centralized Scripts Only
+
+**DO NOT** create individual build/package scripts inside widget projects. Use the centralized scripts:
+- `Build-Widget.ps1` - Builds and packages widgets
+- `Install-Widget.ps1` - Installs, uninstalls, and lists widgets
+
+These scripts are located in the **repository root** (`widgets/` folder).
 
 ---
 
@@ -48,407 +58,411 @@ my-widget.3scwidget
 
 ---
 
-## Packaging Script
+## Build-Widget.ps1 - Centralized Build Script
 
-### package.ps1
+Located at: `widgets/Build-Widget.ps1`
+
+### Features
+
+- Builds and publishes widgets in Release mode
+- Automatically copies manifest.json and Assets/ folder
+- Removes unnecessary files (Contracts, .pdb files)
+- Creates .3scwidget package in `packages/` folder
+- Supports building single widget or all widgets
+- Shows package contents and size
+
+### Usage
 
 ```powershell
-#!/usr/bin/env pwsh
-#Requires -Version 7.0
+# Build single widget
+.\Build-Widget.ps1 -WidgetName "3SC.Widgets.Clock"
 
-<#
-.SYNOPSIS
-    Packages a widget for distribution.
+# Build all widgets
+.\Build-Widget.ps1 -All
 
-.DESCRIPTION
-    Creates a .3scwidget package from the build output.
+# View usage help
+.\Build-Widget.ps1
+```
 
-.PARAMETER Configuration
-    Build configuration (Debug/Release). Default: Release
+### Output
 
-.PARAMETER OutputPath
-    Where to create the package. Default: current directory
+Packages are created in `widgets/packages/` with naming convention:
+- Format: `{widgetkey}-widget.3scwidget`
+- Example: `clock-widget.3scwidget`
 
-.EXAMPLE
-    ./package.ps1 -Configuration Release
-#>
+The widget key is automatically extracted from the project name by:
+1. Removing `3SC.Widgets.` prefix
+2. Converting to lowercase
 
-param(
-    [ValidateSet('Debug', 'Release')]
-    [string]$Configuration = 'Release',
-    
-    [string]$OutputPath = '.'
-)
+Examples:
+- `3SC.Widgets.Clock` → `clock-widget.3scwidget`
+- `3SC.Widgets.ThisDayInHistory` → `thisdayinhistory-widget.3scwidget`
 
-$ErrorActionPreference = 'Stop'
+### What Gets Packaged
 
-# Read manifest
-$manifest = Get-Content 'manifest.json' | ConvertFrom-Json
-$widgetKey = $manifest.widgetKey
-$version = $manifest.version
-$displayName = $manifest.displayName
+The script automatically includes:
+- Widget DLL (e.g., `3SC.Widgets.Clock.dll`)
+- Dependencies (CommunityToolkit.Mvvm, Serilog, etc.)
+- `manifest.json` (copied from project root if not in publish folder)
+- `Assets/` folder (if it exists in project root)
+- `.deps.json` file
 
-Write-Host "Packaging: $displayName v$version" -ForegroundColor Cyan
+The script automatically excludes:
+- `3SC.Widgets.Contracts.dll` (provided by host)
+- `.pdb` files (debug symbols)
 
-# Paths
-$buildOutput = "bin\$Configuration\net8.0-windows"
-$packageName = "$widgetKey-$version.3scwidget"
-$stagingDir = "staging\$widgetKey"
+---
 
-# Validate build output
-if (-not (Test-Path $buildOutput)) {
-    Write-Host "Build output not found. Running build..." -ForegroundColor Yellow
-    dotnet build -c $Configuration
-}
+## Install-Widget.ps1 - Centralized Install Script
 
-# Clean staging
-if (Test-Path $stagingDir) {
-    Remove-Item $stagingDir -Recurse -Force
-}
-New-Item -ItemType Directory -Path $stagingDir | Out-Null
+Located at: `widgets/Install-Widget.ps1`
 
-# Copy required files
-Write-Host "Staging files..." -ForegroundColor Gray
+### Features
 
-# Manifest
-Copy-Item 'manifest.json' $stagingDir
+- Installs widgets from `packages/` folder or custom path
+- Lists all installed widgets with versions
+- Uninstalls widgets
+- Validates package structure and manifest
+- Handles widget key extraction automatically
 
-# Main assembly
-$mainAssembly = Get-ChildItem "$buildOutput\3SC.Widgets.*.dll" -Exclude "*Contracts*" | Select-Object -First 1
-if (-not $mainAssembly) {
-    throw "Main assembly not found in $buildOutput"
-}
-Copy-Item $mainAssembly.FullName $stagingDir
+### Installation Directory
 
-# Optional: Include PDB for Release (smaller)
-if ($Configuration -eq 'Debug') {
-    $pdb = $mainAssembly.FullName -replace '\.dll$', '.pdb'
-    if (Test-Path $pdb) {
-        Copy-Item $pdb $stagingDir
-    }
-}
+Widgets are installed to:
+```
+%APPDATA%\3SC\Widgets\Community\{widget-key}\
+```
 
-# Dependencies (exclude contracts & framework)
-$excludePatterns = @(
-    '*Contracts*',
-    'Microsoft.*',
-    'System.*',
-    'WindowsBase*',
-    'PresentationCore*',
-    'PresentationFramework*'
-)
+Example:
+```
+C:\Users\YourName\AppData\Roaming\3SC\Widgets\Community\
+├── clock\
+│   ├── manifest.json
+│   ├── 3SC.Widgets.Clock.dll
+│   └── Assets\
+└── this-day-in-history\
+    ├── manifest.json
+    ├── 3SC.Widgets.ThisDayInHistory.dll
+    └── ...
+```
 
-$deps = Get-ChildItem "$buildOutput\*.dll" | Where-Object {
-    $name = $_.Name
-    $exclude = $false
-    foreach ($pattern in $excludePatterns) {
-        if ($name -like $pattern) {
-            $exclude = $true
-            break
-        }
-    }
-    -not $exclude -and $_.Name -ne $mainAssembly.Name
-}
+### Usage
 
-if ($deps) {
-    $depsDir = Join-Path $stagingDir 'Dependencies'
-    New-Item -ItemType Directory -Path $depsDir | Out-Null
-    
-    foreach ($dep in $deps) {
-        Copy-Item $dep.FullName $depsDir
-        Write-Host "  + $($dep.Name)" -ForegroundColor Gray
-    }
-}
+```powershell
+# Install widget from packages folder (use package name without -widget.3scwidget)
+.\Install-Widget.ps1 -WidgetKey clock
 
-# Assets
-if (Test-Path 'Assets') {
-    Copy-Item 'Assets' $stagingDir -Recurse
-}
+# Install from custom path
+.\Install-Widget.ps1 -PackagePath "C:\Downloads\my-widget.3scwidget"
 
-# Create package
-$packagePath = Join-Path $OutputPath $packageName
-if (Test-Path $packagePath) {
-    Remove-Item $packagePath -Force
-}
+# List all installed widgets
+.\Install-Widget.ps1 -List
 
-Write-Host "Creating package: $packageName" -ForegroundColor Gray
+# Uninstall widget
+.\Install-Widget.ps1 -Uninstall -WidgetKey clock
 
-Compress-Archive -Path "$stagingDir\*" -DestinationPath $packagePath -CompressionLevel Optimal
+# View usage help
+.\Install-Widget.ps1
+```
 
-# Cleanup
-Remove-Item 'staging' -Recurse -Force
+### Install Process
 
-# Summary
-$packageSize = (Get-Item $packagePath).Length / 1KB
-Write-Host ""
-Write-Host "Package created successfully!" -ForegroundColor Green
-Write-Host "  Path: $packagePath" -ForegroundColor Gray
-Write-Host "  Size: $([math]::Round($packageSize, 1)) KB" -ForegroundColor Gray
+1. Extracts package to temporary directory
+2. Reads `manifest.json` to get widget key
+3. Validates required fields (widgetKey, name, version)
+4. Copies all files to `%APPDATA%\3SC\Widgets\Community\{widget-key}\`
+5. Notifies to restart 3SC host application
 
-# Return path for scripts
-return $packagePath
+---
+
+## Complete Workflow Example
+
+### 1. Build Your Widget
+
+```powershell
+# Navigate to repository root
+cd c:\Users\ALPHA\source\repos\widgets
+
+# Build the widget
+.\Build-Widget.ps1 -WidgetName "3SC.Widgets.Clock"
+```
+
+Output:
+```
+========================================
+Building: 3SC.Widgets.Clock
+========================================
+
+[1/4] Publishing...
+Published successfully
+[2/4] Copying assets...
+[3/4] Cleaning package...
+[4/4] Creating package...
+
+✅ Package created: clock-widget.3scwidget (45.2 KB)
+
+Package contents:
+  - 3SC.Widgets.Clock.dll
+  - CommunityToolkit.Mvvm.dll
+  - Serilog.dll
+  - manifest.json
+  - 3SC.Widgets.Clock.deps.json
+```
+
+### 2. Install for Testing
+
+```powershell
+# Install the widget
+.\Install-Widget.ps1 -WidgetKey clock
+```
+
+Output:
+```
+Extracting package...
+
+✅ Widget installed successfully!
+   Name: Clock Widget
+   Version: 1.2.0
+   Key: clock
+   Path: C:\Users\ALPHA\AppData\Roaming\3SC\Widgets\Community\clock
+
+Restart 3SC to use the widget.
+```
+
+### 3. Test in 3SC Host
+
+1. Close 3SC host application if running
+2. Start 3SC host application
+3. Widget should appear in widget list
+4. Add widget to desktop
+
+### 4. Make Changes & Update
+
+```powershell
+# Make code changes...
+
+# Rebuild
+.\Build-Widget.ps1 -WidgetName "3SC.Widgets.Clock"
+
+# Reinstall (overwrites existing)
+.\Install-Widget.ps1 -WidgetKey clock
+
+# Restart 3SC
+```
+
+### 5. Uninstall When Done
+
+```powershell
+.\Install-Widget.ps1 -Uninstall -WidgetKey clock
 ```
 
 ---
 
-## Installation Script
+## Building All Widgets
 
-### install.ps1
+For bulk operations:
 
 ```powershell
-#!/usr/bin/env pwsh
+# Build all widgets at once
+.\Build-Widget.ps1 -All
+```
 
-<#
-.SYNOPSIS
-    Installs a widget package.
+Output:
+```
+Building all widgets...
+Found 20 widgets
 
-.PARAMETER PackagePath
-    Path to the .3scwidget file
+========================================
+Building: 3SC.Widgets.Clock
+========================================
+...
+✅ Package created: clock-widget.3scwidget (45.2 KB)
 
-.PARAMETER Force
-    Overwrite if already installed
-#>
+========================================
+Building: 3SC.Widgets.Notes
+========================================
+...
+✅ Package created: notes-widget.3scwidget (38.7 KB)
 
-param(
-    [Parameter(Mandatory)]
-    [string]$PackagePath,
-    
-    [switch]$Force
-)
+...
 
-$ErrorActionPreference = 'Stop'
+========================================
+Build Summary
+========================================
+Successful: 18
+Failed: 2
 
-if (-not (Test-Path $PackagePath)) {
-    throw "Package not found: $PackagePath"
-}
-
-# Extract to temp
-$tempDir = Join-Path $env:TEMP "3sc-install-$(Get-Random)"
-Expand-Archive -Path $PackagePath -DestinationPath $tempDir
-
-try {
-    # Read manifest
-    $manifestPath = Join-Path $tempDir 'manifest.json'
-    if (-not (Test-Path $manifestPath)) {
-        throw "Invalid package: missing manifest.json"
-    }
-    
-    $manifest = Get-Content $manifestPath | ConvertFrom-Json
-    $widgetKey = $manifest.widgetKey
-    $version = $manifest.version
-    
-    Write-Host "Installing: $($manifest.displayName) v$version" -ForegroundColor Cyan
-    
-    # Target path
-    $installPath = Join-Path $env:APPDATA "3SC\Widgets\Community\$widgetKey"
-    
-    # Check existing
-    if ((Test-Path $installPath) -and -not $Force) {
-        $existingManifest = Get-Content (Join-Path $installPath 'manifest.json') | ConvertFrom-Json
-        throw "Widget already installed (v$($existingManifest.version)). Use -Force to overwrite."
-    }
-    
-    # Create/clean target
-    if (Test-Path $installPath) {
-        Remove-Item $installPath -Recurse -Force
-    }
-    New-Item -ItemType Directory -Path $installPath | Out-Null
-    
-    # Copy files
-    Copy-Item "$tempDir\*" $installPath -Recurse
-    
-    Write-Host "Installed to: $installPath" -ForegroundColor Green
-    Write-Host ""
-    Write-Host "Restart 3SC to load the widget." -ForegroundColor Yellow
-}
-finally {
-    # Cleanup temp
-    Remove-Item $tempDir -Recurse -Force
-}
+Packages saved to: c:\Users\ALPHA\source\repos\widgets\packages
 ```
 
 ---
 
-## Uninstallation
+## Package Validation
 
-### uninstall.ps1
+The Install-Widget.ps1 script automatically validates:
+- Package is a valid ZIP archive
+- Contains `manifest.json`
+- Manifest has required fields: `widgetKey`, `name`, `version`
+- Widget key format is valid
+
+For additional validation, check the package manually:
 
 ```powershell
-#!/usr/bin/env pwsh
-
-param(
-    [Parameter(Mandatory)]
-    [string]$WidgetKey
-)
-
-$installPath = Join-Path $env:APPDATA "3SC\Widgets\Community\$WidgetKey"
-
-if (-not (Test-Path $installPath)) {
-    throw "Widget not installed: $WidgetKey"
-}
-
-$manifest = Get-Content (Join-Path $installPath 'manifest.json') | ConvertFrom-Json
-Write-Host "Uninstalling: $($manifest.displayName)" -ForegroundColor Cyan
-
-# Remove files
-Remove-Item $installPath -Recurse -Force
-
-# Optionally remove data
-$dataPath = Join-Path $env:APPDATA "3SC\WidgetData\$WidgetKey"
-if (Test-Path $dataPath) {
-    $response = Read-Host "Remove widget data? (y/N)"
-    if ($response -eq 'y') {
-        Remove-Item $dataPath -Recurse -Force
-        Write-Host "Data removed." -ForegroundColor Gray
-    }
-}
-
-Write-Host "Uninstalled successfully!" -ForegroundColor Green
+# Extract and inspect
+Expand-Archive "packages\clock-widget.3scwidget" -DestinationPath "temp-inspect"
+code "temp-inspect\manifest.json"
 ```
 
 ---
 
-## Validation
-
-### validate-package.ps1
-
-```powershell
-#!/usr/bin/env pwsh
-
-param(
-    [Parameter(Mandatory)]
-    [string]$PackagePath
-)
-
-$errors = @()
-$warnings = @()
-
-Write-Host "Validating: $PackagePath" -ForegroundColor Cyan
-
-$tempDir = Join-Path $env:TEMP "3sc-validate-$(Get-Random)"
-Expand-Archive -Path $PackagePath -DestinationPath $tempDir
-
-try {
-    # Check manifest
-    $manifestPath = Join-Path $tempDir 'manifest.json'
-    if (-not (Test-Path $manifestPath)) {
-        $errors += "Missing manifest.json"
-    }
-    else {
-        $manifest = Get-Content $manifestPath | ConvertFrom-Json
-        
-        # Required fields
-        @('widgetKey', 'displayName', 'version', 'entryPoint') | ForEach-Object {
-            if (-not $manifest.$_) {
-                $errors += "Missing required field: $_"
-            }
-        }
-        
-        # Widget key format
-        if ($manifest.widgetKey -and $manifest.widgetKey -notmatch '^[a-z][a-z0-9-]*$') {
-            $errors += "Invalid widgetKey format (must be lowercase alphanumeric with dashes)"
-        }
-        
-        # Version format
-        if ($manifest.version -and $manifest.version -notmatch '^\d+\.\d+\.\d+') {
-            $errors += "Invalid version format (must be semver)"
-        }
-        
-        # Entry point exists
-        if ($manifest.entryPoint) {
-            $entryPath = Join-Path $tempDir $manifest.entryPoint
-            if (-not (Test-Path $entryPath)) {
-                $errors += "Entry point not found: $($manifest.entryPoint)"
-            }
-        }
-        
-        # Icon
-        if (-not (Test-Path (Join-Path $tempDir 'Assets\icon.png'))) {
-            $warnings += "Missing icon.png (128x128 recommended)"
-        }
-    }
-    
-    # Check assemblies
-    $assemblies = Get-ChildItem $tempDir -Filter '*.dll' -Recurse
-    if (-not $assemblies) {
-        $errors += "No assemblies found"
-    }
-    
-    # Check for forbidden dependencies
-    $forbidden = @('3SC.Widgets.Contracts.dll')
-    foreach ($asm in $assemblies) {
-        if ($asm.Name -in $forbidden) {
-            $errors += "Forbidden dependency included: $($asm.Name)"
-        }
-    }
-}
-finally {
-    Remove-Item $tempDir -Recurse -Force
-}
-
-# Report
-Write-Host ""
-if ($warnings) {
-    Write-Host "Warnings:" -ForegroundColor Yellow
-    $warnings | ForEach-Object { Write-Host "  - $_" -ForegroundColor Yellow }
-}
-
-if ($errors) {
-    Write-Host "Errors:" -ForegroundColor Red
-    $errors | ForEach-Object { Write-Host "  - $_" -ForegroundColor Red }
-    Write-Host ""
-    Write-Host "Validation FAILED" -ForegroundColor Red
-    exit 1
-}
-else {
-    Write-Host "Validation PASSED" -ForegroundColor Green
-}
-```
-
 ---
 
-## Package Contents Manifest
+## Troubleshooting
 
-For transparency, you can include a CONTENTS.md:
+### Widget Not Found After Install
 
-```markdown
-# Package Contents
+**Problem:** Widget doesn't appear in 3SC after installation.
 
-## Widget: Clock Widget v1.2.0
+**Solutions:**
+1. Verify installation path: `%APPDATA%\3SC\Widgets\Community\{widget-key}\`
+2. Check `manifest.json` is present in the folder
+3. Ensure 3SC was fully restarted (not just minimized)
+4. Check 3SC logs for loading errors
 
-### Files
+### Package Build Fails
 
-| File | Size | Purpose |
-|------|------|---------|
-| manifest.json | 1.2 KB | Widget metadata |
-| 3SC.Widgets.Clock.dll | 45 KB | Main widget assembly |
-| Assets/icon.png | 4.5 KB | Widget icon (128x128) |
-| Assets/preview.png | 12 KB | Preview image |
+**Problem:** `Build-Widget.ps1` reports build failure.
 
-### Dependencies
+**Solutions:**
+1. Ensure widget builds successfully first: `dotnet build -c Release`
+2. Check `manifest.json` exists in project root
+3. Verify project name follows `3SC.Widgets.*` pattern
+4. Check for compilation errors in project
 
-| Package | Version | License |
-|---------|---------|---------|
-| CommunityToolkit.Mvvm | 8.2.2 | MIT |
-| Serilog | 3.1.1 | Apache-2.0 |
+### Wrong Widget Key
 
-### Checksums (SHA256)
+**Problem:** Widget installs with different key than expected.
 
-```
-3SC.Widgets.Clock.dll: a1b2c3d4e5f6...
-manifest.json: f6e5d4c3b2a1...
-```
-```
+**Solution:**
+- Widget key is determined by `manifest.json` `widgetKey` field
+- Package filename is based on project name (lowercase, no prefix)
+- When installing, the `widgetKey` from manifest is used for the install folder
+
+### Cannot Uninstall Widget
+
+**Problem:** `Install-Widget.ps1 -Uninstall` says widget not found.
+
+**Solutions:**
+1. List installed widgets: `.\Install-Widget.ps1 -List`
+2. Use exact widget key from the list
+3. Manually delete from: `%APPDATA%\3SC\Widgets\Community\{widget-key}\`
+
+### Package Too Large
+
+**Problem:** Widget package is larger than expected.
+
+**Solutions:**
+1. Check if unnecessary dependencies are included
+2. Verify Assets folder doesn't contain large files
+3. Ensure `.pdb` files are excluded (Build-Widget.ps1 does this automatically)
+4. Review package contents: `Expand-Archive` and inspect
 
 ---
 
 ## Best Practices
 
-1. **Exclude Contracts DLL** - Never include 3SC.Widgets.Contracts.dll
-2. **Minimize size** - Only include necessary dependencies
-3. **Include icon** - 128x128 PNG with transparency
-4. **Validate before publish** - Run validate-package.ps1
-5. **Sign packages** - For production, consider code signing
+### 1. Always Use Centralized Scripts
+
+❌ **DON'T** create individual `Build-And-Package-*.ps1` scripts in widget projects.
+
+✅ **DO** use the repository root scripts:
+```powershell
+.\Build-Widget.ps1 -WidgetName "3SC.Widgets.YourWidget"
+```
+
+### 2. Test Before Distribution
+
+```powershell
+# Build
+.\Build-Widget.ps1 -WidgetName "3SC.Widgets.YourWidget"
+
+# Install locally
+.\Install-Widget.ps1 -WidgetKey yourwidget
+
+# Test in 3SC host app
+
+# If good, package is ready in packages/ folder
+```
+
+### 3. Version Management
+
+- Update version in `manifest.json` before building
+- Package filename doesn't include version (e.g., `clock-widget.3scwidget`)
+- Version is stored inside manifest within the package
+- Users can check version: `.\Install-Widget.ps1 -List`
+
+### 4. Asset Organization
+
+Keep Assets/ folder in project root with:
+- `icon.png` (128x128, transparent PNG)
+- `preview.png` (optional, for marketplace)
+- Other resources used by widget
+
+Build-Widget.ps1 automatically copies entire Assets/ folder.
+
+### 5. Clean Builds
+
+For release builds, clean first:
+```powershell
+dotnet clean
+.\Build-Widget.ps1 -WidgetName "3SC.Widgets.YourWidget"
+```
+
+### 6. Package Storage
+
+- Packages are created in `widgets/packages/` folder
+- This folder is in `.gitignore` (don't commit packages to repo)
+- Distribute packages via:
+  - 3SC Workshop Portal (recommended)
+  - GitHub Releases
+  - Direct download links
+
+---
+
+## Integration with CI/CD
+
+### GitHub Actions Example
+
+```yaml
+name: Build Widgets
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    
+    - name: Build All Widgets
+      run: .\Build-Widget.ps1 -All
+      shell: pwsh
+    
+    - name: Upload Packages
+      uses: actions/upload-artifact@v3
+      with:
+        name: widget-packages
+        path: packages/*.3scwidget
+```
 
 ---
 
@@ -460,9 +474,34 @@ manifest.json: f6e5d4c3b2a1...
 
 ---
 
+## Quick Reference Card
+
+```
+BUILD WIDGET
+  .\Build-Widget.ps1 -WidgetName "3SC.Widgets.YourWidget"
+  → Creates: packages/yourwidget-widget.3scwidget
+
+INSTALL WIDGET
+  .\Install-Widget.ps1 -WidgetKey yourwidget
+  → Installs to: %APPDATA%\3SC\Widgets\Community\yourwidget\
+
+LIST WIDGETS
+  .\Install-Widget.ps1 -List
+
+UNINSTALL
+  .\Install-Widget.ps1 -Uninstall -WidgetKey yourwidget
+
+BUILD ALL
+  .\Build-Widget.ps1 -All
+```
+
+---
+
 ## Changelog
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 3.0.0 | 2026-01-20 | Migrated to centralized Build-Widget.ps1 and Install-Widget.ps1 |
 | 2.0.0 | 2026-01-15 | Added validation, checksums |
 | 1.0.0 | 2025-06-01 | Initial version |
+

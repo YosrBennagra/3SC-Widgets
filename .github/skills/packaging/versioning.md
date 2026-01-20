@@ -28,8 +28,6 @@ v1.2.3
 | Add new display option | MINOR | 1.0.1 → 1.1.0 |
 | Restructure settings format | MAJOR | 1.1.0 → 2.0.0 |
 
----
-
 ## Version Locations
 
 Version must be consistent across multiple files:
@@ -40,11 +38,13 @@ Version must be consistent across multiple files:
 │           "version": "1.2.3"             │
 └───────────────────┬─────────────────────┘
                     │
-        ┌───────────┼───────────┐
-        ▼           ▼           ▼
-   .csproj     CHANGELOG    package.ps1
-   <Version>      v1.2.3     [automatic]
+        ┌───────────┼──────────────┐
+        ▼           ▼              ▼
+   .csproj     CHANGELOG    Build-Widget.ps1
+   <Version>      v1.2.3     [reads from manifest]
 ```
+
+**NOTE:** The centralized `Build-Widget.ps1` script automatically reads the version from `manifest.json`, so you don't need custom packaging scripts.
 
 ---
 

@@ -1,15 +1,18 @@
 # Build Configuration
 
 > **Category:** Packaging | **Priority:** 🔴 Critical
-> **Version:** 2.0.0 | **Last Updated:** 2026-01-15
+> **Version:** 3.0.0 | **Last Updated:** 2026-01-20
 
 ## Overview
 
 This skill covers build configuration for widget projects, including Debug/Release modes, dual-mode builds, and MSBuild customization.
 
+**NOTE:** For packaging, use the centralized `Build-Widget.ps1` script in the repository root. See [packaging-deployment.md](packaging-deployment.md).
+
 ## Prerequisites
 
 - [project-setup.md](../core/project-setup.md)
+- [packaging-deployment.md](packaging-deployment.md) - For packaging with Build-Widget.ps1
 
 ---
 
@@ -281,7 +284,8 @@ Write-Host "Build succeeded!" -ForegroundColor Green
 
 # Package if requested
 if ($Package) {
-    & "$PSScriptRoot\package.ps1" -Configuration $Configuration
+    # Use centralized Build-Widget.ps1 script
+    & "$PSScriptRoot\..\..\Build-Widget.ps1" -WidgetName (Split-Path -Leaf $PSScriptRoot)
 }
 ```
 

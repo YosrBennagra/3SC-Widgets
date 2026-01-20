@@ -25,6 +25,5 @@
         "performance",
         "pulse"
     ],
-    "previewImage": "Assets/preview.png",
-    "icon": "Assets/icon.png"
+    "previewImage": "Assets/preview.png"
 }

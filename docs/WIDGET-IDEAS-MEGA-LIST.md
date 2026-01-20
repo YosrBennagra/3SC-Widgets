@@ -23,16 +23,6 @@
 
 ## 🎯 Productivity & Focus
 
-### **Pomodoro+ Timer** 🍅
-Classic Pomodoro with visual tree growth - your tree grows with each session!
-```
-- 25/5 work/break cycles
-- Plant a virtual tree that grows with focus time
-- Die if you break focus (inspired by Forest app)
-- Statistics: hours focused, trees planted
-- Daily/weekly streaks
-```
-
 ### **Tab Debt Tracker** 🔖
 Shows how many browser tabs you have open (connects to Chrome/Firefox).
 ```
@@ -147,25 +137,6 @@ Turn images into ASCII/Unicode art.
 - Export as text file
 ```
 
-### **Gradient Playground** 🌈
-Create and save beautiful gradients.
-```
-- 2-10 color gradients
-- Linear/radial/conic types
-- Mesh gradient support
-- CSS/SVG export
-- Trending gradients feed
-```
-
-### **Logo Size Tester** 📏
-Test logo at different sizes instantly.
-```
-- Upload logo
-- See at: favicon, mobile, desktop, billboard
-- Minimum legible size finder
-- Background contrast tester
-- Export all sizes
-```
 
 ### **Pattern Maker** 🔶
 Create seamless tileable patterns.
@@ -246,15 +217,7 @@ Play classic mini-games.
 
 ## 🌍 Information & Data
 
-### **Moon Phase** 🌙
-Current moon phase with folklore.
-```
-- Live moon visualization
-- Phase name and percentage
-- Best days for: planting, fishing, haircuts
-- Next full/new moon countdown
-- Lunar calendar
-```
+
 
 ### **ISS Tracker** 🛰️
 Where's the International Space Station?
@@ -316,15 +279,6 @@ Learn a phrase in a new language daily.
 - Phrase history archive
 ```
 
-### **This Day in History** 📜
-What happened on this day?
-```
-- 3-5 historical events
-- Births and deaths of famous people
-- Random historical images
-- "Deep dive" link to Wikipedia
-- Share interesting facts
-```
 
 ---
 
@@ -437,25 +391,7 @@ Placeholder text generator.
 - Custom word lists
 ```
 
-### **Cron Expression Builder** ⏲️
-Visual cron schedule creator.
-```
-- Dropdown builders
-- Human-readable output
-- Next 5 run times preview
-- Common patterns library
-- Multiple formats (cron, quartz)
-```
 
-### **API Status** 🟢
-Monitor your favorite APIs.
-```
-- Add API endpoints
-- Status check (green/red)
-- Response time graph
-- Uptime percentage
-- Alert on downtime
-```
 
 ### **Commit Message Generator** 💬
 Never write boring commits again.
@@ -487,201 +423,8 @@ Beautify messy data.
 - Tree view
 ```
 
----
-
-## 🎵 Audio & Music
-
-### **BPM Tapper** 🥁
-Find song tempo.
-```
-- Tap to detect BPM
-- Average of last 8 taps
-- Manual BPM entry
-- Common tempos list
-- Metronome mode
-```
-
-### **Ear Training** 🎼
-Musical interval practice.
-```
-- Play interval
-- Guess the interval
-- Difficulty levels
-- Progress tracking
-- Perfect pitch mode
-```
-
-### **Soundboard** 🔊
-Custom sound effects.
-```
-- 12 assignable buttons
-- Upload your sounds
-- Hotkey support
-- Volume control
-- Sound packs (memes, effects)
-```
-
-### **Voice Pitch Detector** 🎤
-See your vocal range.
-```
-- Real-time pitch display
-- Note name
-- Frequency in Hz
-- Vocal range tracker
-- Pitch stability meter
-```
-
-### **Vinyl Crackle** 📀
-Add warmth to digital music.
-```
-- Simulated vinyl noise
-- Adjustable intensity
-- Mix with system audio
-- Different record "conditions"
-- Toggle on/off
-```
-
----
-
-## 🌈 Visual Effects & Ambiance
-
-### **Aurora Borealis** 🌌
-Northern lights on your desktop.
-```
-- Flowing aurora animation
-- Color customization
-- Speed control
-- Star background
-- Different aurora types
-```
-
-### **Neon Sign Maker** 💡
-Create custom neon text.
-```
-- Custom text input
-- Neon colors
-- Flicker effects
-- Buzzing sound (optional)
-- Different fonts
-```
-
-### **Particle Storm** ⭐
-Mesmerizing particle effects.
-```
-- Physics-based particles
-- Mouse interaction
-- Gravity/wind controls
-- Color schemes
-- Particle count slider
-```
-
-### **Kaleidoscope** 🔮
-Symmetric visual patterns.
-```
-- Real-time generation
-- Mouse-reactive
-- Symmetry options (4, 6, 8)
-- Color palettes
-- Screenshot capture
-```
-
-### **Starfield Warp** 🚀
-Star Wars hyperspace effect.
-```
-- Flying through stars
-- Speed control
-- Warp effect
-- Star density
-- Color tint options
-```
-
-### **Plasma Effect** 🌊
-Retro plasma animation.
-```
-- Oldschool demo scene effect
-- Sine wave patterns
-- RGB color cycling
-- Speed variations
-- Hypnotic mode
-```
-
-### **Window Frost** ❄️
-Frosted window effect.
-```
-- Blur desktop behind widget
-- Frost pattern overlay
-- Melt animation
-- Seasonal themes
-- Draw on frost
-```
-
----
-
-## 🤖 AI & Smart Widgets
-
-### **Smart Clipboard** 📋
-AI-powered clipboard manager.
-```
-- Last 20 clipboard items
-- AI categorization
-- Text translation
-- Extract emails/URLs
-- Clipboard history search
-```
-
-### **Auto Summarizer** 📄
-Paste text, get summary.
-```
-- AI-powered summarization
-- Adjustable length
-- Bullet points or paragraph
-- Copy summary
-- Multiple languages
-```
-
-### **Text to Emoji** 😀
-Convert text to emoji.
-```
-- "I'm happy" → 😊
-- AI interpretation
-- Multiple emoji suggestions
-- Copy emoji string
-- Emoji search
-```
-
-### **Meeting Notes AI** 📝
-AI meeting assistant.
-```
-- Paste meeting transcript
-- Extract action items
-- Identify decisions
-- Attendee summary
-- Export to formats
-```
-
-### **Code Explainer** 💻
-Paste code, get explanation.
-```
-- Supports 20+ languages
-- Line-by-line breakdown
-- Complexity analysis
-- Suggest improvements
-- Beginner-friendly mode
-```
-
----
-
 ## 📊 Monitoring & Stats
 
-### **GitHub Streak** 🔥
-Your contribution streak.
-```
-- Days contributed
-- Longest streak
-- Current streak
-- Heat map visualization
-- PR/commit count
-```
 
 ### **Battery Health** 🔋
 Detailed battery info.

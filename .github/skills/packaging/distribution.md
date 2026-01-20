@@ -120,11 +120,11 @@ workshop publisher register --name "My Company" --email "dev@example.com"
 ### Step 3: Submit Widget
 
 ```bash
-# Package the widget
-./package.ps1 -Configuration Release
+# Package the widget using centralized script
+..\..\..\Build-Widget.ps1 -WidgetName "3SC.Widgets.MyWidget"
 
-# Submit to Workshop
-workshop submit ./my-widget-1.0.0.3scwidget \
+# Submit to Workshop (package will be in packages folder)
+workshop submit ../../../packages/mywidget-widget.3scwidget \
   --category "Productivity" \
   --tags "clock,time,utility"
 ```
@@ -335,13 +335,13 @@ jobs:
     
     - name: Build & Package
       run: |
-        dotnet build -c Release
-        ./package.ps1 -Configuration Release
+        cd ../../../
+        ./Build-Widget.ps1 -WidgetName "3SC.Widgets.MyWidget"
     
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        files: "*.3scwidget"
+        files: "packages/*.3scwidget"
         generate_release_notes: true
         draft: false
         prerelease: ${{ contains(github.ref, '-') }}

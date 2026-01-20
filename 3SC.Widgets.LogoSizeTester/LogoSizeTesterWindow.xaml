@@ -1,0 +1,464 @@
+<local:WidgetWindowBase x:Class="_3SC.Widgets.LogoSizeTester.LogoSizeTesterWindow"
+                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:local="clr-namespace:_3SC.Widgets.LogoSizeTester"
+                        xmlns:converters="clr-namespace:_3SC.Widgets.LogoSizeTester.Converters"
+                        Title="Logo Size Tester"
+                        Width="500"
+        Height="660"
+                        WindowStyle="None"
+                        AllowsTransparency="True"
+                        Background="Transparent"
+                        ResizeMode="CanResize"
+                        Topmost="True">
+
+    <Window.Resources>
+        <!-- Converters -->
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+
+        <!-- Dark Theme Colors -->
+        <SolidColorBrush x:Key="WindowBackground"
+                Color="#1E1E1E"/>
+        <SolidColorBrush x:Key="SurfaceBackground"
+                Color="#252525"/>
+        <SolidColorBrush x:Key="BorderBrush"
+                Color="#3E3E3E"/>
+        <SolidColorBrush x:Key="PrimaryText"
+                Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="SecondaryText"
+                Color="#B0B0B0"/>
+        <SolidColorBrush x:Key="AccentBrush"
+                Color="#4CAF50"/>
+        <SolidColorBrush x:Key="ButtonHover"
+                Color="#2D2D2D"/>
+        <SolidColorBrush x:Key="ButtonPressed"
+                Color="#3E3E3E"/>
+
+        <!-- Button Style -->
+        <Style x:Key="ModernButton"
+                TargetType="Button">
+            <Setter Property="Background"
+                    Value="{StaticResource SurfaceBackground}"/>
+            <Setter Property="Foreground"
+                    Value="{StaticResource PrimaryText}"/>
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource BorderBrush}"/>
+            <Setter Property="BorderThickness"
+                    Value="1"/>
+            <Setter Property="Padding"
+                    Value="12,6"/>
+            <Setter Property="FontSize"
+                    Value="12"/>
+            <Setter Property="Cursor"
+                    Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                        Value="True">
+                    <Setter Property="Background"
+                            Value="{StaticResource ButtonHover}"/>
+                </Trigger>
+                <Trigger Property="IsPressed"
+                        Value="True">
+                    <Setter Property="Background"
+                            Value="{StaticResource ButtonPressed}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Accent Button Style -->
+        <Style x:Key="AccentButton"
+                TargetType="Button"
+                BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background"
+                    Value="{StaticResource AccentBrush}"/>
+            <Setter Property="Foreground"
+                    Value="White"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                        Value="True">
+                    <Setter Property="Background"
+                            Value="#66BB6A"/>
+                </Trigger>
+                <Trigger Property="IsPressed"
+                        Value="True">
+                    <Setter Property="Background"
+                            Value="#388E3C"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Small Button Style -->
+        <Style x:Key="SmallButton"
+                TargetType="Button"
+                BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Padding"
+                    Value="8,4"/>
+            <Setter Property="FontSize"
+                    Value="10"/>
+            <Setter Property="Margin"
+                    Value="2"/>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="{StaticResource WindowBackground}"
+            BorderBrush="{StaticResource BorderBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Grid Grid.Row="0"
+                    Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="🎯 Logo Size Tester"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource PrimaryText}"/>
+                    <TextBlock Text="{Binding FileName}"
+                               FontSize="11"
+                               Foreground="{StaticResource SecondaryText}"
+                               Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        Content="📤"
+                        Width="32"
+                        Height="32"
+                        Style="{StaticResource ModernButton}"
+                        ToolTip="Upload Logo"
+                        Command="{Binding UploadLogoCommand}"/>
+            </Grid>
+
+            <!-- Background Selector -->
+            <Border Grid.Row="1"
+                    Background="{StaticResource SurfaceBackground}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="10"
+                    Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Background"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource SecondaryText}"
+                               Margin="0,0,0,6"/>
+                    <WrapPanel>
+                        <Button Content="White"
+                                Style="{StaticResource SmallButton}"
+                                Command="{Binding ChangeBackgroundCommand}"
+                                CommandParameter="White"/>
+                        <Button Content="Light"
+                                Style="{StaticResource SmallButton}"
+                                Command="{Binding ChangeBackgroundCommand}"
+                                CommandParameter="Light Gray"/>
+                        <Button Content="Gray"
+                                Style="{StaticResource SmallButton}"
+                                Command="{Binding ChangeBackgroundCommand}"
+                                CommandParameter="Gray"/>
+                        <Button Content="Dark"
+                                Style="{StaticResource SmallButton}"
+                                Command="{Binding ChangeBackgroundCommand}"
+                                CommandParameter="Dark Gray"/>
+                        <Button Content="Black"
+                                Style="{StaticResource SmallButton}"
+                                Command="{Binding ChangeBackgroundCommand}"
+                                CommandParameter="Black"/>
+                        <Button Content="Blue"
+                                Style="{StaticResource SmallButton}"
+                                Command="{Binding ChangeBackgroundCommand}"
+                                CommandParameter="Blue"/>
+                        <Button Content="Green"
+                                Style="{StaticResource SmallButton}"
+                                Command="{Binding ChangeBackgroundCommand}"
+                                CommandParameter="Green"/>
+                        <Button Content="Red"
+                                Style="{StaticResource SmallButton}"
+                                Command="{Binding ChangeBackgroundCommand}"
+                                CommandParameter="Red"/>
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Size Previews -->
+            <ScrollViewer Grid.Row="2"
+                    VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <!-- No Logo State -->
+                    <Border Background="{StaticResource SurfaceBackground}"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="2"
+                            CornerRadius="6"
+                            Padding="40"
+                            Visibility="{Binding HasLogo, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="📸"
+                                       FontSize="48"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="Upload a logo to begin"
+                                       FontSize="14"
+                                       Foreground="{StaticResource SecondaryText}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,8,0,0"/>
+                            <Button Content="Choose File"
+                                    Style="{StaticResource AccentButton}"
+                                    Command="{Binding UploadLogoCommand}"
+                                    Margin="0,12,0,0"
+                                    Padding="20,8"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Preview Grid -->
+                    <Grid Visibility="{Binding HasLogo, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Favicon 16x16 -->
+                        <Border Grid.Row="0"
+                                Background="{StaticResource SurfaceBackground}"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="6"
+                                Padding="12"
+                                Margin="0,0,0,8">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0"
+                                        Background="{Binding BackgroundColor}"
+                                        Width="50"
+                                        Height="50"
+                                        BorderBrush="{StaticResource BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="4">
+                                    <Image Source="{Binding LogoImage}"
+                                           Width="16"
+                                            Height="16"
+                                           RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Border>
+
+                                <StackPanel Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Margin="12,0,0,0">
+                                    <TextBlock Text="Favicon"
+                                               FontSize="13"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource PrimaryText}"/>
+                                    <TextBlock Text="{Binding FaviconSize}"
+                                               FontSize="11"
+                                               Foreground="{StaticResource SecondaryText}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Mobile 64x64 -->
+                        <Border Grid.Row="1"
+                                Background="{StaticResource SurfaceBackground}"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="6"
+                                Padding="12"
+                                Margin="0,0,0,8">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0"
+                                        Background="{Binding BackgroundColor}"
+                                        Width="80"
+                                        Height="80"
+                                        BorderBrush="{StaticResource BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="4">
+                                    <Image Source="{Binding LogoImage}"
+                                           Width="64"
+                                            Height="64"
+                                           RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Border>
+
+                                <StackPanel Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Margin="12,0,0,0">
+                                    <TextBlock Text="Mobile Icon"
+                                               FontSize="13"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource PrimaryText}"/>
+                                    <TextBlock Text="{Binding MobileSize}"
+                                               FontSize="11"
+                                               Foreground="{StaticResource SecondaryText}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Desktop 256x256 -->
+                        <Border Grid.Row="2"
+                                Background="{StaticResource SurfaceBackground}"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="6"
+                                Padding="12"
+                                Margin="0,0,0,8">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Grid.Row="0"
+                                        Margin="0,0,0,8">
+                                    <TextBlock Text="Desktop / Website"
+                                               FontSize="13"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource PrimaryText}"/>
+                                    <TextBlock Text="{Binding DesktopSize}"
+                                               FontSize="11"
+                                               Foreground="{StaticResource SecondaryText}"/>
+                                </StackPanel>
+
+                                <Border Grid.Row="1"
+                                        Background="{Binding BackgroundColor}"
+                                        Height="180"
+                                        BorderBrush="{StaticResource BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="4">
+                                    <Image Source="{Binding LogoImage}"
+                                           MaxWidth="160"
+                                            MaxHeight="160"
+                                           RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Billboard 512x512 -->
+                        <Border Grid.Row="3"
+                                Background="{StaticResource SurfaceBackground}"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="6"
+                                Padding="12">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Grid.Row="0"
+                                        Margin="0,0,0,8">
+                                    <TextBlock Text="Large / Billboard"
+                                               FontSize="13"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource PrimaryText}"/>
+                                    <TextBlock Text="{Binding BillboardSize}"
+                                               FontSize="11"
+                                               Foreground="{StaticResource SecondaryText}"/>
+                                </StackPanel>
+
+                                <Border Grid.Row="1"
+                                        Background="{Binding BackgroundColor}"
+                                        Height="120"
+                                        BorderBrush="{StaticResource BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="4">
+                                    <Viewbox MaxWidth="100"
+                                            MaxHeight="100">
+                                        <Image Source="{Binding LogoImage}"
+                                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                                    </Viewbox>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Analysis Info -->
+            <Border Grid.Row="3"
+                    Background="{StaticResource SurfaceBackground}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Padding="12"
+                    Margin="0,12,0,0"
+                    Visibility="{Binding HasLogo, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Contrast Ratio"
+                                   FontSize="11"
+                                   Foreground="{StaticResource SecondaryText}"/>
+                        <TextBlock Text="{Binding ContrastRatio}"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource PrimaryText}"
+                                   Margin="0,2,0,0"/>
+                        <TextBlock Text="{Binding ContrastRating}"
+                                   FontSize="10"
+                                   Foreground="{StaticResource SecondaryText}"
+                                   Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="Min Legible Size"
+                                   FontSize="11"
+                                   Foreground="{StaticResource SecondaryText}"/>
+                        <TextBlock Text="{Binding MinimumLegibleSize}"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource PrimaryText}"
+                                   Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Export Button -->
+            <Button Grid.Row="4"
+                    Content="💾 Export All Sizes"
+                    Style="{StaticResource AccentButton}"
+                    Command="{Binding ExportAllSizesCommand}"
+                    Margin="0,12,0,0"
+                    Padding="0,10"
+                    FontSize="13"
+                    Visibility="{Binding HasLogo, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        </Grid>
+    </Border>
+</local:WidgetWindowBase>

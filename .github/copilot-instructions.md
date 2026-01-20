@@ -1,16 +1,17 @@
 # 🤖 Copilot Instructions for 3SC Widget Development
 
-> **Version:** 2.0.0 | **Last Updated:** 2026-01-15 | **Maintained By:** 3SC Team
+> **Version:** 2.1.0 | **Last Updated:** 2026-01-20 | **Maintained By:** 3SC Team
 
 ## 📋 Table of Contents
 
 1. [Quick Start](#quick-start)
 2. [Project Overview](#project-overview)
-3. [Skill System](#skill-system)
-4. [How to Use Skills](#how-to-use-skills)
-5. [Skill Management](#skill-management)
-6. [Development Workflow](#development-workflow)
-7. [Critical Rules](#critical-rules)
+3. [Project Organization](#project-organization)
+4. [Skill System](#skill-system)
+5. [How to Use Skills](#how-to-use-skills)
+6. [Skill Management](#skill-management)
+7. [Development Workflow](#development-workflow)
+8. [Critical Rules](#critical-rules)
 
 ---
 
@@ -23,20 +24,22 @@ When working on this project, **ALWAYS** consult the relevant skill files in `.g
 - Building/packaging
 - Troubleshooting issues
 
+**For project organization and scaling, see:** [PROJECT-ORGANIZATION.md](.github/PROJECT-ORGANIZATION.md)
+
 ### Essential Commands
 
 ```powershell
-# Build a widget for debugging
-dotnet build -c Debug
+# Build a widget
+.\Build-Widget.ps1 -WidgetName "3SC.Widgets.YourWidget"
 
-# Build and publish for release
-dotnet publish -c Release -o bin\Release\net8.0-windows\publish
+# Install for testing
+.\Install-Widget.ps1 -WidgetKey yourwidget
+
+# Run test host
+dotnet run --project WidgetTestHost
 
 # Run tests
 dotnet test
-
-# Package a widget
-.\Build-And-Package-{WidgetName}.ps1
 ```
 
 ---
@@ -46,6 +49,17 @@ dotnet test
 ### What is 3SC?
 
 3SC is a modern Windows desktop widget application that allows users to place interactive widgets on their desktop. This repository (`widgets/`) contains **external community widgets** that integrate with the main 3SC application.
+
+### Repository Organization
+
+For detailed organization guidelines, scaling strategies, and best practices, see:
+**[PROJECT-ORGANIZATION.md](.github/PROJECT-ORGANIZATION.md)**
+
+Quick summary:
+- **23+ widgets** organized by naming convention `3SC.Widgets.{Name}`
+- **Centralized scripts** for build and install (`Build-Widget.ps1`, `Install-Widget.ps1`)
+- **WidgetTestHost** for local testing without 3SC host app
+- **Skill-based knowledge system** in `.github/skills/`
 
 ### Architecture
 
@@ -247,22 +261,32 @@ Skills should be merged when:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                           DEVELOPMENT (Testing)                          │
+│                      DEVELOPMENT (Testing - Option 1)                    │
 │                                                                          │
-│  Build Release ──▶ Copy files UNZIPPED to:                              │
-│                    %APPDATA%\3SC\Widgets\Community\{widget-key}\        │
-│                    ──▶ Restart 3SC host                                 │
+│  Use WidgetTestHost ──▶ Add widget to MainWindow.xaml.cs                │
+│                      ──▶ dotnet build WidgetTestHost                    │
+│                      ──▶ Run WidgetTestHost.exe                         │
 │                                                                          │
-│  Required files: manifest.json + YourWidget.dll + dependencies          │
+│  Benefits: Quick iteration, debugging, no 3SC host needed               │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      DEVELOPMENT (Testing - Option 2)                    │
+│                                                                          │
+│  Build Release ──▶ .\Build-Widget.ps1 -WidgetName "3SC.Widgets.X"       │
+│                 ──▶ .\Install-Widget.ps1 -WidgetKey x                   │
+│                 ──▶ Restart 3SC host                                    │
+│                                                                          │
+│  Benefits: Test in real environment, verify packaging                   │
 └─────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                          PRODUCTION (Distribution)                       │
 │                                                                          │
-│  Build Release ──▶ Package as ZIP (.3scwidget)                          │
-│                    ──▶ Upload to Workshop Portal                        │
-│                    ──▶ Admin/Reviewer approval                          │
-│                    ──▶ Available in 3SC host app                        │
+│  Build Release ──▶ .\Build-Widget.ps1 -WidgetName "3SC.Widgets.X"       │
+│                 ──▶ Upload packages/*.3scwidget to Workshop Portal      │
+│                 ──▶ Admin/Reviewer approval                             │
+│                 ──▶ Available in 3SC host app                           │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -304,8 +328,12 @@ Copy-Item ".\bin\Release\net8.0-windows\manifest.json" $dest
 2. Follow `core/widget-architecture.md`
 3. Implement features using relevant skills
 4. **Test locally** by copying files to Community folder
-5. **Package for release** using `packaging/packaging-deployment.md`
-6. **Submit to Workshop Portal** for approval
+5. **Add to WidgetTestHost** for integrated testing
+   - Add project reference to `WidgetTestHost/WidgetTestHost.csproj`
+   - Add factory registration in `WidgetTestHost/MainWindow.xaml.cs`
+6. **Add to solution** (`widgets.sln`)
+7. **Package for release** using `.\Build-Widget.ps1 -WidgetName "3SC.Widgets.YourWidget"`
+8. **Submit to Workshop Portal** for approval
 
 ---
 

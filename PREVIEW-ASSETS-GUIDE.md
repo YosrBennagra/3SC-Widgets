@@ -1,20 +1,19 @@
 # Widget Preview Assets Guide
 
 ## Overview
-All widgets now use **preview images/gifs** for display in the 3SC host app. The `icon` field has been removed from all manifests.
+All widgets now use **video previews (MP4)** for display in the 3SC host app. The `icon` field has been removed from all manifests. **Video is preferred over GIF** for better performance and smaller file sizes.
 
 ## What Changed
 
-### ✅ Clock Widget
-- Renamed `clockgif.gif` → `preview.gif`
-- Updated manifest to remove icon field
-- Rebuilt package with preview.gif included (400 KB)
+### ✅ Clock Widget (Latest)
+- Switched from GIF to **MP4 video** preview
+- Updated manifest: `"animated": "Assets/preview.mp4"`
+- Rebuilt package with video included (104 KB vs 400 KB GIF = 74% smaller!)
 
-### 📋 All Widgets Updated
-All 11 widget manifests have been updated to:
-- ✅ Remove `icon` field
-- ✅ Keep `preview` section with both `static` and `animated` options
-- ✅ Reference preview assets in `Assets/` folder
+### 📋 Preview Format Priority
+1. **MP4 Video** (recommended) - Hardware-accelerated, 10x less CPU
+2. GIF (fallback) - Still supported for backward compatibility
+3. PNG (static fallback) - For when animation isn't needed
 
 ## Required Assets for Each Widget
 
@@ -23,8 +22,8 @@ Each widget should have an `Assets/` folder with:
 ```
 3SC.Widgets.{WidgetName}/
 └── Assets/
-    ├── preview.png          # Static preview (800×600 px) - REQUIRED
-    ├── preview.gif          # Animated preview (800×600 px) - OPTIONAL
+    ├── preview.mp4          # Video preview (preferred) - 5-10 sec loop
+    ├── preview.png          # Static fallback (800×600 px) - REQUIRED
     └── screenshots/         # Feature screenshots - OPTIONAL
         ├── main.png
         ├── settings.png
@@ -33,56 +32,73 @@ Each widget should have an `Assets/` folder with:
 
 ## Current Status
 
-| Widget | preview.png | preview.gif | Assets Folder |
-|--------|-------------|-------------|---------------|
-| Clock | ⚠️ Needed | ✅ **Done** | ✅ Yes |
-| AppLauncher | ⚠️ Needed | ⚠️ Needed | ✅ Yes |
-| Calendar | ⚠️ Needed | ⚠️ Needed | ✅ Yes |
-| ClipboardHistory | ⚠️ Needed | ⚠️ Needed | ✅ Yes |
-| Folders | ⚠️ Needed | ⚠️ Needed | ✅ Yes |
-| GameVault | ⚠️ Needed | ⚠️ Needed | ✅ Yes |
-| ImageViewer | ⚠️ Needed | ⚠️ Needed | ✅ Yes |
-| Notes | ⚠️ Needed | ⚠️ Needed | ✅ Yes |
-| PdfViewer | ⚠️ Needed | ⚠️ Needed | ✅ Yes |
-| QuickLinks | ⚠️ Needed | ⚠️ Needed | ✅ Yes |
-| VideoViewer | ⚠️ Needed | ⚠️ Needed | ✅ Yes |
+| Widget | preview.mp4 | preview.png | screenshots | Status |
+|--------|-------------|-------------|-------------|--------|
+| Clock | ✅ Done | ✅ Done | ✅ Done | **Complete** |
+| AppLauncher | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| Calendar | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| ClipboardHistory | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| Folders | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| GameVault | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| ImageViewer | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| Notes | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| PdfViewer | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| QuickLinks | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| VideoViewer | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+
+## Preview Behavior in Widget Library
+
+| Location | What's Displayed | Behavior |
+|----------|------------------|----------|
+| **Grid Card** | `preview.png` (static) | Shows thumbnail, no video playback |
+| **Details Panel** | `preview.mp4` (video) | Plays looping video when widget selected |
+| **Screenshots Carousel** | `screenshots/*.png` | Shown in details panel below preview |
+
+> **Note:** The grid uses static images for performance. Video only plays when a widget is selected in the details panel.
 
 ## How to Create Preview Assets
 
-### Quick Method (Static PNG)
-1. Run your widget in Debug mode
-2. Press `Win + Shift + S` (Snipping Tool)
-3. Capture the widget window
-4. Save as `preview.png` in the widget's `Assets/` folder
-5. Resize to 800×600 px if needed
+### Quick Method (Screen Recording to MP4)
+1. Use **Xbox Game Bar** (built into Windows)
+   - Press `Win + G` to open
+   - Click the Record button (or `Win + Alt + R`)
+2. Record 5-10 seconds of your widget in action
+3. Trim in Photos app or any video editor
+4. Rename to `preview.mp4` and place in `Assets/` folder
 
-### Recommended Method (Animated GIF)
-1. Download **ScreenToGif** (already documented in WIDGET-DELIVERY.md)
+### Recommended Method (OBS or ScreenToGif)
+1. **OBS Studio** (free, high quality):
    ```powershell
-   winget install ScreenToGif
+   winget install OBSProject.OBSStudio
    ```
-2. Run your widget
-3. Open ScreenToGif → Recorder
-4. Position 800×600 frame over widget
-5. Record 5-10 seconds
-6. Export as GIF with 256 colors, looping
-7. Save as `preview.gif` in the widget's `Assets/` folder
+2. Set up a Window Capture for your widget
+3. Record at 1080p, 30fps, ~5-10 seconds
+4. Export as MP4 (H.264)
+5. Trim and optimize if needed
+
+### Converting GIF to MP4 (If you have existing GIFs)
+```powershell
+# Using FFmpeg
+ffmpeg -i preview.gif -movflags +faststart -pix_fmt yuv420p preview.mp4
+```
 
 ## Next Steps
 
 ### For Each Widget (Priority Order):
 
 1. **Clock** ✅ Done
-   - preview.gif created and included
+   - preview.mp4 created and deployed
    - Need to create preview.png as fallback
 
 2. **Remaining Widgets**
-   - [ ] Create preview.png (required for all)
-   - [ ] Create preview.gif (recommended for dynamic widgets)
+   - [ ] Record screen capture (5-10 sec)
+   - [ ] Save as preview.mp4 in Assets folder
+   - [ ] Create preview.png as fallback
+   - [ ] Update manifest to reference preview.mp4
    - [ ] Rebuild widget package
    - [ ] Test installation
 
-### Widgets That Would Benefit Most from Animated GIFs:
+### Widgets That Benefit from Video Preview:
 - ✨ **Clock** - Shows time changing (DONE)
 - ✨ **Calendar** - Shows date navigation
 - ✨ **ClipboardHistory** - Shows items being added/removed
@@ -136,7 +152,7 @@ All widgets now use this structure:
   "entry": "3SC.Widgets.{WidgetName}.dll",
   "preview": {
     "static": "Assets/preview.png",
-    "animated": "Assets/preview.gif",
+    "animated": "Assets/preview.mp4",
     "screenshots": [
       "Assets/screenshots/main.png"
     ]
@@ -161,15 +177,25 @@ All widgets already have this configuration to copy assets:
 ## Host App Integration
 
 The 3SC host app will:
-1. Look for `preview.animated` (GIF) first
-2. Fall back to `preview.static` (PNG) if no GIF
-3. Display preview in widget picker/gallery
-4. No icon field is used
+1. Look for `preview.animated` (MP4 video or GIF) first
+2. Fall back to `preview.static` (PNG) if no video
+3. Display preview using MediaElement (hardware-accelerated video playback)
+4. Auto-loop video previews seamlessly
+5. No icon field is used
+
+## Video vs GIF Comparison
+
+| Aspect | MP4 Video | GIF |
+|--------|-----------|-----|
+| File Size | ~100 KB | ~400+ KB |
+| CPU Usage | ~1% (GPU accelerated) | ~10% (CPU decoded) |
+| Quality | Full color, 30fps | 256 colors, choppy |
+| Recommended | ✅ Yes | Legacy support only |
 
 ## Additional Resources
 
 See [WIDGET-DELIVERY.md](3SC.Widgets.Clock/WIDGET-DELIVERY.md) for:
-- Detailed ScreenToGif tutorial
+- Detailed screen recording tutorials
 - FFmpeg optimization commands
 - Screenshot best practices
-- GIF compression tips
+- Video compression tips
