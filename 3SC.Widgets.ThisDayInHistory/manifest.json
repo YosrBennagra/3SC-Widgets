@@ -1,0 +1,21 @@
+{
+    "widgetKey": "this-day-in-history",
+    "name": "This Day in History",
+    "description": "Discover what happened on this day throughout history",
+    "version": "1.0.0",
+    "author": "3SC Community",
+    "category": "Information",
+    "tags": [
+        "history",
+        "education",
+        "facts",
+        "timeline",
+        "wikipedia"
+    ],
+    "defaultWidth": 400,
+    "defaultHeight": 550,
+    "minWidth": 350,
+    "minHeight": 450,
+    "iconPath": "Assets/history-icon.png",
+    "previewImagePath": "Assets/preview.png"
+}

@@ -28,7 +28,7 @@
   },
   "preview": {
     "static": "Assets/preview.png",
-    "animated": "Assets/preview.gif",
+    "animated": "Assets/preview.mp4",
     "screenshots": [
       "Assets/screenshots/main.png",
       "Assets/screenshots/settings.png",
