@@ -35,6 +35,7 @@ public partial class MainWindow : Window
         _widgetFactories["Ambient Sounds"] = new _3SC.Widgets.AmbientSounds.AmbientSoundsWidgetFactory();
         _widgetFactories["Breathe"] = new _3SC.Widgets.Breathe.BreatheWidgetFactory();
         _widgetFactories["Pomodoro+ Timer"] = new ThreeSC.Widgets.Pomodoro.PomodoroWidgetFactory();
+        _widgetFactories["Gradient Playground"] = new _3SC.Widgets.GradientPlayground.GradientPlaygroundWidgetFactory();
 
         WidgetSelector.ItemsSource = _widgetFactories.Keys.OrderBy(k => k).ToList();
         WidgetSelector.SelectedIndex = -1;

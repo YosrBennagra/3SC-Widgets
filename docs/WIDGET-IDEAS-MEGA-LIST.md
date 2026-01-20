@@ -23,16 +23,6 @@
 
 ## 🎯 Productivity & Focus
 
-### **Pomodoro+ Timer** 🍅
-Classic Pomodoro with visual tree growth - your tree grows with each session!
-```
-- 25/5 work/break cycles
-- Plant a virtual tree that grows with focus time
-- Die if you break focus (inspired by Forest app)
-- Statistics: hours focused, trees planted
-- Daily/weekly streaks
-```
-
 ### **Tab Debt Tracker** 🔖
 Shows how many browser tabs you have open (connects to Chrome/Firefox).
 ```
@@ -147,15 +137,6 @@ Turn images into ASCII/Unicode art.
 - Export as text file
 ```
 
-### **Gradient Playground** 🌈
-Create and save beautiful gradients.
-```
-- 2-10 color gradients
-- Linear/radial/conic types
-- Mesh gradient support
-- CSS/SVG export
-- Trending gradients feed
-```
 
 ### **Logo Size Tester** 📏
 Test logo at different sizes instantly.
