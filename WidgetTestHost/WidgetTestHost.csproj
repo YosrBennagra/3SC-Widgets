@@ -16,6 +16,7 @@
     <ProjectReference Include="..\3SC.Widgets.SystemPulse\3SC.Widgets.SystemPulse.csproj" />
     <ProjectReference Include="..\3SC.Widgets.AmbientSounds\3SC.Widgets.AmbientSounds.csproj" />
     <ProjectReference Include="..\3SC.Widgets.Breathe\3SC.Widgets.Breathe.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.Pomodoro\3SC.Widgets.Pomodoro.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
