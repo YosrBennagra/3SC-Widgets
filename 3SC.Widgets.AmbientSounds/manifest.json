@@ -1,0 +1,31 @@
+{
+    "widgetKey": "ambient-sounds",
+    "name": "Ambient Sounds",
+    "description": "Relaxing ambient soundscapes with beautiful animated visualizations - rain, forest, ocean, cafe, and more",
+    "version": "1.0.0",
+    "author": "3SC Community",
+    "minHostVersion": "1.0.0",
+    "assemblyName": "3SC.Widgets.AmbientSounds.dll",
+    "factoryTypeName": "_3SC.Widgets.AmbientSounds.AmbientSoundsWidgetFactory",
+    "defaultWidth": 260,
+    "defaultHeight": 320,
+    "minWidth": 200,
+    "minHeight": 280,
+    "maxWidth": 400,
+    "maxHeight": 500,
+    "supportedFeatures": [
+        "resize",
+        "settings"
+    ],
+    "tags": [
+        "ambient",
+        "sounds",
+        "rain",
+        "relaxation",
+        "focus",
+        "white-noise",
+        "meditation"
+    ],
+    "previewImage": "Assets/preview.png",
+    "icon": "Assets/icon.png"
+}

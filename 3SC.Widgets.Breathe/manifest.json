@@ -1,0 +1,31 @@
+{
+    "widgetKey": "breathe",
+    "name": "Breathe",
+    "description": "Guided breathing exercises with beautiful animated visuals for relaxation and focus",
+    "version": "1.0.0",
+    "author": "3SC Community",
+    "minHostVersion": "1.0.0",
+    "assemblyName": "3SC.Widgets.Breathe.dll",
+    "factoryTypeName": "_3SC.Widgets.Breathe.BreatheWidgetFactory",
+    "defaultWidth": 220,
+    "defaultHeight": 280,
+    "minWidth": 180,
+    "minHeight": 240,
+    "maxWidth": 350,
+    "maxHeight": 400,
+    "supportedFeatures": [
+        "resize",
+        "settings"
+    ],
+    "tags": [
+        "breathing",
+        "meditation",
+        "relaxation",
+        "wellness",
+        "focus",
+        "anxiety",
+        "calm"
+    ],
+    "previewImage": "Assets/preview.png",
+    "icon": "Assets/icon.png"
+}

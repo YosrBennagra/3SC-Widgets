@@ -13,6 +13,9 @@
     <ProjectReference Include="..\3SC.Widgets.GameVault\3SC.Widgets.GameVault.csproj" />
     <ProjectReference Include="..\3SC.Widgets.ClipboardHistory\3SC.Widgets.ClipboardHistory.csproj" />
     <ProjectReference Include="..\3SC.Widgets.DesktopPet\3SC.Widgets.DesktopPet.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.SystemPulse\3SC.Widgets.SystemPulse.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.AmbientSounds\3SC.Widgets.AmbientSounds.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.Breathe\3SC.Widgets.Breathe.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

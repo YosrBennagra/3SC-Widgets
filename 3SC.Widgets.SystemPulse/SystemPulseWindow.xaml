@@ -1,0 +1,254 @@
+<local:WidgetWindowBase
+    x:Class="_3SC.Widgets.SystemPulse.SystemPulseWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:_3SC.Widgets.SystemPulse"
+    xmlns:helpers="clr-namespace:_3SC.Widgets.SystemPulse.Helpers"
+    Title="System Pulse"
+    Width="280"
+    Height="180"
+    WindowStyle="None"
+    AllowsTransparency="True"
+    Background="Transparent"
+    ShowInTaskbar="False"
+    ResizeMode="CanResizeWithGrip">
+
+    <local:WidgetWindowBase.Resources>
+        <SolidColorBrush x:Key="BackgroundDark"
+                Color="#E8101018"/>
+        <SolidColorBrush x:Key="BackgroundCard"
+                Color="#FF1A1A24"/>
+        <SolidColorBrush x:Key="BorderColor"
+                Color="#FF2A2A3A"/>
+        <SolidColorBrush x:Key="TextPrimary"
+                Color="#FFF1F5F9"/>
+        <SolidColorBrush x:Key="TextSecondary"
+                Color="#FF94A3B8"/>
+        <SolidColorBrush x:Key="CpuGreen"
+                Color="#FF4CAF50"/>
+        <SolidColorBrush x:Key="RamBlue"
+                Color="#FF2196F3"/>
+        <SolidColorBrush x:Key="DiskOrange"
+                Color="#FFFF9800"/>
+
+        <helpers:PercentToWidthConverter x:Key="WidthConverter"/>
+    </local:WidgetWindowBase.Resources>
+
+    <Border Background="{StaticResource BackgroundDark}"
+            BorderBrush="{StaticResource BorderColor}"
+            BorderThickness="1"
+            CornerRadius="12"
+            MouseLeftButtonDown="Border_MouseLeftButtonDown">
+        <Border.Effect>
+            <DropShadowEffect Color="Black"
+                    BlurRadius="20"
+                    ShadowDepth="0"
+                    Opacity="0.5"/>
+        </Border.Effect>
+
+        <Grid Margin="16,12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    Margin="0,0,0,8">
+                <TextBlock Text="⚡"
+                        FontSize="16"
+                        VerticalAlignment="Center"
+                        Margin="0,0,6,0"/>
+                <TextBlock Text="System Pulse"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                           Foreground="{StaticResource TextPrimary}"
+                        VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding ProcessCount, StringFormat=' • {0} processes'}"
+                           FontSize="10"
+                        Foreground="{StaticResource TextSecondary}"
+                           VerticalAlignment="Center"
+                        Margin="8,0,0,0"/>
+            </StackPanel>
+
+            <!-- Stats Grid -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- CPU -->
+                <Border Grid.Column="0"
+                        Background="{StaticResource BackgroundCard}"
+                        CornerRadius="8"
+                        Margin="0,0,4,0"
+                        Padding="8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0"
+                                Text="CPU"
+                                FontSize="10"
+                                   Foreground="{StaticResource TextSecondary}"
+                                   HorizontalAlignment="Center"/>
+
+                        <!-- Circular Progress -->
+                        <Grid Grid.Row="1"
+                                Width="50"
+                                Height="50"
+                                Margin="0,4">
+                            <Ellipse Stroke="#30FFFFFF"
+                                    StrokeThickness="4"/>
+                            <Ellipse x:Name="CpuRing"
+                                    Stroke="{Binding CpuBrush}"
+                                    StrokeThickness="4"
+                                     StrokeDashArray="1 1"
+                                     RenderTransformOrigin="0.5,0.5">
+                                <Ellipse.RenderTransform>
+                                    <RotateTransform Angle="-90"/>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                            <TextBlock Text="{Binding CpuText}"
+                                    FontSize="12"
+                                    FontWeight="Bold"
+                                       Foreground="{StaticResource TextPrimary}"
+                                       HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Border Grid.Row="2"
+                                Background="{Binding CpuBrush}"
+                                CornerRadius="2"
+                                Height="3"
+                                Opacity="0.6"
+                                HorizontalAlignment="Left"
+                                Width="{Binding CpuUsage, Converter={StaticResource WidthConverter}}"/>
+                    </Grid>
+                </Border>
+
+                <!-- RAM -->
+                <Border Grid.Column="1"
+                        Background="{StaticResource BackgroundCard}"
+                        CornerRadius="8"
+                        Margin="2,0"
+                        Padding="8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0"
+                                Text="RAM"
+                                FontSize="10"
+                                   Foreground="{StaticResource TextSecondary}"
+                                   HorizontalAlignment="Center"/>
+
+                        <Grid Grid.Row="1"
+                                Width="50"
+                                Height="50"
+                                Margin="0,4">
+                            <Ellipse Stroke="#30FFFFFF"
+                                    StrokeThickness="4"/>
+                            <Ellipse Stroke="{StaticResource RamBlue}"
+                                    StrokeThickness="4"
+                                     StrokeDashArray="1 1"
+                                     RenderTransformOrigin="0.5,0.5">
+                                <Ellipse.RenderTransform>
+                                    <RotateTransform Angle="-90"/>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                            <TextBlock Text="{Binding RamUsage, StringFormat='{}{0:F0}%'}"
+                                       FontSize="12"
+                                    FontWeight="Bold"
+                                       Foreground="{StaticResource TextPrimary}"
+                                       HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Border Grid.Row="2"
+                                Background="{StaticResource RamBlue}"
+                                CornerRadius="2"
+                                Height="3"
+                                Opacity="0.6"
+                                HorizontalAlignment="Left"
+                                Width="{Binding RamUsage, Converter={StaticResource WidthConverter}}"/>
+                    </Grid>
+                </Border>
+
+                <!-- Disk -->
+                <Border Grid.Column="2"
+                        Background="{StaticResource BackgroundCard}"
+                        CornerRadius="8"
+                        Margin="4,0,0,0"
+                        Padding="8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0"
+                                Text="DISK"
+                                FontSize="10"
+                                   Foreground="{StaticResource TextSecondary}"
+                                   HorizontalAlignment="Center"/>
+
+                        <Grid Grid.Row="1"
+                                Width="50"
+                                Height="50"
+                                Margin="0,4">
+                            <Ellipse Stroke="#30FFFFFF"
+                                    StrokeThickness="4"/>
+                            <Ellipse Stroke="{StaticResource DiskOrange}"
+                                    StrokeThickness="4"
+                                     StrokeDashArray="1 1"
+                                     RenderTransformOrigin="0.5,0.5">
+                                <Ellipse.RenderTransform>
+                                    <RotateTransform Angle="-90"/>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                            <TextBlock Text="{Binding DiskUsage, StringFormat='{}{0:F0}%'}"
+                                       FontSize="12"
+                                    FontWeight="Bold"
+                                       Foreground="{StaticResource TextPrimary}"
+                                       HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Border Grid.Row="2"
+                                Background="{StaticResource DiskOrange}"
+                                CornerRadius="2"
+                                Height="3"
+                                Opacity="0.6"
+                                HorizontalAlignment="Left"
+                                Width="{Binding DiskUsage, Converter={StaticResource WidthConverter}}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Footer -->
+            <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    Margin="0,8,0,0">
+                <TextBlock Text="⏱️"
+                        FontSize="10"
+                        VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding UptimeText}"
+                        FontSize="10"
+                           Foreground="{StaticResource TextSecondary}"
+                        Margin="4,0,0,0"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</local:WidgetWindowBase>
