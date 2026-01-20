@@ -1,0 +1,21 @@
+{
+    "widgetKey": "logo-size-tester",
+    "name": "Logo Size Tester",
+    "description": "Test your logo at different sizes with contrast checking",
+    "author": "3SC Community",
+    "version": "1.0.0",
+    "minHostVersion": "1.0.0",
+    "assemblyName": "3SC.Widgets.LogoSizeTester.dll",
+    "factoryClass": "_3SC.Widgets.LogoSizeTester.LogoSizeTesterWidgetFactory",
+    "icon": "Assets/icon.png",
+    "tags": [
+        "creative",
+        "design",
+        "tools",
+        "logo"
+    ],
+    "defaultSize": {
+        "width": 480,
+        "height": 620
+    }
+}

@@ -18,6 +18,7 @@
     <ProjectReference Include="..\3SC.Widgets.Breathe\3SC.Widgets.Breathe.csproj" />
     <ProjectReference Include="..\3SC.Widgets.Pomodoro\3SC.Widgets.Pomodoro.csproj" />
     <ProjectReference Include="..\3SC.Widgets.GradientPlayground\3SC.Widgets.GradientPlayground.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.LogoSizeTester\3SC.Widgets.LogoSizeTester.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

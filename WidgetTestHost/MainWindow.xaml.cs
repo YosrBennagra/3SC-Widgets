@@ -36,6 +36,7 @@ public partial class MainWindow : Window
         _widgetFactories["Breathe"] = new _3SC.Widgets.Breathe.BreatheWidgetFactory();
         _widgetFactories["Pomodoro+ Timer"] = new ThreeSC.Widgets.Pomodoro.PomodoroWidgetFactory();
         _widgetFactories["Gradient Playground"] = new _3SC.Widgets.GradientPlayground.GradientPlaygroundWidgetFactory();
+        _widgetFactories["Logo Size Tester"] = new _3SC.Widgets.LogoSizeTester.LogoSizeTesterWidgetFactory();
 
         WidgetSelector.ItemsSource = _widgetFactories.Keys.OrderBy(k => k).ToList();
         WidgetSelector.SelectedIndex = -1;

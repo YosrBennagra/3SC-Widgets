@@ -138,16 +138,6 @@ Turn images into ASCII/Unicode art.
 ```
 
 
-### **Logo Size Tester** 📏
-Test logo at different sizes instantly.
-```
-- Upload logo
-- See at: favicon, mobile, desktop, billboard
-- Minimum legible size finder
-- Background contrast tester
-- Export all sizes
-```
-
 ### **Pattern Maker** 🔶
 Create seamless tileable patterns.
 ```
