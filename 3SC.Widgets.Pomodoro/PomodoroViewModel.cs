@@ -185,7 +185,7 @@ namespace ThreeSC.Widgets.Pomodoro
 
             // Calculate expected growth stage based on progress
             int expectedStage = (int)((ProgressPercentage / 100.0) * TREE_GROWTH_STAGES);
-            
+
             if (expectedStage > TreeGrowthStage && expectedStage <= TREE_GROWTH_STAGES)
             {
                 TreeGrowthStage = expectedStage;
@@ -204,7 +204,7 @@ namespace ThreeSC.Widgets.Pomodoro
                 TotalTreesPlanted++;
                 TotalHoursFocused += WORK_DURATION / 3600.0;
                 UpdateStreak();
-                
+
                 Logger.Information("Work session completed! Total trees: {Trees}", TotalTreesPlanted);
 
                 // Reset tree for next session
@@ -231,7 +231,7 @@ namespace ThreeSC.Widgets.Pomodoro
         {
             TreeIsDead = true;
             TreeOpacity = 0.3;
-            
+
             // Reset streak if they killed a tree
             CurrentStreak = 0;
         }
@@ -293,7 +293,7 @@ namespace ThreeSC.Widgets.Pomodoro
                         LongestStreak = settings.LongestStreak;
                         LastSessionDate = settings.LastSessionDate;
 
-                        Logger.Information("Settings loaded: {Trees} trees, {Hours:F1} hours", 
+                        Logger.Information("Settings loaded: {Trees} trees, {Hours:F1} hours",
                             TotalTreesPlanted, TotalHoursFocused);
                     }
                 }

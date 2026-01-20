@@ -15,8 +15,8 @@ namespace ThreeSC.Widgets.Pomodoro
                 {
                     // Range like "3-4"
                     var parts = rangeStr.Split('-');
-                    if (parts.Length == 2 && 
-                        int.TryParse(parts[0], out int min) && 
+                    if (parts.Length == 2 &&
+                        int.TryParse(parts[0], out int min) &&
                         int.TryParse(parts[1], out int max))
                     {
                         return stage >= min && stage <= max ? Visibility.Visible : Visibility.Collapsed;
