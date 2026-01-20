@@ -1,15 +1,21 @@
 {
-  "widgetKey": "moon-phase",
-  "name": "Moon Phase",
-  "description": "Current moon phase with folklore and lunar calendar",
-  "version": "1.0.0",
-  "author": "3SC Community",
-  "category": "Information",
-  "tags": ["astronomy", "moon", "lunar", "folklore", "calendar"],
-  "defaultWidth": 380,
-  "defaultHeight": 520,
-  "minWidth": 320,
-  "minHeight": 450,
-  "iconPath": "Assets/moon-icon.png",
-  "previewImagePath": "Assets/preview.png"
+    "widgetKey": "moon-phase",
+    "name": "Moon Phase",
+    "description": "Current moon phase with folklore and lunar calendar",
+    "version": "1.0.0",
+    "author": "3SC Community",
+    "category": "Information",
+    "tags": [
+        "astronomy",
+        "moon",
+        "lunar",
+        "folklore",
+        "calendar"
+    ],
+    "defaultWidth": 380,
+    "defaultHeight": 520,
+    "minWidth": 320,
+    "minHeight": 450,
+    "iconPath": "Assets/moon-icon.png",
+    "previewImagePath": "Assets/preview.png"
 }

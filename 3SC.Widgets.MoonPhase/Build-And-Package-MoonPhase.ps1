@@ -55,7 +55,8 @@ foreach ($dep in $Dependencies) {
     if (Test-Path $sourcePath) {
         Copy-Item $sourcePath -Destination $PublishPath
         Write-Host "  Copied: $dep" -ForegroundColor Gray
-    } else {
+    }
+    else {
         Write-Host "  Warning: $dep not found" -ForegroundColor DarkYellow
     }
 }

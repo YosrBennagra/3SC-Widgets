@@ -93,7 +93,7 @@ public partial class MoonPhaseWindow : WidgetWindowBase
 
         // Clip to create curved edge
         var geometryGroup = new GeometryGroup();
-        
+
         // Create ellipse for curved shadow edge
         double ellipseWidth = shadowWidth * 2;
         var ellipseGeometry = new EllipseGeometry
@@ -126,7 +126,7 @@ public partial class MoonPhaseWindow : WidgetWindowBase
 
         // Clip to create curved edge
         var geometryGroup = new GeometryGroup();
-        
+
         // Create ellipse for curved shadow edge
         double ellipseWidth = shadowWidth * 2;
         var ellipseGeometry = new EllipseGeometry
