@@ -32,7 +32,6 @@ The widget follows the standard 3SC widget architecture with clean, Clock/Notes-
 ├── ThisDayInHistoryWindow.xaml.cs  # Code-behind
 ├── WidgetWindowBase.cs             # Draggable window base
 ├── manifest.json                   # Widget metadata
-├── Build-And-Package-ThisDayInHistory.ps1
 └── README.md                       # Documentation
 ```
 
@@ -82,9 +81,8 @@ The widget follows the standard 3SC widget architecture with clean, Clock/Notes-
 | **Converters/StringToVisibilityConverter.cs** | 18 | XAML converter |
 | **ThisDayInHistoryWindow.xaml** | 220 | Clean UI design |
 | **ThisDayInHistoryWindow.xaml.cs** | 11 | Code-behind |
-| **Build-And-Package-ThisDayInHistory.ps1** | 96 | Build automation |
 | **README.md** | 125 | Documentation |
-| **Total** | **952 lines** | **12 files** |
+| **Total** | **856 lines** | **11 files** |
 
 ## 🎨 Design Pattern
 
@@ -107,14 +105,14 @@ The widget follows the **Clock/Notes design pattern**:
 ## 🚀 Build & Package
 
 ```powershell
-# Build the widget
-dotnet build -c Release
+# Build and package the widget
+.\Build-Widget.ps1 -WidgetName "3SC.Widgets.ThisDayInHistory"
 
-# Package for distribution
-.\Build-And-Package-ThisDayInHistory.ps1
+# Install for testing
+.\Install-Widget.ps1 -WidgetKey "this-day-in-history"
 
 # Output
-ThisDayInHistory.3scwidget (122.46 KB)
+this-day-in-history-widget.3scwidget (~122 KB)
 ```
 
 ## ✅ Testing Status

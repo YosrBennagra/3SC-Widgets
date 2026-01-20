@@ -68,18 +68,22 @@ The widget includes a curated database of significant events spanning from ancie
 ## Building
 
 ```powershell
-# Build for release
-dotnet build -c Release
-
-# Package as .3scwidget
-.\Build-And-Package-ThisDayInHistory.ps1
+# Build and package the widget
+.\Build-Widget.ps1 -WidgetName "3SC.Widgets.ThisDayInHistory"
 ```
 
 ## Installation
 
-1. Download the `.3scwidget` file
-2. Double-click to install via 3SC host application
-3. Or manually extract to `%APPDATA%\3SC\Widgets\Community\this-day-in-history\`
+```powershell
+# Install the widget (use package name without -widget.3scwidget)
+.\Install-Widget.ps1 -WidgetKey "thisdayinhistory"
+
+# Or list all installed widgets
+.\Install-Widget.ps1 -List
+
+# Or uninstall
+.\Install-Widget.ps1 -Uninstall -WidgetKey "thisdayinhistory"
+```
 
 ## Educational Value
 
