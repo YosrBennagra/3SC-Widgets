@@ -1,0 +1,63 @@
+{
+    "packageId": "com.3sc.desktop-pet",
+    "widgetKey": "desktop-pet",
+    "displayName": "Desktop Pet",
+    "version": "1.0.0",
+    "author": {
+        "name": "3SC Team",
+        "email": "team@3sc.app",
+        "url": "https://3sc.app"
+    },
+    "description": "An adorable desktop companion that lives on your screen! Watch your pet walk around, react to your mouse, express emotions, and develop its own personality. Feed it, play with it, and keep it happy!",
+    "category": "entertainment",
+    "entry": "3SC.Widgets.DesktopPet.dll",
+    "minAppVersion": "1.0.0",
+    "hasSettings": true,
+    "hasOwnWindow": true,
+    "permissions": [],
+    "tags": [
+        "pet",
+        "companion",
+        "fun",
+        "interactive",
+        "animation",
+        "desktop",
+        "virtual pet",
+        "tamagotchi"
+    ],
+    "defaultSize": {
+        "width": 120,
+        "height": 120
+    },
+    "minSize": {
+        "width": 80,
+        "height": 80
+    },
+    "maxSize": {
+        "width": 200,
+        "height": 200
+    },
+    "preview": {
+        "static": "Assets/preview.png",
+        "animated": "Assets/preview.gif",
+        "screenshots": [
+            "Assets/screenshots/idle.png",
+            "Assets/screenshots/walking.png",
+            "Assets/screenshots/happy.png",
+            "Assets/screenshots/sleeping.png"
+        ]
+    },
+    "distribution": {
+        "category": "Entertainment",
+        "tags": [
+            "pet",
+            "fun",
+            "interactive",
+            "companion"
+        ],
+        "listing": {
+            "shortDescription": "Adorable desktop companion with emotions and interactions",
+            "changelog": "CHANGELOG.md"
+        }
+    }
+}

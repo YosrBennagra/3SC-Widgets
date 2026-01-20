@@ -1,0 +1,21 @@
+{
+    "widgetKey": "pomodoro-timer",
+    "name": "Pomodoro+ Timer",
+    "description": "Focus timer with growing trees - stay focused to grow your forest!",
+    "author": "3SC Community",
+    "version": "1.0.0",
+    "minHostVersion": "1.0.0",
+    "assemblyName": "3SC.Widgets.Pomodoro.dll",
+    "factoryClass": "ThreeSC.Widgets.Pomodoro.PomodoroWidgetFactory",
+    "icon": "Assets/icon.png",
+    "tags": [
+        "productivity",
+        "timer",
+        "focus",
+        "pomodoro"
+    ],
+    "defaultSize": {
+        "width": 320,
+        "height": 420
+    }
+}

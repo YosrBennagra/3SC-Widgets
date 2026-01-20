@@ -30,6 +30,11 @@ public partial class MainWindow : Window
         _widgetFactories["App Launcher"] = new _3SC.Widgets.AppLauncher.AppLauncherWidgetFactory();
         _widgetFactories["Game Vault"] = new _3SC.Widgets.GameVault.GameVaultWidgetFactory();
         _widgetFactories["Clipboard History"] = new _3SC.Widgets.ClipboardHistory.ClipboardHistoryWidgetFactory();
+        _widgetFactories["Desktop Pet"] = new _3SC.Widgets.DesktopPet.DesktopPetWidgetFactory();
+        _widgetFactories["System Pulse"] = new _3SC.Widgets.SystemPulse.SystemPulseWidgetFactory();
+        _widgetFactories["Ambient Sounds"] = new _3SC.Widgets.AmbientSounds.AmbientSoundsWidgetFactory();
+        _widgetFactories["Breathe"] = new _3SC.Widgets.Breathe.BreatheWidgetFactory();
+        _widgetFactories["Pomodoro+ Timer"] = new ThreeSC.Widgets.Pomodoro.PomodoroWidgetFactory();
 
         WidgetSelector.ItemsSource = _widgetFactories.Keys.OrderBy(k => k).ToList();
         WidgetSelector.SelectedIndex = -1;
