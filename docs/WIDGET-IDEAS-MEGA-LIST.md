@@ -217,15 +217,7 @@ Play classic mini-games.
 
 ## 🌍 Information & Data
 
-### **Moon Phase** 🌙
-Current moon phase with folklore.
-```
-- Live moon visualization
-- Phase name and percentage
-- Best days for: planting, fishing, haircuts
-- Next full/new moon countdown
-- Lunar calendar
-```
+
 
 ### **ISS Tracker** 🛰️
 Where's the International Space Station?

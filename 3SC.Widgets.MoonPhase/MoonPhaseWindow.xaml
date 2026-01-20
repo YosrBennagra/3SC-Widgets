@@ -1,0 +1,315 @@
+<local:WidgetWindowBase x:Class="_3SC.Widgets.MoonPhase.MoonPhaseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:_3SC.Widgets.MoonPhase"
+        Title="Moon Phase"
+        Width="380" Height="520"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="CanResize"
+        Topmost="True">
+
+    <Window.Resources>
+        <!-- Dark Night Theme -->
+        <SolidColorBrush x:Key="NightSky" Color="#0A0E27"/>
+        <SolidColorBrush x:Key="DeepSpace" Color="#141B3D"/>
+        <SolidColorBrush x:Key="StarLight" Color="#E8E8E8"/>
+        <SolidColorBrush x:Key="MoonGlow" Color="#F4F1DE"/>
+        <SolidColorBrush x:Key="AccentGold" Color="#FFD700"/>
+        <SolidColorBrush x:Key="BorderGlow" Color="#2A3F7F"/>
+        <SolidColorBrush x:Key="TextPrimary" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="TextSecondary" Color="#A0A8C0"/>
+
+        <!-- Gradient for moon -->
+        <RadialGradientBrush x:Key="MoonGradient">
+            <GradientStop Color="#FFFEF5" Offset="0"/>
+            <GradientStop Color="#F4F1DE" Offset="0.7"/>
+            <GradientStop Color="#E5DCC3" Offset="1"/>
+        </RadialGradientBrush>
+
+        <!-- Button Style -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource DeepSpace}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderGlow}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1F2D5C"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#2A3F7F"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="{StaticResource NightSky}"
+            BorderBrush="{StaticResource BorderGlow}"
+            BorderThickness="1"
+            CornerRadius="12">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,16">
+                <TextBlock Text="🌙 Moon Phase Tracker"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource TextPrimary}"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding CurrentDateString}"
+                           FontSize="11"
+                           Foreground="{StaticResource TextSecondary}"
+                           HorizontalAlignment="Center"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Moon Visualization -->
+            <Border Grid.Row="1"
+                    Background="{StaticResource DeepSpace}"
+                    BorderBrush="{StaticResource BorderGlow}"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Padding="20"
+                    Margin="0,0,0,16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Moon Circle -->
+                    <Canvas Grid.Row="0" Width="160" Height="160" Margin="0,0,0,12">
+                        <!-- Stars background -->
+                        <Ellipse Width="2" Height="2" Fill="White" Canvas.Left="20" Canvas.Top="15" Opacity="0.6"/>
+                        <Ellipse Width="1.5" Height="1.5" Fill="White" Canvas.Left="140" Canvas.Top="25" Opacity="0.7"/>
+                        <Ellipse Width="1" Height="1" Fill="White" Canvas.Left="30" Canvas.Top="140" Opacity="0.5"/>
+                        <Ellipse Width="2" Height="2" Fill="White" Canvas.Left="130" Canvas.Top="135" Opacity="0.8"/>
+                        <Ellipse Width="1.5" Height="1.5" Fill="White" Canvas.Left="10" Canvas.Top="80" Opacity="0.6"/>
+                        <Ellipse Width="1" Height="1" Fill="White" Canvas.Left="150" Canvas.Top="70" Opacity="0.7"/>
+
+                        <!-- Moon Glow Effect -->
+                        <Ellipse Width="165" Height="165" Canvas.Left="-2.5" Canvas.Top="-2.5">
+                            <Ellipse.Fill>
+                                <RadialGradientBrush>
+                                    <GradientStop Color="#FFD700" Offset="0.8"/>
+                                    <GradientStop Color="Transparent" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Ellipse.Fill>
+                            <Ellipse.OpacityMask>
+                                <RadialGradientBrush>
+                                    <GradientStop Color="Transparent" Offset="0.9"/>
+                                    <GradientStop Color="Black" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Ellipse.OpacityMask>
+                        </Ellipse>
+
+                        <!-- Moon Base -->
+                        <Ellipse Width="150" Height="150" 
+                                 Fill="{StaticResource MoonGradient}"
+                                 Canvas.Left="5" Canvas.Top="5">
+                            <Ellipse.Effect>
+                                <DropShadowEffect Color="#FFD700" 
+                                                BlurRadius="20" 
+                                                ShadowDepth="0"
+                                                Opacity="0.4"/>
+                            </Ellipse.Effect>
+                        </Ellipse>
+
+                        <!-- Shadow overlay for phase (animated in code-behind) -->
+                        <Canvas x:Name="MoonShadowCanvas" Width="150" Height="150" Canvas.Left="5" Canvas.Top="5">
+                            <Ellipse x:Name="MoonShadow" 
+                                     Width="150" 
+                                     Height="150"
+                                     Fill="{StaticResource NightSky}"
+                                     Opacity="0.9"/>
+                        </Canvas>
+
+                        <!-- Crater details -->
+                        <Ellipse Width="18" Height="18" Fill="#D4CAB0" Canvas.Left="50" Canvas.Top="45" Opacity="0.3"/>
+                        <Ellipse Width="12" Height="12" Fill="#C8BEA0" Canvas.Left="100" Canvas.Top="70" Opacity="0.25"/>
+                        <Ellipse Width="15" Height="15" Fill="#D0C6AA" Canvas.Left="75" Canvas.Top="95" Opacity="0.28"/>
+                        <Ellipse Width="10" Height="10" Fill="#CBBFA5" Canvas.Left="95" Canvas.Top="50" Opacity="0.22"/>
+                    </Canvas>
+
+                    <!-- Phase Info -->
+                    <StackPanel Grid.Row="1" HorizontalAlignment="Center">
+                        <TextBlock FontSize="48" 
+                                   Text="{Binding PhaseEmoji}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,8"/>
+                        <TextBlock Text="{Binding PhaseName}"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource AccentGold}"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Center" Margin="0,4,0,0">
+                            <Run Text="{Binding IlluminationPercentage, StringFormat=N1}" 
+                                 FontSize="14" 
+                                 FontWeight="Bold"
+                                 Foreground="{StaticResource TextPrimary}"/>
+                            <Run Text="% Illuminated" 
+                                 FontSize="12"
+                                 Foreground="{StaticResource TextSecondary}"/>
+                        </TextBlock>
+                        <TextBlock Text="{Binding WaxingOrWaning}"
+                                   FontSize="11"
+                                   Foreground="{StaticResource TextSecondary}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Information Panels -->
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <!-- Countdown -->
+                    <Border Background="{StaticResource DeepSpace}"
+                            BorderBrush="{StaticResource BorderGlow}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="12"
+                            Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                                <TextBlock Text="🌕 Next Full Moon"
+                                           FontSize="10"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                                <TextBlock Text="{Binding DaysUntilFullMoon, StringFormat={}{0} days}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource AccentGold}"
+                                           Margin="0,2,0,0"/>
+                                <TextBlock Text="{Binding NextFullMoonDate}"
+                                           FontSize="9"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="6,0,0,0">
+                                <TextBlock Text="🌑 Next New Moon"
+                                           FontSize="10"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                                <TextBlock Text="{Binding DaysUntilNewMoon, StringFormat={}{0} days}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource TextPrimary}"
+                                           Margin="0,2,0,0"/>
+                                <TextBlock Text="{Binding NextNewMoonDate}"
+                                           FontSize="9"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Best Days -->
+                    <Border Background="{StaticResource DeepSpace}"
+                            BorderBrush="{StaticResource BorderGlow}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="12"
+                            Margin="0,0,0,12">
+                        <StackPanel>
+                            <TextBlock Text="🌾 Best Days For:"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource AccentGold}"
+                                       Margin="0,0,0,8"/>
+
+                            <StackPanel Margin="0,0,0,6">
+                                <TextBlock Text="🌱 Planting"
+                                           FontSize="10"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                                <TextBlock Text="{Binding PlantingAdvice}"
+                                           FontSize="11"
+                                           Foreground="{StaticResource TextPrimary}"
+                                           TextWrapping="Wrap"
+                                           Margin="0,2,0,0"/>
+                            </StackPanel>
+
+                            <StackPanel Margin="0,0,0,6">
+                                <TextBlock Text="🎣 Fishing"
+                                           FontSize="10"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                                <TextBlock Text="{Binding FishingAdvice}"
+                                           FontSize="11"
+                                           Foreground="{StaticResource TextPrimary}"
+                                           TextWrapping="Wrap"
+                                           Margin="0,2,0,0"/>
+                            </StackPanel>
+
+                            <StackPanel>
+                                <TextBlock Text="✂️ Haircuts"
+                                           FontSize="10"
+                                           Foreground="{StaticResource TextSecondary}"/>
+                                <TextBlock Text="{Binding HaircutAdvice}"
+                                           FontSize="11"
+                                           Foreground="{StaticResource TextPrimary}"
+                                           TextWrapping="Wrap"
+                                           Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Folklore -->
+                    <Border Background="{StaticResource DeepSpace}"
+                            BorderBrush="{StaticResource BorderGlow}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="12">
+                        <StackPanel>
+                            <TextBlock Text="📜 Folklore Wisdom"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource AccentGold}"
+                                       Margin="0,0,0,6"/>
+                            <TextBlock Text="{Binding FolkloreAdvice}"
+                                       FontSize="11"
+                                       Foreground="{StaticResource TextPrimary}"
+                                       TextWrapping="Wrap"
+                                       LineHeight="16"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Footer Button -->
+            <Button Grid.Row="3"
+                    Content="🔄 Refresh"
+                    Style="{StaticResource ModernButton}"
+                    Command="{Binding RefreshCommand}"
+                    Margin="0,12,0,0"
+                    Padding="0,8"/>
+        </Grid>
+    </Border>
+</local:WidgetWindowBase>

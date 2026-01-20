@@ -19,6 +19,7 @@
     <ProjectReference Include="..\3SC.Widgets.Pomodoro\3SC.Widgets.Pomodoro.csproj" />
     <ProjectReference Include="..\3SC.Widgets.GradientPlayground\3SC.Widgets.GradientPlayground.csproj" />
     <ProjectReference Include="..\3SC.Widgets.LogoSizeTester\3SC.Widgets.LogoSizeTester.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.MoonPhase\3SC.Widgets.MoonPhase.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
