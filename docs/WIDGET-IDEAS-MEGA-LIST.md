@@ -393,16 +393,6 @@ Placeholder text generator.
 
 
 
-### **API Status** 🟢
-Monitor your favorite APIs.
-```
-- Add API endpoints
-- Status check (green/red)
-- Response time graph
-- Uptime percentage
-- Alert on downtime
-```
-
 ### **Commit Message Generator** 💬
 Never write boring commits again.
 ```

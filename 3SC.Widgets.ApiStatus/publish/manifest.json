@@ -1,0 +1,27 @@
+{
+  "widgetKey": "apistatus",
+  "displayName": "API Status Monitor",
+  "description": "Monitor your favorite APIs with status checks, response time graphs, and uptime tracking",
+  "version": "1.0.0",
+  "author": {
+    "name": "3SC Team",
+    "email": "support@3sc.app"
+  },
+  "entryPoint": "3SC.Widgets.ApiStatus.dll",
+  "factoryType": "_3SC.Widgets.ApiStatus.ApiStatusWidgetFactory",
+  "hasSettings": true,
+  "category": "Utilities",
+  "minHostVersion": "3.0.0",
+  "defaultSize": {
+    "width": 500,
+    "height": 650
+  },
+  "minSize": {
+    "width": 400,
+    "height": 500
+  },
+  "maxSize": {
+    "width": 800,
+    "height": 1000
+  }
+}

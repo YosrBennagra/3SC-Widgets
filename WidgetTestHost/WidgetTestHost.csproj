@@ -22,6 +22,7 @@
     <ProjectReference Include="..\3SC.Widgets.MoonPhase\3SC.Widgets.MoonPhase.csproj" />
     <ProjectReference Include="..\3SC.Widgets.ThisDayInHistory\3SC.Widgets.ThisDayInHistory.csproj" />
     <ProjectReference Include="..\3SC.Widgets.CronExpressionBuilder\3SC.Widgets.CronExpressionBuilder.csproj" />
+    <ProjectReference Include="..\3SC.Widgets.ApiStatus\3SC.Widgets.ApiStatus.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
