@@ -7,7 +7,6 @@
     "minHostVersion": "1.0.0",
     "assemblyName": "3SC.Widgets.GradientPlayground.dll",
     "factoryClass": "_3SC.Widgets.GradientPlayground.GradientPlaygroundWidgetFactory",
-    "icon": "Assets/icon.png",
     "tags": [
         "creative",
         "design",

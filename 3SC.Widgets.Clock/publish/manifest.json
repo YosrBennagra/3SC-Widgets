@@ -31,8 +31,7 @@
     "animated": "Assets/preview.mp4",
     "screenshots": [
       "Assets/screenshots/main.png",
-      "Assets/screenshots/settings.png",
-      "Assets/screenshots/timezones.png"
+      "Assets/screenshots/settings.png"
     ]
   },
   "distribution": {

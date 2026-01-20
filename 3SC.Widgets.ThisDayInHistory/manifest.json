@@ -16,6 +16,5 @@
     "defaultHeight": 550,
     "minWidth": 350,
     "minHeight": 450,
-    "iconPath": "Assets/history-icon.png",
     "previewImagePath": "Assets/preview.png"
 }

@@ -32,19 +32,29 @@ Each widget should have an `Assets/` folder with:
 
 ## Current Status
 
-| Widget | preview.mp4 | preview.png | Status |
-|--------|-------------|-------------|--------|
-| Clock | ✅ **Done** | ⚠️ Needed | Video Preview |
-| AppLauncher | ⚠️ Needed | ⚠️ Needed | Needs Update |
-| Calendar | ⚠️ Needed | ⚠️ Needed | Needs Update |
-| ClipboardHistory | ⚠️ Needed | ⚠️ Needed | Needs Update |
-| Folders | ⚠️ Needed | ⚠️ Needed | Needs Update |
-| GameVault | ⚠️ Needed | ⚠️ Needed | Needs Update |
-| ImageViewer | ⚠️ Needed | ⚠️ Needed | Needs Update |
-| Notes | ⚠️ Needed | ⚠️ Needed | Needs Update |
-| PdfViewer | ⚠️ Needed | ⚠️ Needed | Needs Update |
-| QuickLinks | ⚠️ Needed | ⚠️ Needed | Needs Update |
-| VideoViewer | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| Widget | preview.mp4 | preview.png | screenshots | Status |
+|--------|-------------|-------------|-------------|--------|
+| Clock | ✅ Done | ✅ Done | ✅ Done | **Complete** |
+| AppLauncher | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| Calendar | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| ClipboardHistory | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| Folders | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| GameVault | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| ImageViewer | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| Notes | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| PdfViewer | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| QuickLinks | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+| VideoViewer | ⚠️ Needed | ⚠️ Needed | ⚠️ Needed | Needs Update |
+
+## Preview Behavior in Widget Library
+
+| Location | What's Displayed | Behavior |
+|----------|------------------|----------|
+| **Grid Card** | `preview.png` (static) | Shows thumbnail, no video playback |
+| **Details Panel** | `preview.mp4` (video) | Plays looping video when widget selected |
+| **Screenshots Carousel** | `screenshots/*.png` | Shown in details panel below preview |
+
+> **Note:** The grid uses static images for performance. Video only plays when a widget is selected in the details panel.
 
 ## How to Create Preview Assets
 

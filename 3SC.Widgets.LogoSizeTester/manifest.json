@@ -7,7 +7,6 @@
     "minHostVersion": "1.0.0",
     "assemblyName": "3SC.Widgets.LogoSizeTester.dll",
     "factoryClass": "_3SC.Widgets.LogoSizeTester.LogoSizeTesterWidgetFactory",
-    "icon": "Assets/icon.png",
     "tags": [
         "creative",
         "design",
