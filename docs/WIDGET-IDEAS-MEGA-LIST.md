@@ -279,15 +279,6 @@ Learn a phrase in a new language daily.
 - Phrase history archive
 ```
 
-### **This Day in History** 📜
-What happened on this day?
-```
-- 3-5 historical events
-- Births and deaths of famous people
-- Random historical images
-- "Deep dive" link to Wikipedia
-- Share interesting facts
-```
 
 ---
 
@@ -400,15 +391,7 @@ Placeholder text generator.
 - Custom word lists
 ```
 
-### **Cron Expression Builder** ⏲️
-Visual cron schedule creator.
-```
-- Dropdown builders
-- Human-readable output
-- Next 5 run times preview
-- Common patterns library
-- Multiple formats (cron, quartz)
-```
+
 
 ### **API Status** 🟢
 Monitor your favorite APIs.

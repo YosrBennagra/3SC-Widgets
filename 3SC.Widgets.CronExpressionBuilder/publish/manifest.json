@@ -1,0 +1,27 @@
+{
+  "widgetKey": "cronexpressionbuilder",
+  "displayName": "Cron Expression Builder",
+  "description": "Visual cron schedule creator with human-readable output and next run times preview",
+  "version": "1.0.0",
+  "author": {
+    "name": "3SC Team",
+    "email": "support@3sc.app"
+  },
+  "entryPoint": "3SC.Widgets.CronExpressionBuilder.dll",
+  "factoryType": "_3SC.Widgets.CronExpressionBuilder.CronExpressionBuilderWidgetFactory",
+  "hasSettings": false,
+  "category": "Utilities",
+  "minHostVersion": "3.0.0",
+  "defaultSize": {
+    "width": 450,
+    "height": 600
+  },
+  "minSize": {
+    "width": 400,
+    "height": 500
+  },
+  "maxSize": {
+    "width": 600,
+    "height": 800
+  }
+}

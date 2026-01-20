@@ -39,6 +39,7 @@ public partial class MainWindow : Window
         _widgetFactories["Logo Size Tester"] = new _3SC.Widgets.LogoSizeTester.LogoSizeTesterWidgetFactory();
         _widgetFactories["Moon Phase"] = new _3SC.Widgets.MoonPhase.MoonPhaseWidgetFactory();
         _widgetFactories["This Day in History"] = new _3SC.Widgets.ThisDayInHistory.ThisDayInHistoryWidgetFactory();
+        _widgetFactories["Cron Expression Builder"] = new _3SC.Widgets.CronExpressionBuilder.CronExpressionBuilderWidgetFactory();
 
         WidgetSelector.ItemsSource = _widgetFactories.Keys.OrderBy(k => k).ToList();
         WidgetSelector.SelectedIndex = -1;
