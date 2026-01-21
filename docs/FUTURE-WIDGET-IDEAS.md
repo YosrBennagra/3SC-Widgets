@@ -15,41 +15,6 @@
 
 ---
 
-## 🌟 HIGH PRIORITY - Next to Build
-
-### 1. **Matrix Rain** 🟢
-Iconic digital rain effect from The Matrix with customization.
-
-```
-Features:
-- Classic green digital rain
-- Custom colors and speeds
-- Interactive - clicks create ripples
-- Japanese/Custom character sets
-- Transparency levels
-```
-
-**Complexity:** Medium | **Appeal:** High | **Uniqueness:** ⭐⭐⭐⭐
-
----
-
-### 2. **Pomodoro Focus Timer** 🍅
-Productivity timer with statistics and streak tracking.
-
-```
-Features:
-- 25/5 work/break cycles
-- Session history and stats
-- Daily/weekly streak tracking
-- Focus music integration
-- Desktop notifications
-- Task list integration
-```
-
-**Complexity:** Medium | **Appeal:** Very High | **Uniqueness:** ⭐⭐⭐
-
----
-
 ### 3. **Weather Glass** 🌤️
 Beautiful glass-morphism weather widget with animations.
 
@@ -253,22 +218,7 @@ Features:
 - Hotkey support
 ```
 
----
 
-### 16. **Color Picker Pro** 🎨
-Advanced color picking tool.
-
-```
-Features:
-- Screen color picker
-- Color palette generation
-- Hex/RGB/HSL conversion
-- Color history
-- Palette export
-- Accessibility checker
-```
-
----
 
 ### 17. **System Tray Notes** 📝
 Quick sticky notes.

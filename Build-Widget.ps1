@@ -75,15 +75,9 @@ function Build-SingleWidget {
         }
     }
     
-    # Copy Assets folder if exists
-    $assetsDir = Join-Path $ProjectPath "Assets"
-    if (Test-Path $assetsDir) {
-        Write-Host "[2/4] Copying assets..." -ForegroundColor Yellow
-        Copy-Item $assetsDir (Join-Path $publishDir "Assets") -Recurse -Force
-    }
-    else {
-        Write-Host "[2/4] No assets folder" -ForegroundColor Gray
-    }
+    # Assets are automatically copied by dotnet publish (see .csproj)
+    # No need to copy manually - doing so creates nested Assets/Assets/
+    Write-Host "[2/4] Assets copied by build" -ForegroundColor Gray
     
     # Remove files that shouldn't be packaged
     Write-Host "[3/4] Cleaning package..." -ForegroundColor Yellow

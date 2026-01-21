@@ -16,7 +16,7 @@ namespace _3SC.Widgets.Clock;
 public partial class ClockSettingsWindow : Window
 {
     private static readonly ILogger Log = Serilog.Log.ForContext<ClockSettingsWindow>();
-    
+
     private readonly DispatcherTimer _previewTimer;
     private readonly ClockWidgetSettings _originalSettings;
 
@@ -31,9 +31,9 @@ public partial class ClockSettingsWindow : Window
     public ClockSettingsWindow(ClockWidgetSettings? currentSettings)
     {
         InitializeComponent();
-        
+
         _originalSettings = currentSettings ?? ClockWidgetSettings.Default();
-        
+
         // Load available timezones
         AvailableTimeZones = new ObservableCollection<TimeZoneDisplay>(
             CommonTimeZones.GetAllTimeZones());
@@ -54,9 +54,9 @@ public partial class ClockSettingsWindow : Window
         };
         _previewTimer.Tick += (_, _) => UpdatePreview();
         _previewTimer.Start();
-        
+
         UpdatePreview();
-        
+
         Log.Debug("ClockSettingsWindow opened with settings: TimeZone={TimeZone}", _originalSettings.TimeZoneId);
     }
 
@@ -129,11 +129,11 @@ public partial class ClockSettingsWindow : Window
                 Use24HourFormat,
                 ShowSeconds,
                 ShowTimeZoneLabel);
-            
+
             Log.Information("Settings saved: TimeZone={TimeZone}, 24Hour={Use24Hour}, Seconds={ShowSeconds}, Label={ShowLabel}",
-                UpdatedSettings.TimeZoneId, UpdatedSettings.Use24HourFormat, 
+                UpdatedSettings.TimeZoneId, UpdatedSettings.Use24HourFormat,
                 UpdatedSettings.ShowSeconds, UpdatedSettings.ShowTimeZoneLabel);
-            
+
             DialogResult = true;
             Close();
         }
